@@ -6,7 +6,7 @@ import java.util.Properties;
 
 public class ConfigReader {
     public int port = -1;
-    public void getPropValues() throws IOException {
+    public void testGetPropValues() throws IOException {
         InputStream inputStream = null;
         try {
             Properties prop = new Properties();
