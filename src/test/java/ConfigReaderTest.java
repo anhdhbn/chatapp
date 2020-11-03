@@ -3,13 +3,13 @@ import org.junit.jupiter.api.Assertions;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+import org.junit.jupiter.api.*;
 class ConfigReaderTest {
 
-    @org.junit.jupiter.api.Test
+    @Test
     void testGetPropValues() throws IOException {
         ConfigReader cr = new ConfigReader();
         cr.getPropValues();
-        Assertions.assertEquals(1699, cr.port);
+        assertEquals(1699, cr.port);
     }
 }
