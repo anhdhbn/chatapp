@@ -1,6 +1,7 @@
 package handler;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.Socket;
 
 public class ServerHandler extends ReadWriteHandler{
@@ -14,7 +15,6 @@ public class ServerHandler extends ReadWriteHandler{
             this.initStream();
             while (true){
                 DataTransfer dataTransfer = (DataTransfer) ois.readObject();
-                System.out.println("server recv data");
                 // process
                 this.oos.writeObject(dataTransfer);
             }

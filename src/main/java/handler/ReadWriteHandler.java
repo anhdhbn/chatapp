@@ -20,7 +20,7 @@ public class ReadWriteHandler extends HandlerThread{
     }
 
     protected void initStream() throws IOException {
-        this.ois = new ObjectInputStream(this.getSocket().getInputStream());
         this.oos = new ObjectOutputStream(this.getSocket().getOutputStream());
+        this.ois = new ObjectInputStream(this.getSocket().getInputStream());
     }
 }

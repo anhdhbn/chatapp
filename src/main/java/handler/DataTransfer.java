@@ -1,6 +1,8 @@
 package handler;
 
-public class DataTransfer {
+import java.io.Serializable;
+
+public class DataTransfer implements Serializable {
     public String topic;
     public String from;
     public long datetime;
