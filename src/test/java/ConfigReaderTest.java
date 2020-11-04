@@ -1,9 +1,9 @@
-import org.junit.jupiter.api.Assertions;
-
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
+import utils.ConfigReader;
+
 class ConfigReaderTest {
 
     @Test
