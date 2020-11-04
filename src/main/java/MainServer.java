@@ -10,7 +10,7 @@ public class MainServer {
         cr.getPropValues();
         System.out.println(cr.port);
         while (true){
-            Thread.sleep(1000);
+            Thread.sleep(500);
             DateFormat dateFormat = new SimpleDateFormat("yyyy/mm/dd HH:mm:ss");
             Date date = new Date();
             System.out.println(dateFormat.format(date));
