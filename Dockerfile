@@ -10,6 +10,6 @@ RUN mvn -f /home/app/pom.xml clean package
 # Package stage
 #
 FROM openjdk:11-jre-slim
-COPY --from=build /home/app/target/np-server-1.0-SNAPSHOT.jar /usr/local/lib/np-server.jar
+COPY --from=build /home/app/target/np-server-1.0-SNAPSHOT-jar-with-dependencies.jar /usr/local/lib/np-server.jar
 EXPOSE 1699
-ENTRYPOINT ["java","-cp","/usr/local/lib/np-server.jar", "MainServer"]
+CMD ["java","-cp","/usr/local/lib/np-server.jar", "MainServer"]
