@@ -2,13 +2,12 @@ package npserver.handler;
 
 
 import npserver.Server;
-import org.junit.jupiter.api.TestInstance;
 import npserver.utils.ConfigReader;
 import npserver.utils.Constants;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
