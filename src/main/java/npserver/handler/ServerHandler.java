@@ -1,5 +1,6 @@
 package npserver.handler;
 
+import npserver.utils.Helper;
 import nputils.DataTransfer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -47,25 +48,12 @@ public class ServerHandler extends ReadWriteHandler{
                     else if (data.command.equals(Constants.UN_SUBSCRIBE)) HandlerManagement.unsubscribe(this, data.topic);
                     else if (data.command.equals(Constants.PUBLISH)){
                         if(data.topic.contains("-")){
-                            String partner = data.topic.split("-")[1];
-                            ServerHandler hPartner = HandlerManagement.getHandlerByName(partner);
-                            if(hPartner != null) {
-                                hPartner.sendObj(data);
-                                LOGGER.info("{}: Send data ({}) ==> ({}): ({})", this.idSocket, this.name, hPartner.name, data.data);
-                            }
+                            Helper.sendMessPeerToPeer(this, data);
                         }else {
-                            Set<ServerHandler> set = HandlerManagement.getAllSubscribers(data.topic);
-                            for(ServerHandler handler: set){
-                                if (handler.name.equals(this.name)) continue;
-                                else {
-                                    handler.sendObj(data);
-                                    LOGGER.info("{}: Send data room from ({}) ==> ({}): ({})", this.idSocket, this.name, handler.name, data.data);
-                                }
-                            }
+                            Helper.sendMessToTopic(this, data);
                         }
                     }
                     else {
-                        // error
                         // UN_KNOWN_COMMAND
                         data = new DataTransfer();
                         data.command = Constants.UN_KNOWN_COMMAND;

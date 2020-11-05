@@ -3,6 +3,7 @@ package nputils;
 import java.io.Serializable;
 
 public class DataTransfer implements Serializable {
+    private static final long serialVersionUID = 1L;
     public String topic;
     public String name;
     public String command;

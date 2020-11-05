@@ -38,7 +38,7 @@ class ServerHandlerTest {
             }
         });
         thread.start();
-        Thread.sleep(5000);
+        this.delay();
     }
 
     public void generateClient(int n) throws IOException {
@@ -62,9 +62,13 @@ class ServerHandlerTest {
 
     @org.junit.jupiter.api.AfterEach
     public void tearDown() throws Exception {
-        this.server.server.close();
         for(ReadWriteHandler handler :this.handlers){
             handler.closeAll();
         }
+        this.server.server.close();
+    }
+
+    public void delay() throws InterruptedException {
+        Thread.sleep(3000);
     }
 }

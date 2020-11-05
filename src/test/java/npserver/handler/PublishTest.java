@@ -13,14 +13,14 @@ public class PublishTest extends  ServerHandlerTest{
         this.generateClient(2);
         ReadWriteHandler handler1 = this.handlers.get(0);
         ReadWriteHandler handler2 = this.handlers.get(1);
-        Thread.sleep(3000);
+        this.delay();
 
         DataTransfer dataSub = new DataTransfer("test topic", handler1.name, Constants.SUBSCRIBE);
         DataTransfer dataPub = new DataTransfer("test topic", handler1.name, Constants.PUBLISH, "String", "message");
         handler1.sendObj(dataSub);
-        Thread.sleep(3000);
+        this.delay();
         handler2.sendObj(dataPub);
-        Thread.sleep(3000);
+        this.delay();
 
         DataTransfer dataRecv = handler1.receiveObj();
         Assertions.assertEquals(dataPub.className, dataRecv.className);
@@ -31,7 +31,7 @@ public class PublishTest extends  ServerHandlerTest{
         this.generateClient(2);
         ReadWriteHandler handler1 = this.handlers.get(0);
         ReadWriteHandler handler2 = this.handlers.get(1);
-        Thread.sleep(3000);
+        this.delay();
 
         String topic = handler1.name + "-" + handler2.name;
         DataTransfer dataPub = new DataTransfer(topic, handler1.name, Constants.PUBLISH, "String", "message");

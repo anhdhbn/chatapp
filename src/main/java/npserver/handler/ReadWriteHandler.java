@@ -40,6 +40,7 @@ public class ReadWriteHandler extends HandlerThread{
             this.oos.writeObject(data);
         } catch (IOException e) {
             LOGGER.error("{}: error: ({})", this.idSocket, e.getMessage());
+//            e.printStackTrace();
         } finally {
             this.lock.unlock();
         }

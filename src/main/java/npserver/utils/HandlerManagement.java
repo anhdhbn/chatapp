@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import nputils.DataTransfer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,6 +26,7 @@ public class HandlerManagement {
         else {
             socketDic.put(name, client);
             LOGGER.info("{}: ({})'s handler was added", client.idSocket, client.name);
+            Helper.sendOnline();
             return true;
         }
     }
@@ -33,10 +35,11 @@ public class HandlerManagement {
         if (socketDic.containsKey(name)){
             socketDic.remove(name, client);
             LOGGER.info("{}: ({})'s handler was removed", client.idSocket, client.name);
+            Helper.sendOnline();
         }
     }
 
-    public static Set<String> getAllKey(){
+    public static Set<String> getAllMembers(){
         return socketDic.keySet();
     }
 
