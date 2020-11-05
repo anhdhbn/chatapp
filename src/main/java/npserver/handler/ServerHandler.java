@@ -50,7 +50,7 @@ public class ServerHandler extends ReadWriteHandler{
                             ServerHandler hPartner = HandlerManagement.getHandlerByName(partner);
                             if(hPartner != null) {
                                 hPartner.sendObj(data);
-                                LOGGER.info("{}: Send data {} ==> {}: {}", this.idSocket, this.name, hPartner.name, data.data);
+                                LOGGER.info("{}: Send data ({}) ==> ({}): ({})", this.idSocket, this.name, hPartner.name, data.data);
                             }
                         }else {
                             Set<ServerHandler> set = HandlerManagement.getAllSubscribers(data.topic);
@@ -74,7 +74,7 @@ public class ServerHandler extends ReadWriteHandler{
                 }
             }
         } catch (IOException | ClassNotFoundException e) {
-            LOGGER.error("{}: error: {}", this.idSocket, e.toString());
+            LOGGER.error("{}: error: ({})", this.idSocket, e.toString());
         }
         finally {
             this.closeAll();

@@ -24,7 +24,7 @@ public class HandlerManagement {
         if (socketDic.containsKey(name)) return false;
         else {
             socketDic.put(name, client);
-            LOGGER.info("{}: {}'s handler was added", client.idSocket, client.name);
+            LOGGER.info("{}: ({})'s handler was added", client.idSocket, client.name);
             return true;
         }
     }
@@ -32,7 +32,7 @@ public class HandlerManagement {
     public static void removeHandler(String name, ServerHandler client){
         if (socketDic.containsKey(name)){
             socketDic.remove(name, client);
-            LOGGER.info("{}: {}'s handler was removed", client.idSocket, client.name);
+            LOGGER.info("{}: ({})'s handler was removed", client.idSocket, client.name);
         }
     }
 
@@ -58,13 +58,13 @@ public class HandlerManagement {
             set.add(client);
             topics.put(topic, set);
         }
-        LOGGER.info("{}: {} subscribed ==> {}", client.idSocket, client.name, topic);
+        LOGGER.info("{}: ({}) subscribed ==> ({})", client.idSocket, client.name, topic);
     }
 
     public static void unsubscribe(ServerHandler client, String topic){
         if(topics.containsKey(topic)){
             topics.get(topic).remove(client);
-            LOGGER.info("{}: {} unsubscribed ==> {}", client.idSocket, client.name, topic);
+            LOGGER.info("{}: ({}) unsubscribed ==> ({})", client.idSocket, client.name, topic);
         }
     }
 
@@ -73,7 +73,7 @@ public class HandlerManagement {
             Set<ServerHandler> set = topics.get(topic);
             if(set.contains(client)){
                 set.remove(client);
-                LOGGER.info("{}: {} unsubscribed ==> {}", client.idSocket, client.name, topic);
+                LOGGER.info("{}: ({}) unsubscribed ==> ({})", client.idSocket, client.name, topic);
             }
         }
     }

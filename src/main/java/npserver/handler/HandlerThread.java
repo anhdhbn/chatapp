@@ -44,7 +44,7 @@ public class HandlerThread extends Thread {
             this.closeStream(this.ois);
             this.closeStream(this.oos);
         } catch (IOException e) {
-            LOGGER.error("{}: error: {}", this.idSocket, e.getMessage());
+            LOGGER.error("{}: error: ({})", this.idSocket, e.getMessage());
         }
     }
 }

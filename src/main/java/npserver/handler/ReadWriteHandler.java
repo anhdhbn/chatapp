@@ -38,7 +38,7 @@ public class ReadWriteHandler extends HandlerThread{
         try {
             this.oos.writeObject(data);
         } catch (IOException e) {
-            LOGGER.error("{}: error: {}", this.idSocket, e.getMessage());
+            LOGGER.error("{}: error: ({})", this.idSocket, e.getMessage());
         } finally {
             this.lock.unlock();
         }
@@ -50,7 +50,7 @@ public class ReadWriteHandler extends HandlerThread{
         try {
             data = (DataTransfer)this.ois.readObject();
         } catch (IOException e) {
-            LOGGER.error("{}: error: {}", this.idSocket, e.getMessage());
+            LOGGER.error("{}: error: ({})", this.idSocket, e.getMessage());
         } finally {
             this.lock.unlock();
             return data;

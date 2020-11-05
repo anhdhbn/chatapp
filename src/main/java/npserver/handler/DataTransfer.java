@@ -26,7 +26,6 @@ public class DataTransfer implements Serializable {
         this.topic = topic;
         this.name = name;
         this.command = command;
-        this.datetime = datetime;
         this.className = className;
         this.data = data;
     }
