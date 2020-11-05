@@ -56,7 +56,10 @@ public class ServerHandler extends ReadWriteHandler{
                             Set<ServerHandler> set = HandlerManagement.getAllSubscribers(data.topic);
                             for(ServerHandler handler: set){
                                 if (handler.name.equals(this.name)) continue;
-                                else handler.sendObj(data);
+                                else {
+                                    handler.sendObj(data);
+                                    LOGGER.info("{}: Send data room from ({}) ==> ({}): ({})", this.idSocket, this.name, handler.name, data.data);
+                                }
                             }
                         }
                     }
