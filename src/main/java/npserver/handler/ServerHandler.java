@@ -1,8 +1,9 @@
 package npserver.handler;
 
+import nputils.DataTransfer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import npserver.utils.Constants;
+import nputils.Constants;
 import npserver.utils.HandlerManagement;
 
 import java.io.IOException;

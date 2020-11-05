@@ -1,7 +1,8 @@
 package npserver.handler;
+import nputils.DataTransfer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import npserver.utils.Constants;
+import nputils.Constants;
 
 import java.io.IOException;
 

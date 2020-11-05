@@ -1,4 +1,4 @@
-package npserver.handler;
+package nputils;
 
 import java.io.Serializable;
 

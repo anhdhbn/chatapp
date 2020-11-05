@@ -1,8 +1,8 @@
 package npclient;
 
 import npclient.core.Connection;
-import npserver.handler.DataTransfer;
-import npserver.utils.Constants;
+import nputils.DataTransfer;
+import nputils.Constants;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

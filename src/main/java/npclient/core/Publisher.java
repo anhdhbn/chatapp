@@ -3,8 +3,8 @@ package npclient.core;
 import npclient.core.callback.ErrorListener;
 import npclient.core.callback.OnPublishMessageSuccess;
 import npclient.core.logger.CliLogger;
-import npserver.handler.DataTransfer;
-import npserver.utils.Constants;
+import nputils.DataTransfer;
+import nputils.Constants;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

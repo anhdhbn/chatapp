@@ -1,3 +1,5 @@
+package npserver;
+
 import npserver.Server;
 import npserver.utils.ConfigReader;
 

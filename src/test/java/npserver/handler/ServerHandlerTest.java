@@ -3,7 +3,8 @@ package npserver.handler;
 
 import npserver.Server;
 import npserver.utils.ConfigReader;
-import npserver.utils.Constants;
+import nputils.Constants;
+import nputils.DataTransfer;
 import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;

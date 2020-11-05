@@ -6,7 +6,7 @@ import npclient.core.callback.SubscribedTopicListener;
 import npclient.core.callback.UnsubscribedTopicListener;
 import npclient.core.logger.CliLogger;
 import npclient.exception.ConnectionClosedException;
-import npserver.handler.DataTransfer;
+import nputils.DataTransfer;
 
 import java.io.IOException;
 import java.util.HashMap;
