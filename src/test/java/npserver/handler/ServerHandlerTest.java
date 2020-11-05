@@ -62,6 +62,7 @@ class ServerHandlerTest {
 
     @org.junit.jupiter.api.AfterEach
     public void tearDown() throws Exception {
+        this.server.server.close();
         for(ReadWriteHandler handler :this.handlers){
             handler.closeAll();
         }

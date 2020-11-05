@@ -13,12 +13,13 @@ import org.apache.logging.log4j.Logger;
 public class Server{
     private static final Logger LOGGER = LogManager.getLogger(Server.class);
     private int port;
+    public ServerSocket server;
     public Server(ConfigReader config) {
         this.port = config.port;
     }
 
     public void StartServer() throws IOException {
-        ServerSocket server = new ServerSocket(port);
+        server = new ServerSocket(port);
         LOGGER.info("Server is opening on port {}", port);
         while (true) {
             Socket socket = server.accept();
