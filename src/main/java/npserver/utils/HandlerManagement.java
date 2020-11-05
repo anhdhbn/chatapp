@@ -1,6 +1,6 @@
-package utils;
+package npserver.utils;
 
-import handler.ServerHandler;
+import npserver.handler.ServerHandler;
 
 import java.util.HashMap;
 import java.util.HashSet;

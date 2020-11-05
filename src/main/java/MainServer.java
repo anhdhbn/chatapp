@@ -1,4 +1,5 @@
-import utils.ConfigReader;
+import npserver.Server;
+import npserver.utils.ConfigReader;
 
 import java.io.IOException;
 

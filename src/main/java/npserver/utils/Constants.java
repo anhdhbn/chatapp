@@ -1,4 +1,4 @@
-package utils;
+package npserver.utils;
 
 public final class Constants {
     public static final String SWITCH_AUDIO = "SWITCH_AUDIO";

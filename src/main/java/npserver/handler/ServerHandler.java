@@ -1,9 +1,9 @@
-package handler;
+package npserver.handler;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import utils.Constants;
-import utils.HandlerManagement;
+import npserver.utils.Constants;
+import npserver.utils.HandlerManagement;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -13,7 +13,7 @@ import java.util.Set;
 public class ServerHandler extends ReadWriteHandler{
     private static final Logger LOGGER = LogManager.getLogger(ServerHandler.class);
     private boolean switchAudio = false;
-    public String name;
+
 
     public ServerHandler(Socket socket) {
         super(socket);
@@ -32,7 +32,7 @@ public class ServerHandler extends ReadWriteHandler{
             while (true){
                 if(!switchAudio){
                     DataTransfer data = (DataTransfer) ois.readObject();
-                    LOGGER.info("{}: Recv {}", this.idSocket, data);
+                    LOGGER.info("{}: Recv from ({}) with command ({}) with topic ({}) data ({})", this.idSocket, data.name, data.command, data.topic, data.data);
                     if(!this.checkName(data)) break;
                     if(data.command.equals(Constants.INIT_COMMAND)){
                         if(data.name.isEmpty()) break;
@@ -48,7 +48,10 @@ public class ServerHandler extends ReadWriteHandler{
                         if(data.topic.contains("-")){
                             String partner = data.topic.split("-")[1];
                             ServerHandler hPartner = HandlerManagement.getHandlerByName(partner);
-                            if(hPartner != null) hPartner.sendObj(data);
+                            if(hPartner != null) {
+                                hPartner.sendObj(data);
+                                LOGGER.info("{}: Send data {} ==> {}: {}", this.idSocket, this.name, hPartner.name, data.data);
+                            }
                         }else {
                             Set<ServerHandler> set = HandlerManagement.getAllSubscribers(data.topic);
                             for(ServerHandler handler: set){

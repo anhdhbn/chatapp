@@ -1,6 +1,7 @@
-import handler.ServerHandler;
-import utils.ConfigReader;
-import utils.HandlerManagement;
+package npserver;
+
+import npserver.handler.ServerHandler;
+import npserver.utils.ConfigReader;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -21,7 +22,6 @@ public class Server{
         LOGGER.info("Server is opening on port {}", port);
         while (true) {
             Socket socket = server.accept();
-            System.out.println(socket.getRemoteSocketAddress() + " connected");
             ServerHandler serverHandler = new ServerHandler(socket);
             serverHandler.start();
         }

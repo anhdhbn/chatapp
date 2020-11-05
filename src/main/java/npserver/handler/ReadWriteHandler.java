@@ -1,4 +1,4 @@
-package handler;
+package npserver.handler;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,6 +13,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ReadWriteHandler extends HandlerThread{
     private static final Logger LOGGER = LogManager.getLogger(ReadWriteHandler.class);
     private Lock lock;
+    public String name;
 
     public ReadWriteHandler(Socket socket) {
         super(socket);
