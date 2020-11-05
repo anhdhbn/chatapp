@@ -1,5 +1,6 @@
 package handler;
 
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -15,14 +16,16 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 class ServerHandlerTest {
 
-    private static ServerSocket serverSocket;
-    private static Socket client;
-    private static ReadWriteHandler handler;
-    private static Thread thread;
-    private static ConfigReader cr;
+    protected ServerSocket serverSocket;
+    protected Socket client;
+    protected ReadWriteHandler handler;
+    protected Socket client2;
+    protected ReadWriteHandler handler2;
+    protected Thread thread;
+    protected ConfigReader cr;
 
-    @org.junit.jupiter.api.BeforeAll
-    public static void setUp() throws Exception {
+    @org.junit.jupiter.api.BeforeEach
+    public void setUp() throws Exception {
         cr = new ConfigReader();
         cr.getPropValues();
 
@@ -38,7 +41,7 @@ class ServerHandlerTest {
                     ServerHandler serverHandler = new ServerHandler(socket);
                     serverHandler.start();
                 } catch (IOException e) {
-                    e.printStackTrace();
+//                    e.printStackTrace();
                 }
             }
         });
@@ -46,21 +49,16 @@ class ServerHandlerTest {
         client = new Socket(InetAddress.getLocalHost(), cr.port);
         handler = new ReadWriteHandler(client);
         handler.initStream();
+
+        client2 = new Socket(InetAddress.getLocalHost(), cr.port);
+        handler2 = new ReadWriteHandler(client2);
+        handler2.initStream();
     }
 
-    @org.junit.jupiter.api.AfterAll
-    public static void tearDown() throws Exception {
+    @org.junit.jupiter.api.AfterEach
+    public void tearDown() throws Exception {
         serverSocket.close();
-    }
-
-    @Test
-    public void testEcho() throws IOException, ClassNotFoundException {
-        DataTransfer data = new DataTransfer();
-        data.className = "String";
-
-        handler.oos.writeObject(data);
-        DataTransfer data2 = (DataTransfer)handler.ois.readObject();
         client.close();
-        Assertions.assertEquals(data.className, data2.className);
+        handler.closeAll();
     }
 }
