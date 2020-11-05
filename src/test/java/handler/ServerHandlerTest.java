@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import utils.ConfigReader;
+import utils.Constants;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -49,10 +50,14 @@ class ServerHandlerTest {
         client = new Socket(InetAddress.getLocalHost(), cr.port);
         handler = new ReadWriteHandler(client);
         handler.initStream();
+        DataTransfer dataInit = new DataTransfer(null, "anhdh", Constants.INIT_COMMAND);
+        handler.sendObj(dataInit);
 
         client2 = new Socket(InetAddress.getLocalHost(), cr.port);
         handler2 = new ReadWriteHandler(client2);
         handler2.initStream();
+        DataTransfer dataInit2 = new DataTransfer(null, "anhdh2", Constants.INIT_COMMAND);
+        handler2.sendObj(dataInit2);
     }
 
     @org.junit.jupiter.api.AfterEach
@@ -60,5 +65,7 @@ class ServerHandlerTest {
         serverSocket.close();
         client.close();
         handler.closeAll();
+        client2.close();
+        handler2.closeAll();
     }
 }

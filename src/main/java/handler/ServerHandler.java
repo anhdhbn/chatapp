@@ -1,26 +1,28 @@
 package handler;
 
-import utils.HandlerManagement;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import utils.Constants;
+import utils.HandlerManagement;
 
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class ServerHandler extends ReadWriteHandler{
-    private boolean isInit = true;
+    private static final Logger LOGGER = LogManager.getLogger(ServerHandler.class);
     private boolean switchAudio = false;
     public String name;
 
     public ServerHandler(Socket socket) {
         super(socket);
+        LOGGER.info("{}: connected", this.idSocket);
     }
 
-    private boolean checkName(DataTransfer dataTransfer){
-        return HandlerManagement.checkContainKey(dataTransfer.name);
+    private boolean checkName(DataTransfer data){
+        if(data.command.equals(Constants.INIT_COMMAND)) return true;
+        else return HandlerManagement.checkContainKey(data.name);
     }
 
     @Override
@@ -30,21 +32,21 @@ public class ServerHandler extends ReadWriteHandler{
             while (true){
                 if(!switchAudio){
                     DataTransfer data = (DataTransfer) ois.readObject();
-                    if(isInit) {
-                        isInit = false;
-                        HandlerManagement.addNewHandler(data.name, this);
-                        this.name = data.name;
+                    LOGGER.info("{}: Recv {}", this.idSocket, data);
+                    if(!this.checkName(data)) break;
+                    if(data.command.equals(Constants.INIT_COMMAND)){
+                        if(data.name.isEmpty()) break;
+                        else{
+                            this.name = data.name;
+                            HandlerManagement.addNewHandler(data.name, this);
+                        }
                     }
-                    else {
-                        if(!this.checkName(data)) break;
-                    }
-
-                    if(data.command.equals(Constants.SWITCH_AUDIO)) this.switchAudio = true;
+                    else if(data.command.equals(Constants.SWITCH_AUDIO)) this.switchAudio = true;
                     else if(data.command.equals(Constants.SUBSCRIBE)) HandlerManagement.subscribeTopic(this, data.topic);
                     else if (data.command.equals(Constants.UN_SUBSCRIBE)) HandlerManagement.unsubscribe(this, data.topic);
                     else if (data.command.equals(Constants.PUBLISH)){
-                        if(data.topic.contains("|")){
-                            String partner = data.topic.split("|")[1];
+                        if(data.topic.contains("-")){
+                            String partner = data.topic.split("-")[1];
                             ServerHandler hPartner = HandlerManagement.getHandlerByName(partner);
                             if(hPartner != null) hPartner.sendObj(data);
                         }else {
@@ -69,7 +71,7 @@ public class ServerHandler extends ReadWriteHandler{
                 }
             }
         } catch (IOException | ClassNotFoundException e) {
-//            e.printStackTrace();
+            LOGGER.error("{}: error: {}", this.idSocket, e.toString());
         }
         finally {
             this.closeAll();
@@ -82,12 +84,12 @@ public class ServerHandler extends ReadWriteHandler{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ServerHandler handler = (ServerHandler) o;
-        return Objects.equals(name, handler.name);
+        return Objects.equals(name, handler.name) && Objects.equals(idSocket, handler.idSocket);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(isInit, name);
+        return Objects.hash(name, idSocket);
     }
 
     @Override

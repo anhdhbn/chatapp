@@ -1,5 +1,8 @@
 package handler;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -8,10 +11,11 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class ReadWriteHandler extends HandlerThread{
-    private Socket socket;
+    private static final Logger LOGGER = LogManager.getLogger(ReadWriteHandler.class);
     private Lock lock;
+
     public ReadWriteHandler(Socket socket) {
-        this.setSocket(socket);
+        super(socket);
         this.lock = new ReentrantLock(true);
     }
 
@@ -33,7 +37,7 @@ public class ReadWriteHandler extends HandlerThread{
         try {
             this.oos.writeObject(data);
         } catch (IOException e) {
-//            e.printStackTrace();
+            LOGGER.error("{}: error: {}", this.idSocket, e.getMessage());
         } finally {
             this.lock.unlock();
         }
@@ -45,7 +49,7 @@ public class ReadWriteHandler extends HandlerThread{
         try {
             data = (DataTransfer)this.ois.readObject();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("{}: error: {}", this.idSocket, e.getMessage());
         } finally {
             this.lock.unlock();
             return data;
