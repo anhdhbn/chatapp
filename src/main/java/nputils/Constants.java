@@ -8,4 +8,7 @@ public interface Constants {
     String PUBLISH = "PUBLISH";
     String UN_KNOWN_COMMAND = "UN_KNOWN_COMMAND";
     String ONLINE_TOPIC = "ONLINE";
+    String PREFIX_CHAT = "chat";
+    String PREFIX_GROUP = "group";
+    String SPLITTER = "/";
 }

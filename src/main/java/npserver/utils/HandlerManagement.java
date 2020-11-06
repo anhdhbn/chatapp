@@ -13,28 +13,35 @@ import org.apache.logging.log4j.Logger;
 public class HandlerManagement {
     private static final Logger LOGGER = LogManager.getLogger(HandlerManagement.class);
 
-    private static Map<String, ServerHandler> socketDic = new HashMap<String, ServerHandler>();
+    private static Map<String, Set<ServerHandler>> socketDic = new HashMap<String, Set<ServerHandler>>();
     private static Map<String, Set<ServerHandler>> topics = new HashMap<String, Set<ServerHandler>>();
 
-    public static ServerHandler getHandlerByName(String name) {
-        return socketDic.get(name);
-    }
 
-    public static boolean addNewHandler(String name, ServerHandler client){
-        if (socketDic.containsKey(name)) return false;
-        else {
-            socketDic.put(name, client);
-            LOGGER.info("{}: ({})'s handler was added", client.idSocket, client.name);
-            Helper.sendOnline();
-            return true;
+    public static void addNewHandler(String name, ServerHandler client){
+        if (socketDic.containsKey(name)) {
+            Set<ServerHandler> set = socketDic.get(name);
+            set.add(client);
         }
+        else {
+            Set<ServerHandler> set = new HashSet<>();
+            set.add(client);
+            socketDic.put(name, set);
+            Helper.sendOnline();
+        }
+        LOGGER.info("{}: ({})'s handler was added, current number handlers of this user ({})", client.idSocket, client.name, socketDic.get(name).size());
     }
 
     public static void removeHandler(String name, ServerHandler client){
         if (socketDic.containsKey(name)){
-            socketDic.remove(name, client);
-            LOGGER.info("{}: ({})'s handler was removed", client.idSocket, client.name);
-            Helper.sendOnline();
+            Set<ServerHandler> set = socketDic.get(name);
+            if(set.size() > 0) {
+                set.remove(client);
+                LOGGER.info("{}: ({})'s handler was removed", client.idSocket, client.name);
+            }
+            if(set.size() == 0) {
+                socketDic.remove(name, set);
+                Helper.sendOnline();
+            }
         }
     }
 
