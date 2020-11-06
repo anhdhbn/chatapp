@@ -47,7 +47,7 @@ public class Helper {
         for(String member: HandlerManagement.getAllMembers()){
             members.add(member);
         }
-        DataTransfer data = new DataTransfer(Constants.ONLINE_TOPIC, "server", null, "Set<String>", members);
+        DataTransfer data = new DataTransfer(Constants.ONLINE_TOPIC, "server", null, members);
         for(ServerHandler handler: set){
             handler.sendObj(data);
             LOGGER.info("Server send online signal ==> ({}): ({}) online", handler.name, members.size());

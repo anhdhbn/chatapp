@@ -37,7 +37,7 @@ public class User {
 
         Thread.sleep(5000);
 
-        DataTransfer dataPub = new DataTransfer("test topic", "Lam", Constants.PUBLISH, String.class.getName(), "message");
+        DataTransfer dataPub = new DataTransfer("test topic", "Lam", Constants.PUBLISH, "message");
         outputStream1.writeObject(dataPub);
 
         Thread.sleep(5000);

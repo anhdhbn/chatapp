@@ -16,14 +16,14 @@ public class PublishTest extends  ServerHandlerTest{
         this.delay();
         String topic = this.generateGroupTopic("test topic");
         DataTransfer dataSub = new DataTransfer(topic, handler1.name, Constants.SUBSCRIBE);
-        DataTransfer dataPub = new DataTransfer(topic, handler1.name, Constants.PUBLISH, "String", "message");
+        DataTransfer dataPub = new DataTransfer(topic, handler1.name, Constants.PUBLISH, "message");
         handler1.sendObj(dataSub);
         this.delay();
         handler2.sendObj(dataPub);
         this.delay();
 
         DataTransfer dataRecv = handler1.receiveObj();
-        Assertions.assertEquals(dataPub.className, dataRecv.className);
+        Assertions.assertEquals(dataPub.data, dataRecv.data);
     }
 
     @Test
@@ -39,10 +39,10 @@ public class PublishTest extends  ServerHandlerTest{
         handler2.sendObj(dataSub2);
         this.delay();
 
-        DataTransfer dataPub1 = new DataTransfer(this.generateChatTopic(handler2.name), handler1.name, Constants.PUBLISH, "String", "message");
+        DataTransfer dataPub1 = new DataTransfer(this.generateChatTopic(handler2.name), handler1.name, Constants.PUBLISH, "message");
         handler1.sendObj(dataPub1);
 
         DataTransfer dataRecv = handler2.receiveObj();
-        Assertions.assertEquals(dataPub1.className, dataRecv.className);
+        Assertions.assertEquals(dataPub1.data, dataRecv.data);
     }
 }
