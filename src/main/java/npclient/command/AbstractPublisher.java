@@ -1,11 +1,11 @@
 package npclient.command;
 
+import javafx.application.Platform;
 import npclient.core.Connection;
 import npclient.core.callback.ErrorListener;
 import npclient.core.callback.OnPublishMessageSuccess;
 import npclient.core.logger.CliLogger;
-import nputils.Constants;
-import transferable.DataTransfer;
+import nputils.DataTransfer;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -30,7 +30,7 @@ public abstract class AbstractPublisher implements Runnable {
     }
 
     public void post() {
-        String threadName = "Publisher " + topic;
+        String threadName = topic + " Publisher Thread";
         new Thread(this, threadName).start();
     }
 
@@ -56,7 +56,7 @@ public abstract class AbstractPublisher implements Runnable {
 
             if (successListener != null) {
                 logger.debug("On Success Callback");
-                successListener.onReceive(dataTransfer);
+                Platform.runLater(() -> successListener.onReceive(dataTransfer));
             }
 
             postProcess(publishConn);
@@ -65,7 +65,7 @@ public abstract class AbstractPublisher implements Runnable {
             logger.error("Failed to publish: " + e.getMessage());
             if (errorListener != null) {
                 logger.debug("On Error Callback");
-                errorListener.onReceive(e);
+                Platform.runLater(() -> errorListener.onReceive(e));
             } else {
                 e.printStackTrace();
             }

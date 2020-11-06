@@ -2,7 +2,7 @@ package npclient.command;
 
 import npclient.core.Connection;
 import nputils.Constants;
-import transferable.DataTransfer;
+import nputils.DataTransfer;
 
 import java.io.IOException;
 

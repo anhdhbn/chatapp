@@ -1,6 +1,6 @@
 package npclient.core.callback;
 
-import transferable.DataTransfer;
+import nputils.DataTransfer;
 
 public interface MessageListener {
     void onReceive(DataTransfer message);

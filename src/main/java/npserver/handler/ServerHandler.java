@@ -1,7 +1,7 @@
 package npserver.handler;
 
 import npserver.utils.Helper;
-import transferable.DataTransfer;
+import nputils.DataTransfer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import nputils.Constants;
