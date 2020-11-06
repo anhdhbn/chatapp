@@ -12,14 +12,6 @@ import java.util.Set;
 
 public class Helper {
     private static final Logger LOGGER = LogManager.getLogger(Helper.class);
-    public static void sendMessPeerToPeer(ServerHandler from, DataTransfer data){
-        String partner = data.topic.split("-")[1];
-        ServerHandler hPartner = HandlerManagement.getHandlerByName(partner);
-        if(hPartner != null) {
-            hPartner.sendObj(data);
-            LOGGER.info("{}: Send data ({}) ==> ({}): ({})", from.idSocket, from.name, hPartner.name, data.data);
-        }
-    }
 
     public static void sendMessToTopic(ServerHandler from, DataTransfer data){
         Set<ServerHandler> set = HandlerManagement.getAllSubscribers(data.topic);
@@ -27,7 +19,7 @@ public class Helper {
             if (handler.name.equals(from.name)) continue;
             else {
                 handler.sendObj(data);
-                LOGGER.info("{}: Send data room from ({}) ==> ({}): ({})", from.idSocket, from.name, handler.name, data.data);
+                LOGGER.info("{}: Send data from ({}) ==> group ({}) ({}): ({})", from.idSocket, from.name, data.topic, handler.name, data.data);
             }
         }
     }

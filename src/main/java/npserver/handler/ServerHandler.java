@@ -47,11 +47,7 @@ public class ServerHandler extends ReadWriteHandler{
                     else if(data.command.equals(Constants.SUBSCRIBE)) HandlerManagement.subscribeTopic(this, data.topic);
                     else if (data.command.equals(Constants.UN_SUBSCRIBE)) HandlerManagement.unsubscribe(this, data.topic);
                     else if (data.command.equals(Constants.PUBLISH)){
-                        if(data.topic.contains("-")){
-                            Helper.sendMessPeerToPeer(this, data);
-                        }else {
-                            Helper.sendMessToTopic(this, data);
-                        }
+                        Helper.sendMessToTopic(this, data);
                     }
                     else {
                         // UN_KNOWN_COMMAND
