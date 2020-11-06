@@ -3,7 +3,7 @@ package npserver.server;
 import npserver.ServerTest;
 import npserver.handler.ReadWriteHandler;
 import nputils.Constants;
-import nputils.DataTransfer;
+import transferable.DataTransfer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

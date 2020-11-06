@@ -2,7 +2,7 @@ package npserver.utils;
 
 import npserver.handler.ServerHandler;
 import nputils.Constants;
-import nputils.DataTransfer;
+import transferable.DataTransfer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
