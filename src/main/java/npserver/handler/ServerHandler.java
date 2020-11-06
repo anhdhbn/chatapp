@@ -1,7 +1,7 @@
 package npserver.handler;
 
 import npserver.utils.Helper;
-import nputils.DataTransfer;
+import transferable.DataTransfer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import nputils.Constants;
@@ -10,7 +10,6 @@ import npserver.utils.HandlerManagement;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Objects;
-import java.util.Set;
 
 public class ServerHandler extends ReadWriteHandler{
     private static final Logger LOGGER = LogManager.getLogger(ServerHandler.class);

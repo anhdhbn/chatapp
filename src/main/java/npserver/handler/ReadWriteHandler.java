@@ -1,6 +1,6 @@
 package npserver.handler;
 
-import nputils.DataTransfer;
+import transferable.DataTransfer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

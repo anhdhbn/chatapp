@@ -1,14 +1,12 @@
 package npserver.handler;
 
 import nputils.Constants;
-import nputils.DataTransfer;
+import transferable.DataTransfer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 public class ExtensionTest extends  ServerHandlerTest{
     @Test

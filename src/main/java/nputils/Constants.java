@@ -1,11 +1,11 @@
 package nputils;
 
-public final class Constants {
-    public static final String SWITCH_AUDIO = "SWITCH_AUDIO";
-    public static final String INIT_COMMAND = "INIT_COMMAND";
-    public static final String SUBSCRIBE = "SUBSCRIBE";
-    public static final String UN_SUBSCRIBE = "UN_SUBSCRIBE";
-    public static final String PUBLISH = "PUBLISH";
-    public static final String UN_KNOWN_COMMAND = "UN_KNOWN_COMMAND";
-    public static final String ONLINE_TOPIC = "ONLINE";
+public interface Constants {
+    String SWITCH_AUDIO = "SWITCH_AUDIO";
+    String INIT_COMMAND = "INIT_COMMAND";
+    String SUBSCRIBE = "SUBSCRIBE";
+    String UN_SUBSCRIBE = "UN_SUBSCRIBE";
+    String PUBLISH = "PUBLISH";
+    String UN_KNOWN_COMMAND = "UN_KNOWN_COMMAND";
+    String ONLINE_TOPIC = "ONLINE";
 }

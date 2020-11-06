@@ -1,5 +1,5 @@
 package npserver.handler;
-import nputils.DataTransfer;
+import transferable.DataTransfer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import nputils.Constants;

@@ -1,4 +1,4 @@
 package npclient.core.callback;
 
-public interface SubscribedTopicListener extends MessageListener, ISubscribeCallback {
+public interface SubscribedTopicListener extends MessageListener, ICallback {
 }

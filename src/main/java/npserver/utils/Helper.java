@@ -2,12 +2,11 @@ package npserver.utils;
 
 import npserver.handler.ServerHandler;
 import nputils.Constants;
-import nputils.DataTransfer;
+import transferable.DataTransfer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Set;
 
 public class Helper {
