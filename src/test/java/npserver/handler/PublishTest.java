@@ -14,9 +14,9 @@ public class PublishTest extends  ServerHandlerTest{
         ReadWriteHandler handler1 = this.handlers.get(0);
         ReadWriteHandler handler2 = this.handlers.get(1);
         this.delay();
-
-        DataTransfer dataSub = new DataTransfer("test topic", handler1.name, Constants.SUBSCRIBE);
-        DataTransfer dataPub = new DataTransfer(Constants.PREFIX_GROUP + Constants.SPLITTER + "test topic", handler1.name, Constants.PUBLISH, "String", "message");
+        String topic = this.generateGroupTopic("test topic");
+        DataTransfer dataSub = new DataTransfer(topic, handler1.name, Constants.SUBSCRIBE);
+        DataTransfer dataPub = new DataTransfer(topic, handler1.name, Constants.PUBLISH, "String", "message");
         handler1.sendObj(dataSub);
         this.delay();
         handler2.sendObj(dataPub);
@@ -24,5 +24,25 @@ public class PublishTest extends  ServerHandlerTest{
 
         DataTransfer dataRecv = handler1.receiveObj();
         Assertions.assertEquals(dataPub.className, dataRecv.className);
+    }
+
+    @Test
+    public void twoClientCanChatEachOther() throws IOException, InterruptedException {
+        this.generateClient(2);
+        ReadWriteHandler handler1 = this.handlers.get(0);
+        ReadWriteHandler handler2 = this.handlers.get(1);
+        this.delay();
+
+        DataTransfer dataSub1 = new DataTransfer(this.generateChatTopic(handler2.name), handler1.name, Constants.SUBSCRIBE);
+        DataTransfer dataSub2 = new DataTransfer(this.generateChatTopic(handler1.name), handler2.name, Constants.SUBSCRIBE);
+        handler1.sendObj(dataSub1);
+        handler2.sendObj(dataSub2);
+        this.delay();
+
+        DataTransfer dataPub1 = new DataTransfer(this.generateChatTopic(handler2.name), handler1.name, Constants.PUBLISH, "String", "message");
+        handler1.sendObj(dataPub1);
+
+        DataTransfer dataRecv = handler2.receiveObj();
+        Assertions.assertEquals(dataPub1.className, dataRecv.className);
     }
 }

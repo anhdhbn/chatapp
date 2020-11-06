@@ -71,4 +71,12 @@ class ServerHandlerTest {
     public void delay() throws InterruptedException {
         Thread.sleep(3000);
     }
+
+    public String generateChatTopic(String user){
+        return Constants.PREFIX_CHAT + Constants.SPLITTER + user;
+    }
+
+    public String generateGroupTopic(String topic){
+        return Constants.PREFIX_GROUP + Constants.SPLITTER + topic;
+    }
 }
