@@ -14,14 +14,20 @@ public class Helper {
     private static final Logger LOGGER = LogManager.getLogger(Helper.class);
 
     public static void sendMessToTopic(ServerHandler from, DataTransfer data){
-        Set<ServerHandler> set = HandlerManagement.getAllSubscribers(data.topic);
-        for(ServerHandler handler: set){
-            if (handler.name.equals(from.name)) continue;
-            else {
-                handler.sendObj(data);
-                LOGGER.info("{}: Send data from ({}) ==> group ({}) ({}): ({})", from.idSocket, from.name, data.topic, handler.name, data.data);
+        String[] arr = data.topic.split(Constants.SPLITTER);
+        if(arr.length != 2) return;
+        if(arr[0].equals(Constants.PREFIX_CHAT) || arr[0].equals(Constants.PREFIX_GROUP)){
+            String topic = arr[1];
+            Set<ServerHandler> set = HandlerManagement.getAllSubscribers(topic);
+            for(ServerHandler handler: set){
+                if (handler.name.equals(from.name)) continue;
+                else {
+                    handler.sendObj(data);
+                    LOGGER.info("{}: Send data from ({}) ==> group ({}) ({}): ({})", from.idSocket, from.name, topic, handler.name, data.data);
+                }
             }
         }
+
     }
 
     public static void sendOnline(){

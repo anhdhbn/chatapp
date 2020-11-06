@@ -16,7 +16,7 @@ public class PublishTest extends  ServerHandlerTest{
         this.delay();
 
         DataTransfer dataSub = new DataTransfer("test topic", handler1.name, Constants.SUBSCRIBE);
-        DataTransfer dataPub = new DataTransfer("test topic", handler1.name, Constants.PUBLISH, "String", "message");
+        DataTransfer dataPub = new DataTransfer(Constants.PREFIX_GROUP + Constants.SPLITTER + "test topic", handler1.name, Constants.PUBLISH, "String", "message");
         handler1.sendObj(dataSub);
         this.delay();
         handler2.sendObj(dataPub);
