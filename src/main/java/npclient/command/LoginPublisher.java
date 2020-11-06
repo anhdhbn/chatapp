@@ -1,19 +1,16 @@
 package npclient.command;
 
-import javafx.application.Platform;
 import npclient.core.Connection;
 import npclient.core.callback.OnLoginSuccess;
 import nputils.Constants;
 import nputils.DataTransfer;
-
-import java.io.IOException;
 
 public class LoginPublisher extends AbstractPublisher {
 
     private OnLoginSuccess onLoginSuccess;
 
     public LoginPublisher(String username) {
-        super(null, username);
+        super(Constants.INITIALIZE, username);
         dataTransfer = new DataTransfer(topic, username, Constants.INIT_COMMAND);
     }
 
@@ -23,9 +20,9 @@ public class LoginPublisher extends AbstractPublisher {
     }
 
     @Override
-    protected void postProcess(Connection conn) throws IOException {
+    protected void postProcess(Connection conn) {
         if (onLoginSuccess != null) {
-            Platform.runLater(() -> onLoginSuccess.onLogin(username, conn));
+            /*Platform.runLater(() -> */onLoginSuccess.onLogin(username, conn)/*)*/;
         }
     }
 }
