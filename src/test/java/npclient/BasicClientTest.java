@@ -22,41 +22,41 @@ public class BasicClientTest {
     public void singleThreadTest() throws IOException, ClassNotFoundException, InterruptedException {
         Connection user1 = new Connection("np-server.anhdh.me", 1699);
         ObjectOutputStream outputStream1 = new ObjectOutputStream(user1.getOutputStream());
-        DataTransfer login1 = new DataTransfer("login", "Lam", Constants.INIT_COMMAND);
+        DataTransfer login1 = new DataTransfer(Constants.INITIALIZE, "Lam", Constants.INIT_COMMAND);
         outputStream1.writeObject(login1);
 
         Connection user2 = new Connection("np-server.anhdh.me", 1699);
         ObjectOutputStream outputStream2 = new ObjectOutputStream(user2.getOutputStream());
-        DataTransfer login2 = new DataTransfer("login", "HA", Constants.INIT_COMMAND);
+        DataTransfer login2 = new DataTransfer(Constants.INITIALIZE, "HA", Constants.INIT_COMMAND);
         outputStream2.writeObject(login2);
 
         Thread.sleep(5000);
 
-        DataTransfer dataSub = new DataTransfer("test topic", "HA", Constants.SUBSCRIBE);
+        DataTransfer dataSub = new DataTransfer("chat/Lam", "HA", Constants.SUBSCRIBE);
         outputStream2.writeObject(dataSub);
 
         Thread.sleep(5000);
 
-        DataTransfer dataPub = new DataTransfer("test topic", "Lam", Constants.PUBLISH, String.class.getName(), "message");
+        DataTransfer dataPub = new DataTransfer("chat/HA", "Lam", Constants.PUBLISH, String.class.getName(), "message");
         outputStream1.writeObject(dataPub);
 
         Thread.sleep(5000);
 
         ObjectInputStream inputStream2 = new ObjectInputStream(user2.getInputStream());
         DataTransfer receivedData = (DataTransfer) inputStream2.readObject();
-        Assertions.assertEquals("test topic", receivedData.topic);
+        Assertions.assertEquals("chat/Lam", receivedData.topic);
         Assertions.assertEquals("message", receivedData.data);
     }
 
     @Test
     public void basicChatTest() throws InterruptedException {
-        new LoginPublisher("lamnt")
+        new LoginPublisher("lamnt1")
                 .setOnLoginSuccess(new OnLoginSuccess() {
                     @Override
                     public void onLogin(String username, Connection connection) {
                         try {
                             Thread.sleep(10000);
-                            new Publisher("chat", username)
+                            new Publisher("chat/lamnt2", username)
                                     .putData("Hello")
                                     .setSuccessListener(new OnPublishMessageSuccess() {
                                         @Override
@@ -78,13 +78,13 @@ public class BasicClientTest {
                 })
                 .post();
 
-        new LoginPublisher("tungtobi")
+        new LoginPublisher("lamnt2")
                 .setOnLoginSuccess(new OnLoginSuccess() {
                     @Override
                     public void onLogin(String username, Connection connection) {
                         try {
                             Thread.sleep(3000);
-                            new Subscriber("chat", username)
+                            new Subscriber("chat/lamnt1", username)
                                     .setNewMessageListener(new SubscribedTopicListener() {
                                         @Override
                                         public void onReceive(DataTransfer message) {
@@ -106,6 +106,6 @@ public class BasicClientTest {
                 })
                 .post();
 
-        Thread.sleep(20000);
+        Thread.sleep(25000);
     }
 }

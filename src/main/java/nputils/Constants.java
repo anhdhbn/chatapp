@@ -1,6 +1,7 @@
 package nputils;
 
 public interface Constants {
+    String INITIALIZE = null;
     String SWITCH_AUDIO = "SWITCH_AUDIO";
     String INIT_COMMAND = "INIT_COMMAND";
     String SUBSCRIBE = "SUBSCRIBE";

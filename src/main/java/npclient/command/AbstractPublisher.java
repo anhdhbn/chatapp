@@ -5,6 +5,7 @@ import npclient.core.Connection;
 import npclient.core.callback.ErrorListener;
 import npclient.core.callback.OnPublishMessageSuccess;
 import npclient.core.logger.CliLogger;
+import nputils.Constants;
 import nputils.DataTransfer;
 
 import java.io.IOException;
@@ -50,13 +51,18 @@ public abstract class AbstractPublisher implements Runnable {
             logger.debug("Initialize a publish connection");
             Connection publishConn = new Connection();
 
+
+
             logger.debug("Publish " + dataTransfer + " to topic " + topic);
             ObjectOutputStream outputStream = new ObjectOutputStream(publishConn.getOutputStream());
+            DataTransfer initData = new DataTransfer(Constants.INITIALIZE, username, Constants.INIT_COMMAND);
+            outputStream.writeObject(initData);
+
             outputStream.writeObject(dataTransfer);
 
             if (successListener != null) {
                 logger.debug("On Success Callback");
-                Platform.runLater(() -> successListener.onReceive(dataTransfer));
+                /*Platform.runLater(() -> */successListener.onReceive(dataTransfer)/*)*/;
             }
 
             postProcess(publishConn);
