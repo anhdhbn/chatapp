@@ -19,7 +19,6 @@ public class User {
         this.connection = connection;
     }
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
-
+    public static void main(String[] args) {
     }
 }

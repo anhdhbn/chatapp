@@ -12,21 +12,32 @@ import java.util.Set;
 public class Helper {
     private static final Logger LOGGER = LogManager.getLogger(Helper.class);
 
-    public static void sendMessToTopic(ServerHandler from, DataTransfer data){
-        String[] arr = data.topic.split(Constants.SPLITTER);
-        if(arr.length != 2) return;
-        if(arr[0].equals(Constants.PREFIX_CHAT) || arr[0].equals(Constants.PREFIX_GROUP)){
-            String topic = arr[1];
-            Set<ServerHandler> set = HandlerManagement.getAllSubscribers(topic);
-            for(ServerHandler handler: set){
-                if (handler.name.equals(from.name)) continue;
-                else {
-                    handler.sendObj(data);
-                    LOGGER.info("{}: Send data from ({}) ==> group ({}) ({}): ({})", from.idSocket, from.name, topic, handler.name, data.data);
-                }
+    public static void sendMessPeerToPeer(ServerHandler from, DataTransfer data, String to){
+        // A sub chat/B
+        // B sub chat/A
+        // from A publish topic: chat/B
+        // get all subscribers topic: chat/A
+        // find a handler named B
+        String topic = Constants.PREFIX_CHAT + Constants.SPLITTER + from.name; // chat/A
+        Set<ServerHandler> set = HandlerManagement.getAllSubscribers(topic);
+        for(ServerHandler handler: set){
+            if (handler.name.equals(to)) {
+                data.topic = topic;
+                handler.sendObj(data);
+                LOGGER.info("{}: Send data ({}) ==> ({}): ({})", from.idSocket, from.name, handler.name, data.data);
             }
         }
+    }
 
+    public static void sendMessToTopic(ServerHandler from, DataTransfer data){
+        Set<ServerHandler> set = HandlerManagement.getAllSubscribers(data.topic);
+        for(ServerHandler handler: set){
+            if (handler.name.equals(from.name)) continue;
+            else {
+                handler.sendObj(data);
+                LOGGER.info("{}: Send data from ({}) ==> group ({}) ({}): ({})", from.idSocket, from.name, data.topic, handler.name, data.data);
+            }
+        }
     }
 
     public static void sendOnline(){
@@ -35,7 +46,7 @@ public class Helper {
         for(String member: HandlerManagement.getAllMembers()){
             members.add(member);
         }
-        DataTransfer data = new DataTransfer(Constants.ONLINE_TOPIC, "server", null, "Set<String>", members);
+        DataTransfer data = new DataTransfer(Constants.ONLINE_TOPIC, "server", null, members);
         for(ServerHandler handler: set){
             handler.sendObj(data);
             LOGGER.info("Server send online signal ==> ({}): ({}) online", handler.name, members.size());
