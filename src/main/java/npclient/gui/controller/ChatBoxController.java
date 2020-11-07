@@ -7,7 +7,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.util.Callback;
-import npclient.core.Message;
+import npclient.core.entity.Message;
 import npclient.gui.view.SendMessageCell;
 
 import java.net.URL;

@@ -6,11 +6,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
-import npclient.command.LoginPublisher;
-import npclient.core.Connection;
+import npclient.core.command.LoginPublisher;
+import npclient.core.TCPConnection;
 import npclient.core.callback.ErrorListener;
 import npclient.core.callback.OnLoginSuccess;
-import npclient.gui.StageManager;
+import npclient.gui.manager.StageManager;
 import npclient.gui.utils.FXMLUtils;
 
 import java.net.URL;
@@ -35,7 +35,7 @@ public class LoginController implements Initializable {
         new LoginPublisher(username)
                 .setOnLoginSuccess(new OnLoginSuccess() {
                     @Override
-                    public void onLogin(String username, Connection connection) {
+                    public void onLogin(String username, TCPConnection connection) {
                         loginSuccess();
                     }
                 })

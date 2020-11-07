@@ -8,7 +8,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
-import npclient.core.ChatItem;
+import npclient.core.entity.ChatItem;
 import npclient.gui.view.ChatBox;
 import npclient.gui.view.ChatItemCell;
 

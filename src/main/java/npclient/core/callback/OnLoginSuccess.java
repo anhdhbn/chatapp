@@ -1,7 +1,7 @@
 package npclient.core.callback;
 
-import npclient.core.Connection;
+import npclient.core.TCPConnection;
 
 public interface OnLoginSuccess {
-    void onLogin(String username, Connection mainConnection);
+    void onLogin(String username, TCPConnection mainConnection);
 }

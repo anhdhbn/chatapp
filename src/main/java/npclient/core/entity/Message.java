@@ -1,4 +1,4 @@
-package npclient.core;
+package npclient.core.entity;
 
 public class Message {
 

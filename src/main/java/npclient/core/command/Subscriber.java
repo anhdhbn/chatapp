@@ -1,10 +1,10 @@
-package npclient.command;
+package npclient.core.command;
 
 import javafx.application.Platform;
-import npclient.core.Connection;
+import npclient.core.TCPConnection;
 import npclient.core.callback.ErrorListener;
 import npclient.core.callback.SubscribedTopicListener;
-import npclient.core.logger.CliLogger;
+import npclient.CliLogger;
 import nputils.Constants;
 import nputils.DataTransfer;
 
@@ -12,17 +12,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-public class Subscriber implements Runnable {
+public class Subscriber extends AbstractTask {
 
     private static final CliLogger logger = CliLogger.get(Subscriber.class);
 
     private final String topic;
 
-    private boolean isCancel = false;
-
     private SubscribedTopicListener newMsgListener;
-
-    private ErrorListener errListener;
 
     private final String username;
 
@@ -36,14 +32,9 @@ public class Subscriber implements Runnable {
         return this;
     }
 
-    public Subscriber setOnErrorListener(ErrorListener listener) {
-        this.errListener = listener;
-        return this;
-    }
-
-    public Subscriber stop() {
-        isCancel = true;
-        return this;
+    @Override
+    public Subscriber setErrorListener(ErrorListener listener) {
+        return (Subscriber) super.setErrorListener(listener);
     }
 
     public void listen() {
@@ -54,7 +45,7 @@ public class Subscriber implements Runnable {
     public void run() {
         try {
             logger.debug("Initialize a subscribe connection");
-            Connection subConn = new Connection();
+            TCPConnection subConn = new TCPConnection();
 
             ObjectOutputStream outputStream = new ObjectOutputStream(subConn.getOutputStream());
 
@@ -92,9 +83,9 @@ public class Subscriber implements Runnable {
 
     private void handleError(Exception e) {
         logger.error("Failed to subscribe: " + e.getMessage());
-        if (errListener != null) {
+        if (errorListener != null) {
             logger.debug("On Error Callback");
-            Platform.runLater(() -> errListener.onReceive(e));
+            Platform.runLater(() -> errorListener.onReceive(e));
         } else {
             e.printStackTrace();
         }
