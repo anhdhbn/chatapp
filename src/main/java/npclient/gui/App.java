@@ -1,10 +1,10 @@
 package npclient.gui;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import npclient.gui.manager.StageManager;
 import npclient.gui.utils.FXMLUtils;
 
 public class App extends Application {

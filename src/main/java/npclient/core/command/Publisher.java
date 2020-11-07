@@ -1,12 +1,12 @@
-package npclient.command;
+package npclient.core.command;
 
-import npclient.core.Connection;
+import npclient.core.TCPConnection;
 import nputils.Constants;
 import nputils.DataTransfer;
 
 import java.io.IOException;
 
-public class Publisher extends AbstractPublisher {
+public class Publisher extends TCPPublisher {
 
     public Publisher(String topic, String username) {
         super(topic, username);
@@ -18,7 +18,7 @@ public class Publisher extends AbstractPublisher {
     }
 
     @Override
-    protected void postProcess(Connection publishConn) throws IOException {
+    protected void postProcess(TCPConnection publishConn) throws IOException {
         logger.debug("Close publish connection");
         publishConn.close();
     }

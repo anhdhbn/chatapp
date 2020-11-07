@@ -16,13 +16,13 @@ public class ChatBox extends AnchorPane {
         try {
             fxmlLoader.load(getClass().getResourceAsStream("/fxml/chatbox.fxml"));
             controller = fxmlLoader.getController();
-            setMargin();
+            margin();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void setMargin() {
+    private void margin() {
         AnchorPane.setTopAnchor(this, 0.0);
         AnchorPane.setRightAnchor(this, 0.0);
         AnchorPane.setBottomAnchor(this, 0.0);

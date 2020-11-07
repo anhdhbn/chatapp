@@ -4,8 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.layout.Pane;
-import npclient.gui.StageManager;
+import npclient.gui.manager.StageManager;
 
 import java.io.IOException;
 
@@ -16,7 +15,7 @@ public class FXMLUtils {
             return new FXMLLoader().load(FXMLUtils.class.getResourceAsStream(path));
         } catch (IOException e) {
             e.printStackTrace();
-            return (T) new Pane();
+            return null;
         }
     }
 

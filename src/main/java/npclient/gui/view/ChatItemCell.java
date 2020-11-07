@@ -5,9 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
-import npclient.core.ChatItem;
+import npclient.core.entity.ChatItem;
 
-import java.awt.*;
 import java.io.IOException;
 
 public class ChatItemCell extends ListCell<ChatItem> {

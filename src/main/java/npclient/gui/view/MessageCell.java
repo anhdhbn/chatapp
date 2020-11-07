@@ -3,11 +3,9 @@ package npclient.gui.view;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ListCell;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import npclient.core.ChatItem;
-import npclient.core.Message;
+import npclient.core.entity.Message;
 
 import java.io.IOException;
 

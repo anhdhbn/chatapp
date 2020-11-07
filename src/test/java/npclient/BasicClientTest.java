@@ -1,9 +1,9 @@
 package npclient;
 
-import npclient.command.LoginPublisher;
-import npclient.command.Publisher;
-import npclient.command.Subscriber;
-import npclient.core.Connection;
+import npclient.core.command.LoginPublisher;
+import npclient.core.command.Publisher;
+import npclient.core.command.Subscriber;
+import npclient.core.TCPConnection;
 import npclient.core.callback.OnLoginSuccess;
 import npclient.core.callback.OnPublishMessageSuccess;
 import npclient.core.callback.SubscribedTopicListener;
@@ -20,12 +20,12 @@ public class BasicClientTest {
 
     @Test
     public void singleThreadTest() throws IOException, ClassNotFoundException, InterruptedException {
-        Connection user1 = new Connection("np-server.anhdh.me", 1699);
+        TCPConnection user1 = new TCPConnection("np-server.anhdh.me", 1699);
         ObjectOutputStream outputStream1 = new ObjectOutputStream(user1.getOutputStream());
         DataTransfer login1 = new DataTransfer(Constants.INITIALIZE, "Lam", Constants.INIT_COMMAND);
         outputStream1.writeObject(login1);
 
-        Connection user2 = new Connection("np-server.anhdh.me", 1699);
+        TCPConnection user2 = new TCPConnection("np-server.anhdh.me", 1699);
         ObjectOutputStream outputStream2 = new ObjectOutputStream(user2.getOutputStream());
         DataTransfer login2 = new DataTransfer(Constants.INITIALIZE, "HA", Constants.INIT_COMMAND);
         outputStream2.writeObject(login2);
@@ -73,7 +73,7 @@ public class BasicClientTest {
         new LoginPublisher("lamnt1")
                 .setOnLoginSuccess(new OnLoginSuccess() {
                     @Override
-                    public void onLogin(String username, Connection connection) {
+                    public void onLogin(String username, TCPConnection connection) {
                         try {
                             Thread.sleep(10000);
                             new Publisher("chat/lamnt2", username)
@@ -101,7 +101,7 @@ public class BasicClientTest {
         new LoginPublisher("lamnt2")
                 .setOnLoginSuccess(new OnLoginSuccess() {
                     @Override
-                    public void onLogin(String username, Connection connection) {
+                    public void onLogin(String username, TCPConnection connection) {
                         try {
                             Thread.sleep(3000);
                             new Subscriber("chat/lamnt1", username)

@@ -1,33 +1,39 @@
-package npclient.command;
+package npclient.core.command;
 
 import javafx.application.Platform;
-import npclient.core.Connection;
+import npclient.core.TCPConnection;
 import npclient.core.callback.ErrorListener;
 import npclient.core.callback.OnPublishMessageSuccess;
-import npclient.core.logger.CliLogger;
+import npclient.CliLogger;
 import nputils.Constants;
 import nputils.DataTransfer;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
-public abstract class AbstractPublisher implements Runnable {
+public abstract class TCPPublisher extends AbstractPublisher {
 
-    protected static final CliLogger logger = CliLogger.get(AbstractPublisher.class);
+    protected static final CliLogger logger = CliLogger.get(TCPPublisher.class);
 
     protected DataTransfer dataTransfer;
 
     protected final String topic;
 
-    protected final String username;
-
-    protected ErrorListener errorListener;
-
     protected OnPublishMessageSuccess successListener;
 
-    public AbstractPublisher(String topic, String username) {
+    public TCPPublisher(String topic, String username) {
+        super(username);
         this.topic = topic;
-        this.username = username;
+    }
+
+    public TCPPublisher setErrorListener(ErrorListener listener) {
+        this.errorListener = listener;
+        return this;
+    }
+
+    public TCPPublisher setSuccessListener(OnPublishMessageSuccess listener) {
+        this.successListener = listener;
+        return this;
     }
 
     public void post() {
@@ -35,32 +41,24 @@ public abstract class AbstractPublisher implements Runnable {
         new Thread(this, threadName).start();
     }
 
-    public AbstractPublisher setErrorListener(ErrorListener listener) {
-        this.errorListener = listener;
-        return this;
-    }
-
-    public AbstractPublisher setSuccessListener(OnPublishMessageSuccess listener) {
-        this.successListener = listener;
-        return this;
-    }
-
     @Override
     public void run() {
         try {
             logger.debug("Initialize a publish connection");
-            Connection publishConn = new Connection();
+            TCPConnection publishConn = new TCPConnection();
 
             logger.debug("Publish " + dataTransfer + " to topic " + topic);
             ObjectOutputStream outputStream = new ObjectOutputStream(publishConn.getOutputStream());
             DataTransfer initData = new DataTransfer(Constants.INITIALIZE, username, Constants.INIT_COMMAND);
             outputStream.writeObject(initData);
 
-            outputStream.writeObject(dataTransfer);
+            if (!isCancel) {
+                outputStream.writeObject(dataTransfer);
 
-            if (successListener != null) {
-                logger.debug("On Success Callback");
-                Platform.runLater(() -> successListener.onReceive(dataTransfer));
+                if (successListener != null) {
+                    logger.debug("On Success Callback");
+                    Platform.runLater(() -> successListener.onReceive(dataTransfer));
+                }
             }
 
             postProcess(publishConn);
@@ -76,5 +74,5 @@ public abstract class AbstractPublisher implements Runnable {
         }
     }
 
-    protected abstract void postProcess(Connection conn) throws IOException;
+    protected abstract void postProcess(TCPConnection conn) throws IOException;
 }

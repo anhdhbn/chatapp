@@ -1,6 +1,7 @@
-package npclient.core;
+package npclient.core.entity;
 
 public class ChatItem {
+
     private String name;
     private String lastMessage;
     private long time;

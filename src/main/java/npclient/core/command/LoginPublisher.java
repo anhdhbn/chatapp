@@ -1,12 +1,12 @@
-package npclient.command;
+package npclient.core.command;
 
 import javafx.application.Platform;
-import npclient.core.Connection;
+import npclient.core.TCPConnection;
 import npclient.core.callback.OnLoginSuccess;
 import nputils.Constants;
 import nputils.DataTransfer;
 
-public class LoginPublisher extends AbstractPublisher {
+public class LoginPublisher extends TCPPublisher {
 
     private OnLoginSuccess onLoginSuccess;
 
@@ -21,7 +21,7 @@ public class LoginPublisher extends AbstractPublisher {
     }
 
     @Override
-    protected void postProcess(Connection conn) {
+    protected void postProcess(TCPConnection conn) {
         if (onLoginSuccess != null) {
             Platform.runLater(() -> onLoginSuccess.onLogin(username, conn));
         }
