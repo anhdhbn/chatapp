@@ -64,7 +64,7 @@ public class Subscriber implements Runnable {
             logger.debug("Send subscribe signal");
             DataTransfer subSignal = new DataTransfer(topic, username, Constants.SUBSCRIBE);
             outputStream.writeObject(subSignal);
-            Thread.sleep(12000);
+            Thread.sleep(1000);
 
             logger.debug("Listening data from server");
             ObjectInputStream inputStream = new ObjectInputStream(subConn.getInputStream());
@@ -74,7 +74,7 @@ public class Subscriber implements Runnable {
                     DataTransfer data = (DataTransfer) inputStream.readObject();
                     if (newMsgListener != null && data != null) {
                         logger.debug("On New Message Callback");
-                        /*Platform.runLater(() -> */newMsgListener.onReceive(data)/*)*/;
+                        Platform.runLater(() -> newMsgListener.onReceive(data));
                     }
 
                 } catch (Exception e) {

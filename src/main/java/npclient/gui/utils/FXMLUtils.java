@@ -11,12 +11,12 @@ import java.io.IOException;
 
 public class FXMLUtils {
 
-    public static Parent load(String path) {
+    public static <T extends Parent> T load(String path) {
         try {
             return new FXMLLoader().load(FXMLUtils.class.getResourceAsStream(path));
         } catch (IOException e) {
             e.printStackTrace();
-            return new Pane();
+            return (T) new Pane();
         }
     }
 

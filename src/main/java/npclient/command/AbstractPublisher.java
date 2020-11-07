@@ -51,8 +51,6 @@ public abstract class AbstractPublisher implements Runnable {
             logger.debug("Initialize a publish connection");
             Connection publishConn = new Connection();
 
-
-
             logger.debug("Publish " + dataTransfer + " to topic " + topic);
             ObjectOutputStream outputStream = new ObjectOutputStream(publishConn.getOutputStream());
             DataTransfer initData = new DataTransfer(Constants.INITIALIZE, username, Constants.INIT_COMMAND);
@@ -62,7 +60,7 @@ public abstract class AbstractPublisher implements Runnable {
 
             if (successListener != null) {
                 logger.debug("On Success Callback");
-                /*Platform.runLater(() -> */successListener.onReceive(dataTransfer)/*)*/;
+                Platform.runLater(() -> successListener.onReceive(dataTransfer));
             }
 
             postProcess(publishConn);

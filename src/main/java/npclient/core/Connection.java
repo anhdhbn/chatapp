@@ -1,5 +1,8 @@
 package npclient.core;
 
+import nputils.Constants;
+import nputils.DataTransfer;
+
 import java.io.*;
 import java.net.Socket;
 

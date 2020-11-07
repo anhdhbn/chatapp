@@ -37,7 +37,7 @@ public class BasicClientTest {
 
         Thread.sleep(5000);
 
-        DataTransfer dataPub = new DataTransfer("chat/HA", "Lam", Constants.PUBLISH, String.class.getName(), "message");
+        DataTransfer dataPub = new DataTransfer("chat/HA", "Lam", Constants.PUBLISH, "message");
         outputStream1.writeObject(dataPub);
 
         Thread.sleep(5000);
@@ -49,7 +49,27 @@ public class BasicClientTest {
     }
 
     @Test
-    public void basicChatTest() throws InterruptedException {
+    public void getActiveUsersTest() throws InterruptedException {
+        new Subscriber(Constants.ONLINE_TOPIC, "lamnt")
+                                .setNewMessageListener(new SubscribedTopicListener() {
+                                    @Override
+                                    public void onReceive(DataTransfer message) {
+                                        System.out.println("Online = " + message.data);
+                                    }
+                                })
+                                .listen();
+
+        Thread.sleep(5000);
+
+        new Publisher("abc", "lamnt2")
+                .putData("abc")
+                .post();
+
+        Thread.sleep(15000);
+    }
+
+    @Test
+    public void asyncChatTest() throws InterruptedException {
         new LoginPublisher("lamnt1")
                 .setOnLoginSuccess(new OnLoginSuccess() {
                     @Override

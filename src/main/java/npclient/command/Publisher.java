@@ -10,11 +10,10 @@ public class Publisher extends AbstractPublisher {
 
     public Publisher(String topic, String username) {
         super(topic, username);
-
     }
 
     public Publisher putData(Object data) {
-        dataTransfer = new DataTransfer(topic, username, Constants.PUBLISH, data.getClass().getName(), data);
+        dataTransfer = new DataTransfer(topic, username, Constants.PUBLISH, data);
         return this;
     }
 
