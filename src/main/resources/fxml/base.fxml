@@ -8,14 +8,26 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<SplitPane dividerPositions="0.36" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<!--<?import npclient.gui.view.ChatBox?>-->
+
+<SplitPane dividerPositions="0.36" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="npclient.gui.controller.BaseController">
    <items>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+      <AnchorPane minWidth="320.0">
          <children>
             <VBox prefHeight="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-            <ListView AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="200.0" />
+            <ToolBar AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="200.0">
+              <items>
+                  <TextField promptText="Search" />
+                <Button mnemonicParsing="false" text="Join Group" />
+              </items>
+            </ToolBar>
+            <ListView fx:id="lvChatItem" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="239.0" />
          </children>
       </AnchorPane>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+      <AnchorPane fx:id="paneChatbox" prefHeight="200.0" prefWidth="200.0">
+<!--         <children>-->
+<!--            <ChatBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>-->
+<!--         </children>-->
+      </AnchorPane>
    </items>
 </SplitPane>

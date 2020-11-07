@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<?import npclient.gui.view.CircleImageView?>
+
+<?import javafx.scene.shape.Circle?>
+
+<!--<fx:root fx:id="container" alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="320.0" prefHeight="96.0" type="javafx.scene.layout.HBox" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">-->
+<HBox fx:id="container" alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="320.0" prefHeight="96.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <CircleImageView radius="40.0" url="/img/avatar-100.jpg" />
+<!--      <Circle radius="40.0" smooth="true" />-->
+      <VBox HBox.hgrow="ALWAYS">
+         <children>
+            <Text fx:id="tTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
+               <VBox.margin>
+                  <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+               </VBox.margin>
+            </Text>
+            <Text fx:id="tLastMsg" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+               <VBox.margin>
+                  <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+               </VBox.margin>
+            </Text>
+         </children>
+      </VBox>
+   </children>
+   <padding>
+      <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+   </padding>
+</HBox>
+<!--</fx:root>-->

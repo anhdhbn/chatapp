@@ -1,5 +1,6 @@
 package npclient.command;
 
+import javafx.application.Platform;
 import npclient.core.Connection;
 import npclient.core.callback.OnLoginSuccess;
 import nputils.Constants;
@@ -22,7 +23,7 @@ public class LoginPublisher extends AbstractPublisher {
     @Override
     protected void postProcess(Connection conn) {
         if (onLoginSuccess != null) {
-            /*Platform.runLater(() -> */onLoginSuccess.onLogin(username, conn)/*)*/;
+            Platform.runLater(() -> onLoginSuccess.onLogin(username, conn));
         }
     }
 }
