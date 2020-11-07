@@ -28,4 +28,13 @@ public class DataTransfer implements Serializable {
         this.command = command;
         this.data = data;
     }
+
+    @Override
+    public String toString() {
+        return "DataTransfer{" +
+                "command=" + command +
+                ", datetime=" + datetime +
+                ", data=" + data +
+                '}';
+    }
 }
