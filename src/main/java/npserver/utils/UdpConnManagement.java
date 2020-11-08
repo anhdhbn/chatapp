@@ -54,12 +54,14 @@ public class UdpConnManagement {
         pairs.remove(user2);
     }
 
-    public static void tcpRemovePair(String user){
+    public static String tcpRemovePair(String user){
         if(pairs.get(user) != null){
             String user2 = pairs.get(user);
             pairs.remove(user);
             pairs.remove(user2);
+            return user2;
         }
+        return null;
     }
 
 

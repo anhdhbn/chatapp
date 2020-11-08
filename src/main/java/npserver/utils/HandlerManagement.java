@@ -2,6 +2,7 @@ package npserver.utils;
 
 import npserver.handler.ServerHandler;
 import nputils.Constants;
+import nputils.DataTransfer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -41,7 +42,12 @@ public class HandlerManagement {
             if(set.size() == 0) {
                 socketDic.remove(name, set);
                 Helper.sendOnline();
-                UdpConnManagement.tcpRemovePair(name);
+                String partner = UdpConnManagement.tcpRemovePair(name);
+                if(partner != null){
+                    String topic = Constants.PREFIX_VOICE + Constants.SPLITTER + partner;
+                    DataTransfer dataTransfer = new DataTransfer(topic, name, Constants.PUBLISH, Constants.VOICE_QUIT);
+                    Helper.sendMessPeerToPeerVoice(client, dataTransfer, partner);
+                }
             }
         }
     }
