@@ -24,15 +24,14 @@ public class UdpServer {
     public void StartServer() throws IOException {
         server = new DatagramSocket(port);
         LOGGER.info("Udp server is opening on port {}", port);
+        byte[] recvData = new byte[Constants.BUFFER_SIZE];
         while (true) {
-            byte[] recvData = new byte[Constants.BUFFER_SIZE];
 
             DatagramPacket recvPacket = new DatagramPacket(recvData, recvData.length);
-            LOGGER.info("Server: Recv package from {} {}", recvPacket.getAddress(), recvPacket.getPort());
             if(recvPacket.getAddress() == null) continue;
 
             String strAdr = recvPacket.getAddress().getHostAddress();
-
+            LOGGER.info("Server: Recv package from {}", strAdr);
             int port = recvPacket.getPort();
             String ipAdr = UdpConnManagement.createAddr(strAdr, port);
 
