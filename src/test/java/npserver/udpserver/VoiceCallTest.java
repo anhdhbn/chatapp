@@ -21,6 +21,7 @@ public class VoiceCallTest extends ServerTest {
         DatagramSocket udp1 = this.udpConns.get(0);
         DatagramSocket udp2 = this.udpConns.get(1);
 
+        this.delay();
         String topic = Constants.PREFIX_VOICE + Constants.SPLITTER + handler2.name;
         DataTransfer dataReq = new DataTransfer(topic, handler1.name, Constants.PUBLISH, Constants.VOICE_REQUEST);
         handler1.sendObj(dataReq);
@@ -76,7 +77,7 @@ public class VoiceCallTest extends ServerTest {
         thread2.start();
         thread3.start();
         thread4.start();
-        Thread.sleep(15000);
+        Thread.sleep(10000);
     }
 
     public void sendDataUdp(DatagramSocket udpConn) throws IOException {
