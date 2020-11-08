@@ -6,9 +6,11 @@ import javafx.scene.control.Label;
 import npclient.CliLogger;
 import npclient.MyAccount;
 import npclient.core.UDPConnection;
+import npclient.core.command.Publisher;
 import npclient.core.command.VoiceListener;
 import npclient.core.command.VoiceSpeaker;
 import npclient.gui.util.AudioUtils;
+import nputils.Constants;
 
 import javax.sound.sampled.*;
 import java.net.URL;
@@ -68,5 +70,8 @@ public class VoiceChatController implements Initializable {
     public void stop() {
         listener.cancel();
         speaker.cancel();
+        new Publisher("voice/" + lUser2.getText(), lUser1.getText())
+                .putData(Constants.VOICE_QUIT)
+                .post();
     }
 }
