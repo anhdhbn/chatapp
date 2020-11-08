@@ -34,6 +34,7 @@ public class UdpServer {
 
             String sender = UdpConnManagement.getUserByConn(ipAdr);
             if(sender == null){
+                LOGGER.info("{}: Server recv data: ({})", ipAdr, new String(recvPacket.getData()));
                 int len = recvPacket.getData()[0];
                 byte[] newBuff = new byte[len];
                 System.arraycopy(recvPacket.getData(), 1, newBuff, 0, len);
