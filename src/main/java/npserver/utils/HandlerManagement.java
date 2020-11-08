@@ -41,6 +41,7 @@ public class HandlerManagement {
             if(set.size() == 0) {
                 socketDic.remove(name, set);
                 Helper.sendOnline();
+                UdpConnManagement.tcpRemovePair(name);
             }
         }
     }

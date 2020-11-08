@@ -46,13 +46,22 @@ public class UdpConnManagement {
     public static IPInfo getPartnerIpInfo(String sender){
         String partner = pairs.get(sender);
         if(partner == null) return null;
-        return userAddr.get(partner);
+        else return userAddr.get(partner);
     }
 
     public static void tcpRemovePair(String user1, String user2){
         pairs.remove(user1);
         pairs.remove(user2);
     }
+
+    public static void tcpRemovePair(String user){
+        if(pairs.get(user) != null){
+            String user2 = pairs.get(user);
+            pairs.remove(user);
+            pairs.remove(user2);
+        }
+    }
+
 
     public static void tcpAddPair(String user1, String user2){
         pairs.put(user1, user2);
