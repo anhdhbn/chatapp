@@ -7,12 +7,13 @@ import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import npclient.MyAccount;
-import npclient.core.command.LoginPublisher;
-import npclient.core.TCPConnection;
+import npclient.core.UDPConnection;
 import npclient.core.callback.ErrorListener;
-import npclient.core.callback.OnLoginSuccess;
+import npclient.core.callback.OnPublishMessageSuccess;
+import npclient.core.command.LoginPublisher;
 import npclient.gui.manager.StageManager;
 import npclient.gui.utils.FXMLUtils;
+import nputils.DataTransfer;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -34,10 +35,11 @@ public class LoginController implements Initializable {
 
     private void login(String username) {
         new LoginPublisher(username)
-                .setOnLoginSuccess(new OnLoginSuccess() {
+                .setSuccessListener(new OnPublishMessageSuccess() {
                     @Override
-                    public void onLogin(String username, TCPConnection connection) {
-                        loginSuccess(username);
+                    public void onReceive(DataTransfer message) {
+                        UDPConnection udpConn = (UDPConnection) message.data;
+                        loginSuccess(message.name, udpConn);
                     }
                 })
                 .setErrorListener(new ErrorListener() {
@@ -49,8 +51,8 @@ public class LoginController implements Initializable {
                 .post();
     }
 
-    private void loginSuccess(String name) {
-        MyAccount.register(name);
+    private void loginSuccess(String name, UDPConnection udpConn) {
+        MyAccount.register(name, udpConn);
         Parent baseScene = FXMLUtils.load("/fxml/base.fxml");
         StageManager.getInstance().changeScene(baseScene);
     }

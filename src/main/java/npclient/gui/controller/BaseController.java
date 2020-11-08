@@ -14,6 +14,7 @@ import npclient.core.callback.SubscribedTopicListener;
 import npclient.core.command.Subscriber;
 import npclient.core.data.MessageManager;
 import npclient.core.entity.ChatItem;
+import npclient.core.entity.Message;
 import npclient.gui.view.ChatBox;
 import npclient.gui.view.ChatItemCell;
 import nputils.Constants;
@@ -68,17 +69,25 @@ public class BaseController implements Initializable {
 
                         // Retrieve online users
                         List<String> onlineUsers = (List<String>) message.data;
+
+                        // Clear all offline user chat messages in MessageManager
+                        MessageManager.getInstance().clearOffline(onlineUsers);
+
                         for (String user : onlineUsers) {
                             // Add user (not your self) into listview
                             if (!username.equals(user)) {
                                 ChatItem item = new ChatItem();
                                 item.setName(user);
                                 lvChatItem.getItems().add(item);
-                            }
 
-                            // Check whether current user still online
-                            if (user.equals(current))
-                                isCurrentOnline = true;
+                                // Check whether current user still online
+                                if (user.equals(current))
+                                    isCurrentOnline = true;
+                                else {
+                                    // with other user listen message
+                                    subscribeMessages(username, user);
+                                }
+                            }
                         }
 
                         // In case current user offline
@@ -86,9 +95,25 @@ public class BaseController implements Initializable {
                         if (!isCurrentOnline) {
                             clearChatBox();
                         }
+                    }
+                })
+                .listen();
+    }
 
-                        // Clear all offline user chat messages in MessageManager
-                        MessageManager.getInstance().clearOffline(onlineUsers);
+    private void subscribeMessages(String username, String target) {
+        final String topic = String.format("chat/%s", target);
+        new Subscriber(topic, username)
+                .setNewMessageListener(new SubscribedTopicListener() {
+                    @Override
+                    public void onReceive(DataTransfer message) {
+                        Object content = message.data;
+                        if (content instanceof String) {
+                            Message m = new Message();
+                            m.setFrom(message.name);
+                            m.setTime(message.datetime);
+                            m.setContent(content.toString());
+                            MessageManager.getInstance().append(target, m);
+                        }
                     }
                 })
                 .listen();

@@ -65,7 +65,7 @@ public class Subscriber extends AbstractTask {
                 try {
                     DataTransfer data = (DataTransfer) inputStream.readObject();
                     if (newMsgListener != null && data != null) {
-                        logger.debug("On New Message Callback");
+                        logger.debug("Receive new message");
                         try {
                             Platform.runLater(() -> newMsgListener.onReceive(data));
                         } catch (IllegalStateException ex) {
@@ -74,6 +74,7 @@ public class Subscriber extends AbstractTask {
                     }
 
                 } catch (Exception e) {
+                    logger.error("Failed to subscribe: " + e.getMessage());
                     handleError(e);
                 }
             }
@@ -81,18 +82,9 @@ public class Subscriber extends AbstractTask {
             logger.debug("Close subscribe connection");
             subConn.close();
 
-        } catch (IOException /*| InterruptedException*/ e) {
+        } catch (IOException e) {
+            logger.error("Failed to subscribe: " + e.getMessage());
             handleError(e);
-        }
-    }
-
-    private void handleError(Exception e) {
-        logger.error("Failed to subscribe: " + e.getMessage());
-        if (errorListener != null) {
-            logger.debug("On Error Callback");
-            Platform.runLater(() -> errorListener.onReceive(e));
-        } else {
-            e.printStackTrace();
         }
     }
 }

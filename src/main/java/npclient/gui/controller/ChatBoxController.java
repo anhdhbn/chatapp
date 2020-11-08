@@ -55,7 +55,10 @@ public class ChatBoxController implements Initializable {
     }
 
     @FXML void startVoiceCall() {
-
+        final String topic = String.format("voice/%s", target);
+        final String username = MyAccount.getInstance().getName();
+        new Publisher(topic, username)
+                .putData("VOICE_RE")
     }
 
     private void send(String input) {

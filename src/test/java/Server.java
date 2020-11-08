@@ -17,8 +17,10 @@ public class Server
             {
                 DatagramPacket p = new DatagramPacket(bytes, bytes.length);
                 ds.receive(p);
+                System.out.println(p.getAddress());
                 if(port1 == 0)
                 {
+
                     port1 = p.getPort();
                     address1 = p.getAddress().getHostAddress();
                     System.out.println("(1st) Server received:" + new String(bytes) + " from " + address1 + " on port " + port1);
