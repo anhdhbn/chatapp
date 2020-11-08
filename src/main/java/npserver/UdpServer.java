@@ -46,11 +46,12 @@ public class UdpServer {
                 }
             } else {
                 UdpConnManagement.IPInfo ipInfo = UdpConnManagement.getPartnerIpInfo(sender);
-
-                DatagramPacket sendPacket = new DatagramPacket(recvData, recvData.length, ipInfo.host, ipInfo.port);
-                server.send(sendPacket);
-                String partnerAdr = UdpConnManagement.createAddr(ipInfo.host.getHostAddress(), ipInfo.port);
-                LOGGER.info("{}: ({}) forward to ({})", ipAdr, sender, partnerAdr);
+                if(ipInfo == null){
+                    DatagramPacket sendPacket = new DatagramPacket(recvData, recvData.length, ipInfo.host, ipInfo.port);
+                    server.send(sendPacket);
+                    String partnerAdr = UdpConnManagement.createAddr(ipInfo.host.getHostAddress(), ipInfo.port);
+                    LOGGER.info("{}: ({}) forward to ({})", ipAdr, sender, partnerAdr);
+                }
             }
         }
     }
