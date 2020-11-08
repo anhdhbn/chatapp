@@ -6,7 +6,7 @@ import nputils.Constants;
 
 import java.io.IOException;
 
-public class PublishTest extends  ServerHandlerTest{
+public class PublishTest extends ServerTest {
 
     @Test
     public void clientSubscribedTopicCanReceiveMessageFromThis() throws IOException, InterruptedException {

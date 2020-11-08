@@ -7,10 +7,8 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
-public class ExtensionTest extends  ServerHandlerTest{
+public class ExtensionTest extends ServerTest {
     @Test
     public void clientSubscribeAndReceiveOnlineNotification() throws IOException, InterruptedException {
         this.generateClient();

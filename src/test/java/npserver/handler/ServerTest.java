@@ -2,6 +2,7 @@ package npserver.handler;
 
 
 import npserver.Server;
+import npserver.UdpServer;
 import npserver.utils.ConfigReader;
 import nputils.Constants;
 import nputils.DataTransfer;
@@ -13,7 +14,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
-class ServerHandlerTest {
+class ServerTest {
     protected ArrayList<Socket> clients;
     protected ArrayList<ReadWriteHandler> handlers;
 
@@ -21,6 +22,7 @@ class ServerHandlerTest {
     protected ConfigReader cr;
     protected final String user = "anhdh";
     protected Server server;
+    protected UdpServer udpServer;
 
     @org.junit.jupiter.api.BeforeEach
     public void setUp() throws Exception {
@@ -29,6 +31,12 @@ class ServerHandlerTest {
         clients = new ArrayList<>();
         handlers = new ArrayList<>();
 
+        this.startServer();
+        this.startUdpServer();
+        this.delay();
+    }
+
+    public void startServer(){
         thread = new Thread(() -> {
             server = new Server(cr);
             try {
@@ -38,7 +46,18 @@ class ServerHandlerTest {
             }
         });
         thread.start();
-        this.delay();
+    }
+
+    public void startUdpServer(){
+        thread = new Thread(() -> {
+            udpServer = new UdpServer(cr);
+            try {
+                udpServer.StartServer();
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        thread.start();
     }
 
     public void generateClient(int n) throws IOException {
@@ -70,6 +89,7 @@ class ServerHandlerTest {
             handler.closeAll();
         }
         this.server.server.close();
+        this.udpServer.server.close();
     }
 
     public void delay() throws InterruptedException {

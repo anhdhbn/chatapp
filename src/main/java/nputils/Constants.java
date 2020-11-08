@@ -12,4 +12,6 @@ public final class Constants {
     public static final String PREFIX_GROUP = "group";
     public static final String PREFIX_LOGIN = "login";
     public static final String SPLITTER = "/";
+
+    public static final int BUFFER_SIZE = 1024;
 }
