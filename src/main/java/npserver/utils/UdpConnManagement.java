@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class UdpConnManagement {
     private static final Logger LOGGER = LogManager.getLogger(UdpConnManagement.class);
@@ -21,52 +22,52 @@ public class UdpConnManagement {
         }
     }
 
-    private static Map<String, String> userUdpConn = new HashMap<String, String>(); // inet add - username
+    private static AtomicReference<Map<String, String>> pairsRef = new AtomicReference<>(new HashMap<>());
+    private static AtomicReference<Map<String, String>> userUdpConn = new AtomicReference<>(new HashMap<>());
 
-    private static Map<String, String> pairs = new HashMap<String, String>(); // username, username2
-    private static Map<String, IPInfo> userAddr = new HashMap<String, IPInfo>(); // username, info udp
+    private static AtomicReference<Map<String, IPInfo>> userAddr = new AtomicReference<>(new HashMap<>());
 
     public static String createAddr(String host, int port){
         return String.format("/%s:%d", host, port);
     }
 
 
-    public static String getUserByConn(String addr){
-        return userUdpConn.get(addr);
+    public synchronized static String getUserByConn(String addr){
+        return userUdpConn.get().get(addr);
     }
 
-    public static void addMapping(String username, InetAddress host, int port){
+    public synchronized static void addMapping(String username, InetAddress host, int port){
         String strAdd = createAddr(host.getHostAddress(), port);
         IPInfo ipInfo = new IPInfo(host, port);
         LOGGER.info("{}: map ==> ({})", strAdd, username);
-        userUdpConn.put(strAdd, username);
-        userAddr.put(username, ipInfo);
+        userUdpConn.get().put(strAdd, username);
+        userAddr.get().put(username, ipInfo);
     }
 
-    public static IPInfo getPartnerIpInfo(String sender){
-        String partner = pairs.get(sender);
+    public synchronized static IPInfo getPartnerIpInfo(String sender){
+        String partner = pairsRef.get().get(sender);
         if(partner == null) return null;
-        else return userAddr.get(partner);
+        else return userAddr.get().get(partner);
     }
 
-    public static void tcpRemovePair(String user1, String user2){
-        pairs.remove(user1);
-        pairs.remove(user2);
+    public synchronized static void tcpRemovePair(String user1, String user2){
+        pairsRef.get().remove(user1);
+        pairsRef.get().remove(user2);
     }
 
-    public static String tcpRemovePair(String user){
-        if(pairs.get(user) != null){
-            String user2 = pairs.get(user);
-            pairs.remove(user);
-            pairs.remove(user2);
+    public synchronized static String tcpRemovePair(String user){
+        if(pairsRef.get().get(user) != null){
+            String user2 = pairsRef.get().get(user);
+            pairsRef.get().remove(user);
+            pairsRef.get().remove(user2);
             return user2;
         }
         return null;
     }
 
 
-    public static void tcpAddPair(String user1, String user2){
-        pairs.put(user1, user2);
-        pairs.put(user2, user1);
+    public synchronized static void tcpAddPair(String user1, String user2){
+        pairsRef.get().put(user1, user2);
+        pairsRef.get().put(user2, user1);
     }
 }

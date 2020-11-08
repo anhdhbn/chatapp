@@ -39,6 +39,7 @@ public class VoiceCallTest extends ServerTest {
                     sendDataUdp(udp1);
                 } catch (IOException e) {
                     e.printStackTrace();
+                    break;
                 }
             }
         });
@@ -49,6 +50,7 @@ public class VoiceCallTest extends ServerTest {
                     recvDataUdp(udp1);
                 } catch (IOException e) {
                     e.printStackTrace();
+                    break;
                 }
             }
         });
@@ -59,6 +61,7 @@ public class VoiceCallTest extends ServerTest {
                     sendDataUdp(udp2);
                 } catch (IOException e) {
                     e.printStackTrace();
+                    break;
                 }
             }
         });
@@ -69,6 +72,7 @@ public class VoiceCallTest extends ServerTest {
                     recvDataUdp(udp2);
                 } catch (IOException e) {
                     e.printStackTrace();
+                    break;
                 }
             }
         });
@@ -78,6 +82,8 @@ public class VoiceCallTest extends ServerTest {
         thread3.start();
         thread4.start();
         this.delay();
+        udp1.close();
+        udp2.close();
     }
 
     public void sendDataUdp(DatagramSocket udpConn) throws IOException {
