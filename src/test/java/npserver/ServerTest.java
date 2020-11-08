@@ -1,7 +1,9 @@
-package npserver.handler;
+package npserver;
 
 
 import npserver.Server;
+import npserver.UdpServer;
+import npserver.handler.ReadWriteHandler;
 import npserver.utils.ConfigReader;
 import nputils.Constants;
 import nputils.DataTransfer;
@@ -13,7 +15,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
-class ServerHandlerTest {
+public class ServerTest {
     protected ArrayList<Socket> clients;
     protected ArrayList<ReadWriteHandler> handlers;
 
@@ -21,6 +23,7 @@ class ServerHandlerTest {
     protected ConfigReader cr;
     protected final String user = "anhdh";
     protected Server server;
+    protected UdpServer udpServer;
 
     @org.junit.jupiter.api.BeforeEach
     public void setUp() throws Exception {
@@ -29,6 +32,14 @@ class ServerHandlerTest {
         clients = new ArrayList<>();
         handlers = new ArrayList<>();
 
+        this.startServer();
+        this.delay();
+        this.startUdpServer();
+
+        this.delay();
+    }
+
+    public void startServer(){
         thread = new Thread(() -> {
             server = new Server(cr);
             try {
@@ -38,7 +49,18 @@ class ServerHandlerTest {
             }
         });
         thread.start();
-        this.delay();
+    }
+
+    public void startUdpServer(){
+        thread = new Thread(() -> {
+            udpServer = new UdpServer(cr);
+            try {
+                udpServer.StartServer();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        thread.start();
     }
 
     public void generateClient(int n) throws IOException {
@@ -47,17 +69,21 @@ class ServerHandlerTest {
         }
     }
 
-    public void generateClient() throws IOException {
+    public void generateClientWithName(String name) throws IOException {
         Socket client = new Socket(InetAddress.getLocalHost(), cr.port);
         ReadWriteHandler handler = new ReadWriteHandler(client);
         handler.initStream();
-        String userName = this.user + (this.handlers.size() + 1);
-        handler.name = userName;
-        DataTransfer dataInit = new DataTransfer(null, userName, Constants.INIT_COMMAND);
+        handler.name = name;
+        DataTransfer dataInit = new DataTransfer(null, name, Constants.INIT_COMMAND);
         handler.sendObj(dataInit);
 
         handlers.add(handler);
         clients.add(client);
+    }
+
+    public void generateClient() throws IOException {
+        String userName = this.user + (this.handlers.size() + 1);
+        this.generateClientWithName(userName);
     }
 
     @org.junit.jupiter.api.AfterEach
@@ -66,6 +92,7 @@ class ServerHandlerTest {
             handler.closeAll();
         }
         this.server.server.close();
+        this.udpServer.server.close();
     }
 
     public void delay() throws InterruptedException {

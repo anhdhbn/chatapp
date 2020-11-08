@@ -52,4 +52,9 @@ public class Helper {
             LOGGER.info("Server send online signal ==> ({}): ({}) online", handler.name, members.size());
         }
     }
+
+    public static boolean checkExistUser(String username){
+        Set<ServerHandler> set = HandlerManagement.getAllSubscribers(Constants.ONLINE_TOPIC);
+        return set.stream().anyMatch(h-> h.name.equals(username));
+    }
 }

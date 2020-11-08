@@ -1,11 +1,12 @@
 package npserver.handler;
 
+import npserver.utils.HandlerManagement;
 import npserver.utils.Helper;
+import npserver.utils.UdpConnManagement;
+import nputils.Constants;
 import nputils.DataTransfer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import nputils.Constants;
-import npserver.utils.HandlerManagement;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -13,8 +14,6 @@ import java.util.Objects;
 
 public class ServerHandler extends ReadWriteHandler{
     private static final Logger LOGGER = LogManager.getLogger(ServerHandler.class);
-    private boolean switchAudio = false;
-
 
     public ServerHandler(Socket socket) {
         super(socket);
@@ -31,39 +30,48 @@ public class ServerHandler extends ReadWriteHandler{
         try {
             this.initStream();
             while (true){
-                if(!switchAudio){
-                    DataTransfer data = (DataTransfer) ois.readObject();
-                    LOGGER.info("{}: Recv from ({}) with command ({}) with topic ({}) data ({})", this.idSocket, data.name, data.command, data.topic, data.data);
-                    if(!this.checkName(data)) break;
-                    if(data.command.equals(Constants.INIT_COMMAND)){
-                        if(data.name.isEmpty()) break;
-                        else{
-                            this.name = data.name;
-                            HandlerManagement.addNewHandler(data.name, this);
-                        }
+                DataTransfer data = (DataTransfer) ois.readObject();
+                LOGGER.info("{}: Recv from ({}) with command ({}) with topic ({}) data ({})", this.idSocket, data.name, data.command, data.topic, data.data);
+                if(!this.checkName(data)) break;
+                if(data.command.equals(Constants.INIT_COMMAND)){
+                    if(data.name.isEmpty()) break;
+                    else{
+                        this.name = data.name;
+                        HandlerManagement.addNewHandler(data.name, this);
                     }
-                    else if(data.command.equals(Constants.SWITCH_AUDIO)) this.switchAudio = true;
-                    else if(data.command.equals(Constants.SUBSCRIBE)) HandlerManagement.subscribeTopic(this, data.topic);
-                    else if (data.command.equals(Constants.UN_SUBSCRIBE)) HandlerManagement.unsubscribe(this, data.topic);
-                    else if (data.command.equals(Constants.PUBLISH)){
-                        String[] arr = data.topic.split(Constants.SPLITTER);
-                        if(arr.length != 2) continue;
-                        if(arr[0].equals(Constants.PREFIX_CHAT)){
+                }
+                else if(data.command.equals(Constants.SUBSCRIBE)) HandlerManagement.subscribeTopic(this, data.topic);
+                else if (data.command.equals(Constants.UN_SUBSCRIBE)) HandlerManagement.unsubscribe(this, data.topic);
+                else if (data.command.equals(Constants.PUBLISH)){
+                    // xxx/yyy
+                    // arr[0] = xxx
+                    String[] arr = data.topic.split(Constants.SPLITTER);
+                    if(arr.length != 2) continue;
+                    if(arr[0].equals(Constants.PREFIX_CHAT)){
+                        Helper.sendMessPeerToPeer(this, data, arr[1]);
+                    } else if (arr[0].equals(Constants.PREFIX_GROUP)){
+                        Helper.sendMessToTopic(this, data);
+                    } else if (arr[0].equals(Constants.PREFIX_LOGIN)){
+                        DataTransfer res = new DataTransfer(null, this.name, "", !Helper.checkExistUser(this.name));
+                        this.sendObj(res);
+                    } else if (arr[0].equals(Constants.PREFIX_VOICE)){ // publish voice/B
+                        String action = (String)data.data;
+                        if(action.equals(Constants.VOICE_REQUEST) || action.equals(Constants.VOICE_REJECT)){
                             Helper.sendMessPeerToPeer(this, data, arr[1]);
-                        } else if (arr[0].equals(Constants.PREFIX_GROUP)){
-                            Helper.sendMessToTopic(this, data);
+                        }else if (action.equals(Constants.VOICE_ACCEPT)){
+                            Helper.sendMessPeerToPeer(this, data, arr[1]);
+                            UdpConnManagement.tcpAddPair(this.name, arr[1]);
+                        } else if (action.equals(Constants.VOICE_QUIT)){
+                            Helper.sendMessPeerToPeer(this, data, arr[1]);
+                            UdpConnManagement.tcpRemovePair(this.name, arr[1]);
                         }
                     }
-                    else {
-                        // UN_KNOWN_COMMAND
-                        data = new DataTransfer();
-                        data.command = Constants.UN_KNOWN_COMMAND;
-                        this.sendObj(data);
-                    }
-                } else {
-                    // audio here
-                    // code here
-                    this.switchAudio = false;
+                }
+                else {
+                    // UN_KNOWN_COMMAND
+                    data = new DataTransfer();
+                    data.command = Constants.UN_KNOWN_COMMAND;
+                    this.sendObj(data);
                 }
             }
         } catch (IOException | ClassNotFoundException e) {

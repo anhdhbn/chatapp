@@ -7,6 +7,7 @@ import java.util.Properties;
 
 public class ConfigReader {
     public int port = -1;
+    public int portUdp = -1;
     public void getPropValues() throws IOException {
         InputStream inputStream = null;
         try {
@@ -22,7 +23,9 @@ public class ConfigReader {
             }
 
             int port = Integer.parseInt(prop.getProperty("port"));
+            int portUdp = Integer.parseInt(prop.getProperty("portUdp"));
             this.port = port;
+            this.portUdp = portUdp;
         } catch (Exception e) {
             System.out.println("Exception: " + e);
         } finally {

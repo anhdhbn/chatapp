@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import nputils.Constants;
+import nputils.DataTransfer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -67,6 +69,7 @@ public class HandlerManagement {
             set.add(client);
             topics.put(topic, set);
         }
+        if(topic.equals(Constants.ONLINE_TOPIC)) Helper.sendOnline();
         LOGGER.info("{}: ({}) subscribed ==> ({})", client.idSocket, client.name, topic);
     }
 

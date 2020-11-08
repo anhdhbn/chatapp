@@ -1,4 +1,6 @@
-package npserver.handler;
+package npserver.server;
+import npserver.ServerTest;
+import npserver.handler.ReadWriteHandler;
 import nputils.DataTransfer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -6,7 +8,7 @@ import nputils.Constants;
 
 import java.io.IOException;
 
-public class PublishTest extends  ServerHandlerTest{
+public class PublishTest extends ServerTest {
 
     @Test
     public void clientSubscribedTopicCanReceiveMessageFromThis() throws IOException, InterruptedException {
