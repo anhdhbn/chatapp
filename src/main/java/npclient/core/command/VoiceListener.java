@@ -16,6 +16,8 @@ public class VoiceListener extends AbstractPublisher {
 
     private TargetDataLine audioInput;
 
+    private UDPConnection connection;
+
     public VoiceListener(String username) {
         super(username);
     }
@@ -31,42 +33,40 @@ public class VoiceListener extends AbstractPublisher {
         return this;
     }
 
+    public VoiceListener setConnection(UDPConnection connection) {
+        this.connection = connection;
+        return this;
+    }
+
     @Override
     public void run() {
-        try {
-            UDPConnection connection = new UDPConnection();
-            InetAddress inetAddr = connection.getInetAddress();
-            int port = connection.getPort();
+        InetAddress inetAddr = connection.getInetAddress();
+        int port = connection.getPort();
 
-            byte[] buffer = new byte[512];
-            long pack = 0L;
+        byte[] buffer = new byte[512];
+        long pack = 0L;
 
-            while (!isCancel) {
-                try {
-                    int read = audioInput.read(buffer, 0, buffer.length);
-                    logger.debug("Read " + read + " bytes from audio input");
+        while (!isCancel) {
+            try {
+                int read = audioInput.read(buffer, 0, buffer.length);
+                logger.debug("Read " + read + " bytes from audio input");
 
-                    DatagramPacket data = new DatagramPacket(buffer, buffer.length, inetAddr, port);
-                    connection.send(data);
+                DatagramPacket data = new DatagramPacket(buffer, buffer.length, inetAddr, port);
+                connection.send(data);
 
-                    logger.debug("Send packet #" + pack);
+                logger.debug("Send packet #" + pack);
 
-                } catch (IOException ex) {
-                    logger.error(ex.getMessage());
-                    if (errorListener != null)
-                        errorListener.onReceive(ex);
-                }
+            } catch (IOException ex) {
+                logger.error(ex.getMessage());
+                if (errorListener != null)
+                    errorListener.onReceive(ex);
             }
-
-            logger.debug("Recorder is stop");
-            audioInput.drain();
-            audioInput.close();
-
-            logger.debug("Audio is drain and close");
-        } catch (SocketException ex) {
-            logger.error(ex.getMessage());
-            if (errorListener != null)
-                Platform.runLater(() -> errorListener.onReceive(ex));
         }
+
+        logger.debug("Recorder is stop");
+        audioInput.drain();
+        audioInput.close();
+
+        logger.debug("Audio is drain and close");
     }
 }

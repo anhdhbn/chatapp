@@ -61,11 +61,20 @@ public class BasicClientTest {
 
         Thread.sleep(5000);
 
+        new Subscriber("chat/L", "lamnt")
+                .setNewMessageListener(new SubscribedTopicListener() {
+                    @Override
+                    public void onReceive(DataTransfer message) {
+                        System.out.println("Chat: " + message.data);
+                    }
+                })
+                .listen();
+
         new Publisher("abc", "lamnt2")
                 .putData("abc")
                 .post();
 
-        Thread.sleep(15000);
+        Thread.sleep(150000);
     }
 
     @Test

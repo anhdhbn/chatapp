@@ -51,11 +51,12 @@ public class Subscriber extends AbstractTask {
 
             DataTransfer initData = new DataTransfer(Constants.INITIALIZE, username, Constants.INIT_COMMAND);
             outputStream.writeObject(initData);
+//            Thread.sleep(2000);
 
             logger.debug("Send subscribe signal");
             DataTransfer subSignal = new DataTransfer(topic, username, Constants.SUBSCRIBE);
             outputStream.writeObject(subSignal);
-            Thread.sleep(1000);
+//            Thread.sleep(2000);
 
             logger.debug("Listening data from server");
             ObjectInputStream inputStream = new ObjectInputStream(subConn.getInputStream());
@@ -65,7 +66,11 @@ public class Subscriber extends AbstractTask {
                     DataTransfer data = (DataTransfer) inputStream.readObject();
                     if (newMsgListener != null && data != null) {
                         logger.debug("On New Message Callback");
-                        Platform.runLater(() -> newMsgListener.onReceive(data));
+                        try {
+                            Platform.runLater(() -> newMsgListener.onReceive(data));
+                        } catch (IllegalStateException ex) {
+                            newMsgListener.onReceive(data);
+                        }
                     }
 
                 } catch (Exception e) {
@@ -76,7 +81,7 @@ public class Subscriber extends AbstractTask {
             logger.debug("Close subscribe connection");
             subConn.close();
 
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException /*| InterruptedException*/ e) {
             handleError(e);
         }
     }

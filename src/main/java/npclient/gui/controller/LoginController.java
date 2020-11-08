@@ -6,6 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import npclient.MyAccount;
 import npclient.core.command.LoginPublisher;
 import npclient.core.TCPConnection;
 import npclient.core.callback.ErrorListener;
@@ -36,7 +37,7 @@ public class LoginController implements Initializable {
                 .setOnLoginSuccess(new OnLoginSuccess() {
                     @Override
                     public void onLogin(String username, TCPConnection connection) {
-                        loginSuccess();
+                        loginSuccess(username);
                     }
                 })
                 .setErrorListener(new ErrorListener() {
@@ -48,8 +49,8 @@ public class LoginController implements Initializable {
                 .post();
     }
 
-    private void loginSuccess() {
-        FXMLUtils.showSimpleAlert(Alert.AlertType.CONFIRMATION, "Login Successful!");
+    private void loginSuccess(String name) {
+        MyAccount.register(name);
         Parent baseScene = FXMLUtils.load("/fxml/base.fxml");
         StageManager.getInstance().changeScene(baseScene);
     }

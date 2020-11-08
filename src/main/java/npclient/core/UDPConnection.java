@@ -2,6 +2,7 @@ package npclient.core;
 
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.Socket;
 import java.net.SocketException;
 
 public class UDPConnection extends DatagramSocket {

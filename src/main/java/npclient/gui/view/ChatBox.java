@@ -32,4 +32,8 @@ public class ChatBox extends AnchorPane {
     public void setTarget(String title) {
         controller.setTitle(title);
     }
+
+    public final String getTarget() {
+        return controller.getTitle();
+    }
 }

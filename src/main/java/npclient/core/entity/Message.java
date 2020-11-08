@@ -1,6 +1,6 @@
 package npclient.core.entity;
 
-public class Message {
+public class Message implements Comparable {
 
     private String from;
     private String to;
@@ -37,5 +37,14 @@ public class Message {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        if (o instanceof Message) {
+            Message m = (Message) o;
+            return Long.compare(time, m.time);
+        }
+        return 0;
     }
 }

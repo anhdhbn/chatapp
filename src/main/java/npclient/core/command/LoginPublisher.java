@@ -23,7 +23,11 @@ public class LoginPublisher extends TCPPublisher {
     @Override
     protected void postProcess(TCPConnection conn) {
         if (onLoginSuccess != null) {
-            Platform.runLater(() -> onLoginSuccess.onLogin(username, conn));
+            try {
+                Platform.runLater(() -> onLoginSuccess.onLogin(username, conn));
+            } catch (IllegalStateException ex) {
+                successListener.onReceive(dataTransfer);
+            }
         }
     }
 }
