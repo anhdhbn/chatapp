@@ -46,7 +46,7 @@ public class UdpServer {
                 }
             } else {
                 UdpConnManagement.IPInfo ipInfo = UdpConnManagement.getPartnerIpInfo(sender);
-                if(ipInfo == null){
+                if(ipInfo != null){
                     DatagramPacket sendPacket = new DatagramPacket(recvData, recvData.length, ipInfo.host, ipInfo.port);
                     server.send(sendPacket);
                     String partnerAdr = UdpConnManagement.createAddr(ipInfo.host.getHostAddress(), ipInfo.port);
