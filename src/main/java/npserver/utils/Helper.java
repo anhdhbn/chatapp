@@ -13,13 +13,13 @@ import java.util.Set;
 public class Helper {
     private static final Logger LOGGER = LogManager.getLogger(Helper.class);
 
-    public static void sendMessPeerToPeer(ServerHandler from, DataTransfer data, String to){
+    public static void sendMessPeerToPeer(ServerHandler from, DataTransfer data, String to, String prefix){
         // A sub chat/B
         // B sub chat/A
         // from A publish topic: chat/B
         // get all subscribers topic: chat/A
         // find a handler named B
-        String topic = Constants.PREFIX_CHAT + Constants.SPLITTER + from.name; // chat/A
+        String topic = prefix + Constants.SPLITTER + from.name; // chat/A
         Set<ServerHandler> set = HandlerManagement.getAllSubscribers(topic);
         for(ServerHandler handler: set){
             if (handler.name.equals(to)) {
