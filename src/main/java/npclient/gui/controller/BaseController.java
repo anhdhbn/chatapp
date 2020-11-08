@@ -249,7 +249,7 @@ public class BaseController implements Initializable {
                             .putData(Constants.VOICE_ACCEPT)
                             .setSuccessListener(new OnPublishMessageSuccess() {
                                 @Override
-                                public void onReceive(DataTransfer message) {
+                                public void onReceive(DataTransfer m) {
                                     openVoiceChatDialog(message.name);
                                 }
                             })
