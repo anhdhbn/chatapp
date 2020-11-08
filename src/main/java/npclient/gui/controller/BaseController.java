@@ -26,6 +26,7 @@ import npclient.gui.entity.Messages;
 import npclient.gui.manager.MessageManager;
 import npclient.gui.entity.ChatItem;
 import npclient.gui.entity.TextMessage;
+import npclient.gui.manager.MessageSubscribeManager;
 import npclient.gui.manager.StageManager;
 import npclient.gui.util.UIUtils;
 import npclient.gui.view.ChatBox;
@@ -125,6 +126,7 @@ public class BaseController implements Initializable {
 
                         // Clear all offline user chat messages in MessageManager
                         MessageManager.getInstance().clearOffline(onlineUsers);
+                        MessageSubscribeManager.getInstance().clearOffline(onlineUsers);
 
                         for (String user : onlineUsers) {
                             // Add user (not your self) into listview
@@ -136,9 +138,10 @@ public class BaseController implements Initializable {
                                 // Check whether current user still online
                                 if (user.equals(current))
                                     isCurrentOnline = true;
-                                else {
+                                else if (!MessageSubscribeManager.getInstance().containsKey(user)) {
                                     // with other user listen message
-                                    subscribeMessages(username, user);
+                                    Subscriber subscriber = subscribeMessages(username, user);
+                                    MessageSubscribeManager.getInstance().put(user, subscriber);
                                 }
                             }
                         }
@@ -153,9 +156,9 @@ public class BaseController implements Initializable {
                 .listen();
     }
 
-    private void subscribeMessages(String username, String target) {
+    private Subscriber subscribeMessages(String username, String target) {
         final String topic = String.format("chat/%s", target);
-        new Subscriber(topic, username)
+        Subscriber subscriber = new Subscriber(topic, username)
                 .setNewMessageListener(new SubscribedTopicListener() {
                     @Override
                     public void onReceive(DataTransfer message) {
@@ -176,8 +179,9 @@ public class BaseController implements Initializable {
                             }
                         }
                     }
-                })
-                .listen();
+                });
+        subscriber.listen();
+        return subscriber;
     }
 
     /**

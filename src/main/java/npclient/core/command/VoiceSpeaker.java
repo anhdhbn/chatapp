@@ -37,6 +37,7 @@ public class VoiceSpeaker extends AbstractTask {
             while (!isCancel){
                 connection.receive(incoming);
                 buffer = incoming.getData();
+                logger.debug("Receive " + buffer.length + " bytes");
                 audioOutput.write(buffer, 0, buffer.length);
             }
 
