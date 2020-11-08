@@ -39,9 +39,11 @@ public class UdpConnManagement {
     public synchronized static void addMapping(String username, InetAddress host, int port){
         String strAdd = createAddr(host.getHostAddress(), port);
         IPInfo ipInfo = new IPInfo(host, port);
-        LOGGER.info("{}: map ==> ({})", strAdd, username);
-        userUdpConn.get().put(strAdd, username);
-        userAddr.get().put(username, ipInfo);
+        if(userUdpConn.get().get(strAdd) == null && userAddr.get().get(username) == null ){
+            LOGGER.info("{}: map ==> ({})", strAdd, username);
+            userUdpConn.get().put(strAdd, username);
+            userAddr.get().put(username, ipInfo);
+        }
     }
 
     public synchronized static IPInfo getPartnerIpInfo(String sender){
