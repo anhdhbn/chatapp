@@ -7,9 +7,12 @@ import npserver.handler.ReadWriteHandler;
 import npserver.utils.ConfigReader;
 import nputils.Constants;
 import nputils.DataTransfer;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -18,6 +21,7 @@ import java.util.ArrayList;
 public class ServerTest {
     protected ArrayList<Socket> clients;
     protected ArrayList<ReadWriteHandler> handlers;
+    protected ArrayList<DatagramSocket> udpConns;
 
     protected Thread thread;
     protected ConfigReader cr;
@@ -31,6 +35,7 @@ public class ServerTest {
         cr.getPropValues();
         clients = new ArrayList<>();
         handlers = new ArrayList<>();
+        udpConns = new ArrayList<>();
 
         this.startServer();
         this.delay();
@@ -77,8 +82,45 @@ public class ServerTest {
         DataTransfer dataInit = new DataTransfer(null, name, Constants.INIT_COMMAND);
         handler.sendObj(dataInit);
 
+
+        String topic = Constants.PREFIX_LOGIN + Constants.SPLITTER + handler.name;
+        DataTransfer dataLogin = new DataTransfer(topic, handler.name, Constants.PUBLISH);
+        handler.sendObj(dataLogin);
+        dataLogin = handler.receiveObj();
+        Assertions.assertEquals(true, (boolean)dataLogin.data);
+
+        DatagramSocket udp = login(handler.name); // udp
+
+
+        // subscribe voice
+        topic = Constants.PREFIX_VOICE + Constants.SPLITTER + handler.name;
+        DataTransfer dataSubVoice = new DataTransfer(topic, handler.name, Constants.SUBSCRIBE);
+        handler.sendObj(dataSubVoice);
+
         handlers.add(handler);
         clients.add(client);
+        udpConns.add(udp);
+    }
+
+    public DatagramSocket login(String user) throws IOException {
+        DatagramSocket udpConn = new DatagramSocket();
+        byte[] nameBytes = user.getBytes();
+        byte[] initBuf = new byte[Constants.BUFFER_SIZE];
+        initBuf[0] = (byte) user.length();
+        System.arraycopy(nameBytes, 0, initBuf, 1, nameBytes.length);
+
+        DatagramPacket initPacket = new DatagramPacket(initBuf, initBuf.length,
+                InetAddress.getByName("localhost"),
+                cr.portUdp
+        );
+
+        udpConn.send(initPacket);
+
+        byte[] recvBuf =  new byte[Constants.BUFFER_SIZE];
+        DatagramPacket recvPacket = new DatagramPacket(recvBuf, recvBuf.length);
+        udpConn.receive(recvPacket);
+
+        return udpConn;
     }
 
     public void generateClient() throws IOException {
