@@ -42,12 +42,17 @@ public class ServerHandler extends ReadWriteHandler{
                 else if(data.command.equals(Constants.SUBSCRIBE)) HandlerManagement.subscribeTopic(this, data.topic);
                 else if (data.command.equals(Constants.UN_SUBSCRIBE)) HandlerManagement.unsubscribe(this, data.topic);
                 else if (data.command.equals(Constants.PUBLISH)){
+                    // xxx/yyy
+                    // arr[0] = xxx
                     String[] arr = data.topic.split(Constants.SPLITTER);
                     if(arr.length != 2) continue;
                     if(arr[0].equals(Constants.PREFIX_CHAT)){
                         Helper.sendMessPeerToPeer(this, data, arr[1]);
                     } else if (arr[0].equals(Constants.PREFIX_GROUP)){
                         Helper.sendMessToTopic(this, data);
+                    } else if (arr[0].equals(Constants.PREFIX_LOGIN)){
+                        DataTransfer res = new DataTransfer(null, this.name, "", !Helper.checkExistUser(this.name));
+                        this.sendObj(res);
                     }
                 }
                 else {

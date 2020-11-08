@@ -47,17 +47,21 @@ class ServerHandlerTest {
         }
     }
 
-    public void generateClient() throws IOException {
+    public void generateClientWithName(String name) throws IOException {
         Socket client = new Socket(InetAddress.getLocalHost(), cr.port);
         ReadWriteHandler handler = new ReadWriteHandler(client);
         handler.initStream();
-        String userName = this.user + (this.handlers.size() + 1);
-        handler.name = userName;
-        DataTransfer dataInit = new DataTransfer(null, userName, Constants.INIT_COMMAND);
+        handler.name = name;
+        DataTransfer dataInit = new DataTransfer(null, name, Constants.INIT_COMMAND);
         handler.sendObj(dataInit);
 
         handlers.add(handler);
         clients.add(client);
+    }
+
+    public void generateClient() throws IOException {
+        String userName = this.user + (this.handlers.size() + 1);
+        this.generateClientWithName(userName);
     }
 
     @org.junit.jupiter.api.AfterEach
