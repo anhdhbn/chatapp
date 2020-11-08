@@ -41,7 +41,7 @@ public class VoiceListener extends AbstractPublisher {
     @Override
     public void run() {
         byte[] buffer = new byte[Constants.BUFFER_SIZE];
-//        long pack = 0L;
+        long pack = 0L;
 
         while (!isCancel) {
             try {
@@ -54,7 +54,7 @@ public class VoiceListener extends AbstractPublisher {
                 );
                 connection.send(data);
 
-//                logger.debug("Send packet #" + pack++);
+                logger.debug("Send packet #" + pack++);
 
             } catch (IOException ex) {
                 logger.error("Failed to listen: " + ex.getMessage());
