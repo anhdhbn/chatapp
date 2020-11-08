@@ -3,6 +3,7 @@ package npclient.gui.controller;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import npclient.CliConstants;
 import npclient.CliLogger;
 import npclient.MyAccount;
 import npclient.core.UDPConnection;
@@ -13,7 +14,10 @@ import npclient.gui.util.AudioUtils;
 import nputils.Constants;
 
 import javax.sound.sampled.*;
+import java.io.IOException;
+import java.net.DatagramPacket;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.ResourceBundle;
 
 public class VoiceChatController implements Initializable {
@@ -44,6 +48,20 @@ public class VoiceChatController implements Initializable {
 
             final UDPConnection udpConn = MyAccount.getInstance().getUdpConn();
 
+            String name = MyAccount.getInstance().getName();
+            byte[] nameBytes = name.getBytes();
+            byte[] initBuf = new byte[Constants.BUFFER_SIZE];
+            initBuf[0] = 0;
+            initBuf[1] = (byte) name.length();
+            System.arraycopy(nameBytes, 0, initBuf, 2, nameBytes.length);
+
+            DatagramPacket initPacket = new DatagramPacket(initBuf, initBuf.length,
+                    UDPConnection.getServInetAddr(),
+                    CliConstants.UDP_PORT
+            );
+
+            udpConn.send(initPacket);
+
             listener = new VoiceListener()
                     .setConnection(udpConn)
                     .setAudioInput(audioInput);
@@ -54,7 +72,7 @@ public class VoiceChatController implements Initializable {
                     .setAudioOutput(audioOutput);
             speaker.listen();
 
-        } catch (LineUnavailableException e) {
+        } catch (LineUnavailableException | IOException e) {
             e.printStackTrace();
         }
     }
