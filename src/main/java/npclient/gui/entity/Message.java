@@ -25,4 +25,6 @@ public abstract class Message implements Comparable<Message> {
     public int compareTo(Message o) {
         return Long.compare(time, o.time);
     }
+
+
 }

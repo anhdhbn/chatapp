@@ -288,7 +288,7 @@ public class BaseController implements Initializable {
 
             voiceChatStage.initOwner(StageManager.getInstance().getPrimaryStage());
 
-            voiceChatStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            voiceChatStage.setOnHiding(new EventHandler<WindowEvent>() {
                 @Override
                 public void handle(WindowEvent event) {
                     controller.stop();
