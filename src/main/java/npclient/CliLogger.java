@@ -3,7 +3,7 @@ package npclient;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
-public class CliLogger extends Logger {
+public final class CliLogger extends Logger {
 
     protected CliLogger(String name) {
         super(name);

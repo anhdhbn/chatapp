@@ -44,12 +44,18 @@ public class VoiceSpeaker extends AbstractTask {
 
             audioOutput.drain();
             audioOutput.close();
+
             logger.debug("Audio is drain and close");
 
         } catch (IOException ex) {
             logger.error(ex.getMessage());
-            if (errorListener != null)
-                Platform.runLater(() -> errorListener.onReceive(ex));
+            if (errorListener != null) {
+                try {
+                    Platform.runLater(() -> errorListener.onReceive(ex));
+                } catch (IllegalStateException e) {
+                    errorListener.onReceive(ex);
+                }
+            }
         }
     }
 

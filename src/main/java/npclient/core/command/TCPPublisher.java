@@ -57,7 +57,11 @@ public abstract class TCPPublisher extends AbstractPublisher {
 
                 if (successListener != null) {
                     logger.debug("On Success Callback");
-                    Platform.runLater(() -> successListener.onReceive(dataTransfer));
+                    try {
+                        Platform.runLater(() -> successListener.onReceive(dataTransfer));
+                    } catch (IllegalStateException ex) {
+                        successListener.onReceive(dataTransfer);
+                    }
                 }
             }
 
