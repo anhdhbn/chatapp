@@ -4,7 +4,6 @@ import npclient.core.command.LoginPublisher;
 import npclient.core.command.Publisher;
 import npclient.core.command.Subscriber;
 import npclient.core.TCPConnection;
-import npclient.core.callback.OnLoginSuccess;
 import npclient.core.callback.OnPublishMessageSuccess;
 import npclient.core.callback.SubscribedTopicListener;
 import nputils.Constants;
@@ -22,12 +21,12 @@ public class BasicClientTest {
     public void singleThreadTest() throws IOException, ClassNotFoundException, InterruptedException {
         TCPConnection user1 = new TCPConnection("np-server.anhdh.me", 1699);
         ObjectOutputStream outputStream1 = new ObjectOutputStream(user1.getOutputStream());
-        DataTransfer login1 = new DataTransfer(Constants.INITIALIZE, "Lam", Constants.INIT_COMMAND);
+        DataTransfer login1 = new DataTransfer(Constants.INITIALIZE_TOPIC, "Lam", Constants.INIT_COMMAND);
         outputStream1.writeObject(login1);
 
         TCPConnection user2 = new TCPConnection("np-server.anhdh.me", 1699);
         ObjectOutputStream outputStream2 = new ObjectOutputStream(user2.getOutputStream());
-        DataTransfer login2 = new DataTransfer(Constants.INITIALIZE, "HA", Constants.INIT_COMMAND);
+        DataTransfer login2 = new DataTransfer(Constants.INITIALIZE_TOPIC, "HA", Constants.INIT_COMMAND);
         outputStream2.writeObject(login2);
 
         Thread.sleep(5000);

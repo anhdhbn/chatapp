@@ -8,7 +8,6 @@ import npclient.CliLogger;
 import nputils.Constants;
 import nputils.DataTransfer;
 
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
@@ -49,7 +48,7 @@ public abstract class TCPPublisher extends AbstractPublisher {
             TCPConnection publishConn = new TCPConnection();
 
             ObjectOutputStream outputStream = new ObjectOutputStream(publishConn.getOutputStream());
-            DataTransfer initData = new DataTransfer(Constants.INITIALIZE, username, Constants.INIT_COMMAND);
+            DataTransfer initData = new DataTransfer(Constants.INITIALIZE_TOPIC, username, Constants.INIT_COMMAND);
             outputStream.writeObject(initData);
 
             if (!isCancel) {

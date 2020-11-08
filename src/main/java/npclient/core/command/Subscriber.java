@@ -49,7 +49,7 @@ public class Subscriber extends AbstractTask {
 
             ObjectOutputStream outputStream = new ObjectOutputStream(subConn.getOutputStream());
 
-            DataTransfer initData = new DataTransfer(Constants.INITIALIZE, username, Constants.INIT_COMMAND);
+            DataTransfer initData = new DataTransfer(Constants.INITIALIZE_TOPIC, username, Constants.INIT_COMMAND);
             outputStream.writeObject(initData);
 //            Thread.sleep(2000);
 

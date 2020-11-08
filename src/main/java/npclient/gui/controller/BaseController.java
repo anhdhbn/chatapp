@@ -5,22 +5,31 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 import npclient.MyAccount;
+import npclient.core.UDPConnection;
+import npclient.core.Utils;
+import npclient.core.callback.OnPublishMessageSuccess;
 import npclient.core.callback.SubscribedTopicListener;
+import npclient.core.command.Publisher;
 import npclient.core.command.Subscriber;
 import npclient.core.data.MessageManager;
 import npclient.core.entity.ChatItem;
 import npclient.core.entity.Message;
+import npclient.gui.utils.FXMLUtils;
 import npclient.gui.view.ChatBox;
 import npclient.gui.view.ChatItemCell;
 import nputils.Constants;
 import nputils.DataTransfer;
 
+import java.io.IOException;
+import java.net.DatagramPacket;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -49,6 +58,61 @@ public class BaseController implements Initializable {
         });
 
         listenOnlineUsers();
+
+        listenVoiceCall();
+    }
+
+    private void listenVoiceCall() {
+        final String username = MyAccount.getInstance().getName();
+        final String topic = String.format("voice/%s", username);
+        new Subscriber(topic, username)
+                .setNewMessageListener(new SubscribedTopicListener() {
+                    @Override
+                    public void onReceive(DataTransfer message) {
+                        String action = message.data.toString();
+                        switch (action) {
+                            case Constants.VOICE_REQUEST:
+                                FXMLUtils.showSimpleAlert(Alert.AlertType.CONFIRMATION, message.name + " is calling you");
+                                final String resTopic = String.format("voice/%s", message.name);
+                                new Publisher(resTopic, username)
+                                        .putData(Constants.VOICE_ACCEPT)
+                                        .setSuccessListener(new OnPublishMessageSuccess() {
+                                            @Override
+                                            public void onReceive(DataTransfer message) {
+                                                byte[] buf = new byte[Constants.BUFFER_SIZE];
+                                                System.arraycopy(username.getBytes(), 0, buf, 0, buf.length);
+                                                try {
+                                                    DatagramPacket packet = new DatagramPacket(buf, buf.length,
+                                                            UDPConnection.getServInetAddr(),
+                                                            npclient.Constants.UDP_PORT
+                                                    );
+                                                    MyAccount.getInstance().getUdpConn().send(packet);
+                                                } catch (IOException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        })
+                                        .post();
+
+
+                                break;
+
+                            case Constants.VOICE_ACCEPT:
+                                byte[] buf = new byte[Constants.BUFFER_SIZE];
+                                DatagramPacket packet = new DatagramPacket(buf, buf.length);
+                                try {
+                                    MyAccount.getInstance().getUdpConn().receive(packet);
+                                    System.out.println("Receive " + new String(packet.getData()));
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+                                break;
+
+                        }
+                    }
+                })
+                .listen();
     }
 
     /**
