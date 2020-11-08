@@ -16,6 +16,7 @@ import npclient.core.data.MessageManager;
 import npclient.core.data.Messages;
 import npclient.core.entity.Message;
 import npclient.gui.view.SendMessageCell;
+import nputils.Constants;
 import nputils.DataTransfer;
 
 import java.net.URL;
@@ -58,7 +59,8 @@ public class ChatBoxController implements Initializable {
         final String topic = String.format("voice/%s", target);
         final String username = MyAccount.getInstance().getName();
         new Publisher(topic, username)
-                .putData("VOICE_RE")
+                .putData(Constants.VOICE_REQUEST)
+                .post();
     }
 
     private void send(String input) {

@@ -21,4 +21,5 @@ public final class Constants {
     public static final String SPLITTER = "/";
 
     public static final int BUFFER_SIZE = 1024;
+    public static final String INITIALIZE_TOPIC = null;
 }

@@ -43,4 +43,8 @@ public class MyAccount {
     public void setInCall(boolean inCall) {
         this.inCall = inCall;
     }
+
+    public UDPConnection getUdpConn() {
+        return udpConn;
+    }
 }
