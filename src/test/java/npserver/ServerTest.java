@@ -1,8 +1,9 @@
-package npserver.handler;
+package npserver;
 
 
 import npserver.Server;
 import npserver.UdpServer;
+import npserver.handler.ReadWriteHandler;
 import npserver.utils.ConfigReader;
 import nputils.Constants;
 import nputils.DataTransfer;
@@ -14,7 +15,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
-class ServerTest {
+public class ServerTest {
     protected ArrayList<Socket> clients;
     protected ArrayList<ReadWriteHandler> handlers;
 
@@ -53,7 +54,7 @@ class ServerTest {
             udpServer = new UdpServer(cr);
             try {
                 udpServer.StartServer();
-            } catch (IOException | InterruptedException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         });

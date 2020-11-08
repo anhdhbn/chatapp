@@ -14,7 +14,7 @@ public class MainServer {
             UdpServer udpserver = new UdpServer(cr);
             try {
                 udpserver.StartServer();
-            } catch (IOException | InterruptedException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         });
