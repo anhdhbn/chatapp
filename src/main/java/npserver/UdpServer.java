@@ -1,6 +1,5 @@
 package npserver;
 
-import npserver.handler.ServerHandler;
 import npserver.utils.ConfigReader;
 import npserver.utils.UdpConnManagement;
 import nputils.Constants;
@@ -10,8 +9,6 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.ServerSocket;
-import java.net.Socket;
 
 public class UdpServer {
     private static final Logger LOGGER = LogManager.getLogger(UdpServer.class);

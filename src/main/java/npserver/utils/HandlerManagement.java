@@ -1,16 +1,14 @@
 package npserver.utils;
 
 import npserver.handler.ServerHandler;
+import nputils.Constants;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import nputils.Constants;
-import nputils.DataTransfer;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class HandlerManagement {
     private static final Logger LOGGER = LogManager.getLogger(HandlerManagement.class);
