@@ -77,7 +77,7 @@ public class VoiceCallTest extends ServerTest {
         thread2.start();
         thread3.start();
         thread4.start();
-        Thread.sleep(10000);
+        this.delay();
     }
 
     public void sendDataUdp(DatagramSocket udpConn) throws IOException {
