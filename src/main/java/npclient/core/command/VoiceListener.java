@@ -46,7 +46,7 @@ public class VoiceListener extends AbstractPublisher {
         while (!isCancel) {
             try {
                 int read = audioInput.read(buffer, 0, buffer.length);
-//                logger.debug("Read " + read + " bytes from audio input");
+                logger.debug("Read " + read + " bytes from audio input");
 
                 DatagramPacket data = new DatagramPacket(buffer, buffer.length,
                         UDPConnection.getServInetAddr(),
