@@ -25,6 +25,7 @@ import npclient.core.command.Subscriber;
 import npclient.gui.manager.MessageManager;
 import npclient.gui.entity.ChatItem;
 import npclient.gui.entity.TextMessage;
+import npclient.gui.manager.StageManager;
 import npclient.gui.util.UIUtils;
 import npclient.gui.view.ChatBox;
 import npclient.gui.view.ChatItemCell;
@@ -266,6 +267,8 @@ public class BaseController implements Initializable {
             voiceChatStage = new Stage();
             voiceChatStage.setTitle("Voice Chat");
             voiceChatStage.setScene(scene);
+
+            voiceChatStage.initOwner(StageManager.getInstance().getPrimaryStage());
 
             voiceChatStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                 @Override
