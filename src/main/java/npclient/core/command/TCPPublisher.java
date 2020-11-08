@@ -61,6 +61,7 @@ public abstract class TCPPublisher extends AbstractPublisher {
             publishConn.close();
 
         } catch (Exception e) {
+            e.printStackTrace();
             logger.error("Failed to publish: " + e.getMessage());
             handleError(e);
         }

@@ -50,8 +50,9 @@ public class LoginPublisher extends TCPPublisher {
 
         byte[] nameBytes = dataTransfer.name.getBytes();
         byte[] initBuf = new byte[Constants.BUFFER_SIZE];
-        initBuf[0] = (byte) dataTransfer.name.length();
-        System.arraycopy(nameBytes, 0, initBuf, 1, nameBytes.length);
+        initBuf[0] = 0;
+        initBuf[1] = (byte) dataTransfer.name.length();
+        System.arraycopy(nameBytes, 0, initBuf, 2, nameBytes.length);
 
         DatagramPacket initPacket = new DatagramPacket(initBuf, initBuf.length,
                 UDPConnection.getServInetAddr(),
