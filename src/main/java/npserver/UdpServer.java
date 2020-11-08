@@ -28,10 +28,11 @@ public class UdpServer {
             byte[] recvData = new byte[Constants.BUFFER_SIZE];
 
             DatagramPacket recvPacket = new DatagramPacket(recvData, recvData.length);
+            LOGGER.info("Server: Recv package from {} {}", recvPacket.getAddress(), recvPacket.getPort());
             if(recvPacket.getAddress() == null) continue;
 
             String strAdr = recvPacket.getAddress().getHostAddress();
-            LOGGER.info("Server: Recv package from {}", strAdr);
+
             int port = recvPacket.getPort();
             String ipAdr = UdpConnManagement.createAddr(strAdr, port);
 
