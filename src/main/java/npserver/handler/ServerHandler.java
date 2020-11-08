@@ -48,7 +48,7 @@ public class ServerHandler extends ReadWriteHandler{
                     String[] arr = data.topic.split(Constants.SPLITTER);
                     if(arr.length != 2) continue;
                     if(arr[0].equals(Constants.PREFIX_CHAT)){
-                        Helper.sendMessPeerToPeer(this, data, arr[1], Constants.PREFIX_CHAT);
+                        Helper.sendMessPeerToPeerChat(this, data, arr[1]);
                     } else if (arr[0].equals(Constants.PREFIX_GROUP)){
                         Helper.sendMessToTopic(this, data);
                     } else if (arr[0].equals(Constants.PREFIX_LOGIN)){
@@ -57,12 +57,12 @@ public class ServerHandler extends ReadWriteHandler{
                     } else if (arr[0].equals(Constants.PREFIX_VOICE)){ // publish voice/B
                         String action = (String)data.data;
                         if(action.equals(Constants.VOICE_REQUEST) || action.equals(Constants.VOICE_REJECT)){
-                            Helper.sendMessPeerToPeer(this, data, arr[1], Constants.PREFIX_VOICE);
+                            Helper.sendMessPeerToPeerVoice(this, data, arr[1]);
                         }else if (action.equals(Constants.VOICE_ACCEPT)){
-                            Helper.sendMessPeerToPeer(this, data, arr[1], Constants.PREFIX_VOICE);
+                            Helper.sendMessPeerToPeerVoice(this, data, arr[1]);
                             UdpConnManagement.tcpAddPair(this.name, arr[1]);
                         } else if (action.equals(Constants.VOICE_QUIT)){
-                            Helper.sendMessPeerToPeer(this, data, arr[1], Constants.PREFIX_VOICE);
+                            Helper.sendMessPeerToPeerVoice(this, data, arr[1]);
                             UdpConnManagement.tcpRemovePair(this.name, arr[1]);
                         }
                     }
