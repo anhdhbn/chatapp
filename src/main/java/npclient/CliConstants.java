@@ -1,6 +1,6 @@
 package npclient;
 
-public interface Constants {
+public interface CliConstants {
 
     String NP_HOST = "np-server.anhdh.me";
     int TCP_PORT = 1699;

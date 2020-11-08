@@ -1,11 +1,10 @@
 package npclient.core;
 
 import java.io.*;
-import java.net.InetAddress;
 import java.net.Socket;
 
-import static npclient.Constants.NP_HOST;
-import static npclient.Constants.TCP_PORT;
+import static npclient.CliConstants.NP_HOST;
+import static npclient.CliConstants.TCP_PORT;
 
 public class TCPConnection extends Socket {
 
