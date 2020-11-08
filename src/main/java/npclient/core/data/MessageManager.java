@@ -3,6 +3,8 @@ package npclient.core.data;
 import npclient.core.entity.Message;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 public class MessageManager extends HashMap<String, Messages> {
 
@@ -25,5 +27,13 @@ public class MessageManager extends HashMap<String, Messages> {
         messages.add(m);
 
         return messages;
+    }
+
+    public void clearOffline(List<String> online) {
+        Set<String> keys = keySet();
+        for (String user : keys) {
+            if (!online.contains(user))
+                remove(user);
+        }
     }
 }
