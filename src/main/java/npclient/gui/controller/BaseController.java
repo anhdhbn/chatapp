@@ -22,6 +22,7 @@ import npclient.core.callback.OnRejectListener;
 import npclient.core.callback.SubscribedTopicListener;
 import npclient.core.command.Publisher;
 import npclient.core.command.Subscriber;
+import npclient.gui.entity.Messages;
 import npclient.gui.manager.MessageManager;
 import npclient.gui.entity.ChatItem;
 import npclient.gui.entity.TextMessage;
@@ -108,7 +109,12 @@ public class BaseController implements Initializable {
                     @Override
                     public void onReceive(DataTransfer message) {
                         // Get current user in chat box
-                        String current = getCurrentChat();
+                        String current = null;
+
+                        ChatBox currentChatBox = getCurrentChat();
+                        if (currentChatBox != null)
+                            current = currentChatBox.getTarget();
+
                         boolean isCurrentOnline = current == null;
 
                         // Clear all exist chat item
@@ -159,7 +165,15 @@ public class BaseController implements Initializable {
                             m.setFrom(message.name);
                             m.setTime(message.datetime);
                             m.setContent(content.toString());
-                            MessageManager.getInstance().append(target, m);
+                            Messages messages = MessageManager.getInstance().append(target, m);
+
+                            ChatBox chatBox = getCurrentChat();
+                            if (chatBox != null) {
+                                String current = chatBox.getTarget();
+                                if (message.name.equals(current)) {
+                                    chatBox.setItems(messages);
+                                }
+                            }
                         }
                     }
                 })
@@ -170,11 +184,11 @@ public class BaseController implements Initializable {
      * Get current chatting user
      * @return current chatting username
      */
-    private String getCurrentChat() {
+    private ChatBox getCurrentChat() {
         if (!paneChatbox.getChildren().isEmpty()) {
             Node first = paneChatbox.getChildren().get(0);
             if (first instanceof ChatBox) {
-                return ((ChatBox) first).getTarget();
+                return (ChatBox) first;
             }
         }
 
