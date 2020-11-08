@@ -48,8 +48,15 @@ public class UdpConnManagement {
 
     public synchronized static IPInfo getPartnerIpInfo(String sender){
         String partner = pairsRef.get().get(sender);
-        if(partner == null) return null;
-        else return userAddr.get().get(partner);
+        if(partner == null) {
+            LOGGER.error("{}: Pair not found", sender);
+            return null;
+        }
+        else {
+            IPInfo info = userAddr.get().get(partner);
+            if(info == null) LOGGER.error("{}: Partner IPInfo not found", sender);
+            return info;
+        }
     }
 
     public synchronized static void tcpRemovePair(String user1, String user2){

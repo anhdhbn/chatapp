@@ -51,6 +51,8 @@ public class UdpServer {
                     server.send(sendPacket);
                     String partnerAdr = UdpConnManagement.createAddr(ipInfo.host.getHostAddress(), ipInfo.port);
                     LOGGER.info("{}: ({}) forward to ({})", ipAdr, sender, partnerAdr);
+                } else {
+                    LOGGER.error("{}: ({}) not found partner", ipAdr, sender);
                 }
             }
         }
