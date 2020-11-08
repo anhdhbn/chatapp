@@ -34,7 +34,7 @@ public class ChatBoxController implements Initializable {
 
     private String target;
 
-    private Subscriber messageSubscriber;
+//    private Subscriber messageSubscriber;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -98,8 +98,8 @@ public class ChatBoxController implements Initializable {
         target = title;
         lTitle.setText(target);
 
-        // disconnect from subs
-        disconnectSubscriber();
+//        // disconnect from subs
+//        disconnectSubscriber();
 
         // load exist message
         Messages existMessages = MessageManager.getInstance().get(target);
@@ -107,38 +107,42 @@ public class ChatBoxController implements Initializable {
             lvMessage.getItems().setAll(existMessages);
 
         // listen message
-        generateSubscriber(target);
-        messageSubscriber.listen();
+//        generateSubscriber(target);
+//        messageSubscriber.listen();
     }
 
     public final String getTitle() {
         return target;
     }
 
-    private void disconnectSubscriber() {
-        if (messageSubscriber != null) {
-            messageSubscriber.cancel();
-        }
-    }
+//    private void disconnectSubscriber() {
+//        if (messageSubscriber != null) {
+//            messageSubscriber.cancel();
+//        }
+//    }
+//
+//    private void generateSubscriber(final String target) {
+//        final String topic = String.format("chat/%s", target);
+//        final String username = MyAccount.getInstance().getName();
+//
+//        messageSubscriber = new Subscriber(topic, username)
+//                .setNewMessageListener(new SubscribedTopicListener() {
+//                    @Override
+//                    public void onReceive(DataTransfer message) {
+//                        Object content = message.data;
+//                        if (content instanceof String) {
+//                            TextMessage m = new TextMessage();
+//                            m.setFrom(message.name);
+//                            m.setTime(message.datetime);
+//                            m.setContent(content.toString());
+//                            Messages messages = MessageManager.getInstance().append(target, m);
+//                            lvMessage.getItems().setAll(messages);
+//                        }
+//                    }
+//                });
+//    }
 
-    private void generateSubscriber(final String target) {
-        final String topic = String.format("chat/%s", target);
-        final String username = MyAccount.getInstance().getName();
-
-        messageSubscriber = new Subscriber(topic, username)
-                .setNewMessageListener(new SubscribedTopicListener() {
-                    @Override
-                    public void onReceive(DataTransfer message) {
-                        Object content = message.data;
-                        if (content instanceof String) {
-                            TextMessage m = new TextMessage();
-                            m.setFrom(message.name);
-                            m.setTime(message.datetime);
-                            m.setContent(content.toString());
-                            Messages messages = MessageManager.getInstance().append(target, m);
-                            lvMessage.getItems().setAll(messages);
-                        }
-                    }
-                });
+    public void setItem(Messages messages) {
+        lvMessage.getItems().setAll(messages);
     }
 }
