@@ -47,7 +47,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>fully.qualified.MainClass</mainClass>
+                            <mainClass>npserver.MainServer</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
