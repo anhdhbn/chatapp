@@ -87,6 +87,10 @@ public class ChatBoxController implements Initializable {
         lTitle.setText(target);
 
         disconnectSubscriber();
+
+        Messages existMessages = MessageManager.getInstance().get(target);
+        lvMessage.getItems().setAll(existMessages);
+
         generateSubscriber(target);
         messageSubscriber.listen();
     }
@@ -104,6 +108,7 @@ public class ChatBoxController implements Initializable {
     private void generateSubscriber(final String target) {
         final String topic = String.format("chat/%s", target);
         final String username = MyAccount.getInstance().getName();
+
         messageSubscriber = new Subscriber(topic, username)
                 .setNewMessageListener(new SubscribedTopicListener() {
                     @Override
