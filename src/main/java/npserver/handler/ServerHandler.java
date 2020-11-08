@@ -2,6 +2,7 @@ package npserver.handler;
 
 import npserver.utils.HandlerManagement;
 import npserver.utils.Helper;
+import npserver.utils.UdpConnManagement;
 import nputils.Constants;
 import nputils.DataTransfer;
 import org.apache.logging.log4j.LogManager;
@@ -53,6 +54,17 @@ public class ServerHandler extends ReadWriteHandler{
                     } else if (arr[0].equals(Constants.PREFIX_LOGIN)){
                         DataTransfer res = new DataTransfer(null, this.name, "", !Helper.checkExistUser(this.name));
                         this.sendObj(res);
+                    } else if (arr[0].equals(Constants.PREFIX_VOICE)){ // publish voice/B
+                        String action = (String)data.data;
+                        if(action.equals(Constants.VOICE_REQUEST) || action.equals(Constants.VOICE_REJECT)){
+                            Helper.sendMessPeerToPeer(this, data, arr[1]);
+                        }else if (action.equals(Constants.VOICE_ACCEPT)){
+                            Helper.sendMessPeerToPeer(this, data, arr[1]);
+                            UdpConnManagement.tcpAddPair(this.name, arr[1]);
+                        } else if (action.equals(Constants.VOICE_QUIT)){
+                            Helper.sendMessPeerToPeer(this, data, arr[1]);
+                            UdpConnManagement.tcpRemovePair(this.name, arr[1]);
+                        }
                     }
                 }
                 else {

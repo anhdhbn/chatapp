@@ -48,4 +48,14 @@ public class UdpConnManagement {
         if(partner == null) return null;
         return userAddr.get(partner);
     }
+
+    public static void tcpRemovePair(String user1, String user2){
+        pairs.remove(user1);
+        pairs.remove(user2);
+    }
+
+    public static void tcpAddPair(String user1, String user2){
+        pairs.put(user1, user2);
+        pairs.put(user2, user1);
+    }
 }

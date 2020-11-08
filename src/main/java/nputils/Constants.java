@@ -11,6 +11,13 @@ public final class Constants {
     public static final String PREFIX_CHAT = "chat";
     public static final String PREFIX_GROUP = "group";
     public static final String PREFIX_LOGIN = "login";
+    public static final String PREFIX_VOICE = "voice";
+
+    public static final String VOICE_REQUEST = "VOICE_REQUEST";
+    public static final String VOICE_ACCEPT = "VOICE_ACCEPT";
+    public static final String VOICE_QUIT = "VOICE_QUIT";
+    public static final String VOICE_REJECT = "VOICE_REJECT";
+
     public static final String SPLITTER = "/";
 
     public static final int BUFFER_SIZE = 1024;
