@@ -19,6 +19,7 @@ public class MainServer {
             }
         });
         udpServerThread.start();
+        Thread.sleep(3000);
         Server server = new Server(cr);
         server.StartServer();
     }
