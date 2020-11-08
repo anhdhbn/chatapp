@@ -5,7 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import npclient.core.entity.Message;
+import npclient.gui.entity.Message;
+import npclient.gui.entity.TextMessage;
 
 import java.io.IOException;
 
@@ -37,7 +38,8 @@ public abstract class MessageCell extends ListCell<Message> {
                 }
             }
 
-            tContent.setText(item.getContent());
+            if (item instanceof TextMessage)
+                tContent.setText(((TextMessage) item).getContent());
 
             setText(null);
             setGraphic(container);

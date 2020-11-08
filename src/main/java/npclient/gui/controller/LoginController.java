@@ -12,7 +12,7 @@ import npclient.core.callback.ErrorListener;
 import npclient.core.callback.OnPublishMessageSuccess;
 import npclient.core.command.LoginPublisher;
 import npclient.gui.manager.StageManager;
-import npclient.gui.utils.FXMLUtils;
+import npclient.gui.util.UIUtils;
 import nputils.DataTransfer;
 
 import java.net.URL;
@@ -53,11 +53,11 @@ public class LoginController implements Initializable {
 
     private void loginSuccess(String name, UDPConnection udpConn) {
         MyAccount.register(name, udpConn);
-        Parent baseScene = FXMLUtils.load("/fxml/base.fxml");
+        Parent baseScene = UIUtils.load("/fxml/base.fxml");
         StageManager.getInstance().changeScene(baseScene);
     }
 
     private void loginFailure() {
-        FXMLUtils.showSimpleAlert(Alert.AlertType.ERROR, "Failed to login! Please check your connection");
+        UIUtils.showSimpleAlert(Alert.AlertType.ERROR, "Failed to login! Please check your connection");
     }
 }

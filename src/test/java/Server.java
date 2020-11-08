@@ -1,3 +1,5 @@
+import nputils.Constants;
+
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -8,7 +10,7 @@ public class Server
     {
         int port1 = 0, port2 = 0;
         String address1 = null, address2;
-        byte[] bytes = new byte[1024];
+        byte[] bytes = new byte[Constants.BUFFER_SIZE];
         try
         {
             System.out.println("Server waiting");

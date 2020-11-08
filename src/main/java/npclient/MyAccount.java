@@ -2,10 +2,12 @@ package npclient;
 
 import npclient.core.UDPConnection;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public class MyAccount {
 
     private String name;
-    private boolean inCall;
+    private final AtomicBoolean inCall;
     private UDPConnection udpConn;
 
     private static MyAccount instance;
@@ -19,7 +21,7 @@ public class MyAccount {
     }
 
     public MyAccount() {
-        this.inCall = false;
+        this.inCall = new AtomicBoolean(false);
     }
 
     public MyAccount(String name, UDPConnection udpConn) {
@@ -37,11 +39,11 @@ public class MyAccount {
     }
 
     public boolean isInCall() {
-        return inCall;
+        return inCall.get();
     }
 
-    public void setInCall(boolean inCall) {
-        this.inCall = inCall;
+    public synchronized void setInCall(boolean inCall) {
+        this.inCall.set(inCall);
     }
 
     public UDPConnection getUdpConn() {

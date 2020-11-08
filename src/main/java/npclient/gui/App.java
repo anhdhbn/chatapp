@@ -5,12 +5,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import npclient.gui.manager.StageManager;
-import npclient.gui.utils.FXMLUtils;
+import npclient.gui.util.UIUtils;
 
 public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLUtils.load("/fxml/login.fxml");
+        Parent root = UIUtils.load("/fxml/login.fxml");
+
+        assert root != null;
         Scene scene = new Scene(root);
 
         primaryStage.setTitle("Chatapp");

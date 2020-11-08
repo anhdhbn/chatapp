@@ -49,7 +49,7 @@ public class LoginPublisher extends TCPPublisher {
         UDPConnection udpConn = new UDPConnection();
 
         byte[] nameBytes = dataTransfer.name.getBytes();
-        byte[] initBuf = new byte[1024];
+        byte[] initBuf = new byte[Constants.BUFFER_SIZE];
         initBuf[0] = (byte) dataTransfer.name.length();
         System.arraycopy(nameBytes, 0, initBuf, 1, nameBytes.length);
 
@@ -60,7 +60,7 @@ public class LoginPublisher extends TCPPublisher {
 
         udpConn.send(initPacket);
 
-        byte[] recvBuf =  new byte[1024];
+        byte[] recvBuf =  new byte[Constants.BUFFER_SIZE];
         DatagramPacket recvPacket = new DatagramPacket(recvBuf, recvBuf.length);
         udpConn.receive(recvPacket);
 

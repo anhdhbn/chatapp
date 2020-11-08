@@ -1,6 +1,6 @@
-package npclient.core.data;
+package npclient.gui.entity;
 
-import npclient.core.entity.Message;
+import npclient.gui.entity.Message;
 
 import java.util.PriorityQueue;
 

@@ -1,4 +1,4 @@
-package npclient.core.entity;
+package npclient.gui.entity;
 
 public class ChatItem {
 

@@ -2,7 +2,9 @@ package npclient.core.command;
 
 import npclient.CliLogger;
 import npclient.CliConstants;
+import npclient.MyAccount;
 import npclient.core.UDPConnection;
+import nputils.Constants;
 
 import javax.sound.sampled.TargetDataLine;
 import java.io.IOException;
@@ -16,13 +18,13 @@ public class VoiceListener extends AbstractPublisher {
 
     private UDPConnection connection;
 
-    public VoiceListener(String username) {
-        super(username);
+    public VoiceListener() {
+        super(null);
     }
 
     @Override
     public void post() {
-        String threadName = "Voice Publisher Thread";
+        String threadName = "Voice Listener Thread";
         new Thread(this, threadName).start();
     }
 
@@ -38,7 +40,7 @@ public class VoiceListener extends AbstractPublisher {
 
     @Override
     public void run() {
-        byte[] buffer = new byte[1024];
+        byte[] buffer = new byte[Constants.BUFFER_SIZE];
         long pack = 0L;
 
         while (!isCancel) {

@@ -1,6 +1,7 @@
-package npclient.core.data;
+package npclient.gui.manager;
 
-import npclient.core.entity.Message;
+import npclient.gui.entity.Message;
+import npclient.gui.entity.Messages;
 
 import java.util.HashMap;
 import java.util.List;

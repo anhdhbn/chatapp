@@ -2,6 +2,7 @@ package npclient.core.command;
 
 import npclient.CliLogger;
 import npclient.core.UDPConnection;
+import nputils.Constants;
 
 import javax.sound.sampled.SourceDataLine;
 import java.io.IOException;
@@ -28,7 +29,7 @@ public class VoiceSpeaker extends AbstractTask {
     @Override
     public void run(){
         try {
-            byte[] buffer = new byte[1024];
+            byte[] buffer = new byte[Constants.BUFFER_SIZE];
             DatagramPacket incoming = new DatagramPacket(buffer, buffer.length);
 
             logger.debug("Waiting for incoming data...");
@@ -52,5 +53,8 @@ public class VoiceSpeaker extends AbstractTask {
         }
     }
 
-
+    public void listen() {
+        String threadName = "Voice Speaker Thread";
+        new Thread(this, threadName).start();
+    }
 }
