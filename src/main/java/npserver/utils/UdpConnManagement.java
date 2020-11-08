@@ -38,7 +38,7 @@ public class UdpConnManagement {
     public static void addMapping(String username, InetAddress host, int port){
         String strAdd = createAddr(host.getHostAddress(), port);
         IPInfo ipInfo = new IPInfo(host, port);
-        LOGGER.info("{}: map  ==> {}", strAdd, username);
+        LOGGER.info("{}: map ==> ({})", strAdd, username);
         userUdpConn.put(strAdd, username);
         userAddr.put(username, ipInfo);
     }

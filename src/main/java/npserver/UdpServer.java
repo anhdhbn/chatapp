@@ -24,14 +24,14 @@ public class UdpServer {
     public void StartServer() throws IOException {
         server = new DatagramSocket(port);
         LOGGER.info("Udp server is opening on port {}", port);
-        byte[] recvData = new byte[Constants.BUFFER_SIZE];
-        while (true) {
 
+        while (true) {
+            byte[] recvData = new byte[Constants.BUFFER_SIZE];
             DatagramPacket recvPacket = new DatagramPacket(recvData, recvData.length);
-            if(recvPacket.getAddress() == null) continue;
+            server.receive(recvPacket);
 
             String strAdr = recvPacket.getAddress().getHostAddress();
-            LOGGER.info("Server: Recv package from {}", strAdr);
+            LOGGER.info("Server: Recv package from ({})", strAdr);
             int port = recvPacket.getPort();
             String ipAdr = UdpConnManagement.createAddr(strAdr, port);
 
@@ -45,7 +45,7 @@ public class UdpServer {
                 DatagramPacket sendPacket = new DatagramPacket(recvData, recvData.length, ipInfo.host, ipInfo.port);
                 server.send(sendPacket);
                 String partnerAdr = UdpConnManagement.createAddr(ipInfo.host.getHostAddress(), ipInfo.port);
-                LOGGER.info("{}: {} forward to {}", ipAdr, sender, partnerAdr);
+                LOGGER.info("{}: ({}) forward to ({})", ipAdr, sender, partnerAdr);
             }
         }
     }

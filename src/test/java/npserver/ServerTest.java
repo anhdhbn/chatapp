@@ -33,7 +33,9 @@ public class ServerTest {
         handlers = new ArrayList<>();
 
         this.startServer();
+        this.delay();
         this.startUdpServer();
+
         this.delay();
     }
 
