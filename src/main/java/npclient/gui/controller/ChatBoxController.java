@@ -86,12 +86,15 @@ public class ChatBoxController implements Initializable {
         target = title;
         lTitle.setText(target);
 
+        // disconnect from subs
         disconnectSubscriber();
 
+        // load exist message
         Messages existMessages = MessageManager.getInstance().get(target);
         if (existMessages != null)
             lvMessage.getItems().setAll(existMessages);
 
+        // listen message
         generateSubscriber(target);
         messageSubscriber.listen();
     }

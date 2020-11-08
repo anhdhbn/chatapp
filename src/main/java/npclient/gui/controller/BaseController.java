@@ -42,7 +42,8 @@ public class BaseController implements Initializable {
         lvChatItem.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<ChatItem>() {
             @Override
             public void changed(ObservableValue<? extends ChatItem> observable, ChatItem oldChat, ChatItem newChat) {
-                changeChatBox(newChat.getName());
+                if (newChat != null)
+                    changeChatBox(newChat.getName());
             }
         });
 
