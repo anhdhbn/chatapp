@@ -12,9 +12,10 @@ import npclient.core.callback.OnPublishMessageSuccess;
 import npclient.core.callback.SubscribedTopicListener;
 import npclient.core.command.Publisher;
 import npclient.core.command.Subscriber;
-import npclient.core.data.MessageManager;
-import npclient.core.data.Messages;
-import npclient.core.entity.Message;
+import npclient.gui.manager.MessageManager;
+import npclient.gui.entity.Messages;
+import npclient.gui.entity.Message;
+import npclient.gui.entity.TextMessage;
 import npclient.gui.view.SendMessageCell;
 import nputils.Constants;
 import nputils.DataTransfer;
@@ -60,6 +61,12 @@ public class ChatBoxController implements Initializable {
         final String username = MyAccount.getInstance().getName();
         new Publisher(topic, username)
                 .putData(Constants.VOICE_REQUEST)
+                .setSuccessListener(new OnPublishMessageSuccess() {
+                    @Override
+                    public void onReceive(DataTransfer message) {
+                        MyAccount.getInstance().setInCall(true);
+                    }
+                })
                 .post();
     }
 
@@ -72,7 +79,7 @@ public class ChatBoxController implements Initializable {
                 .setSuccessListener(new OnPublishMessageSuccess() {
                     @Override
                     public void onReceive(DataTransfer message) {
-                        Message m = new Message();
+                        TextMessage m = new TextMessage();
                         m.setFrom(username);
                         m.setContent(input);
                         m.setTime(System.currentTimeMillis());
@@ -124,7 +131,7 @@ public class ChatBoxController implements Initializable {
                     public void onReceive(DataTransfer message) {
                         Object content = message.data;
                         if (content instanceof String) {
-                            Message m = new Message();
+                            TextMessage m = new TextMessage();
                             m.setFrom(message.name);
                             m.setTime(message.datetime);
                             m.setContent(content.toString());

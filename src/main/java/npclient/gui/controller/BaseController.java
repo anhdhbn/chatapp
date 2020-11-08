@@ -2,32 +2,36 @@ package npclient.gui.controller;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Callback;
-import npclient.CliConstants;
 import npclient.MyAccount;
-import npclient.core.UDPConnection;
+import npclient.core.callback.OnAcceptListener;
 import npclient.core.callback.OnPublishMessageSuccess;
+import npclient.core.callback.OnRejectListener;
 import npclient.core.callback.SubscribedTopicListener;
 import npclient.core.command.Publisher;
 import npclient.core.command.Subscriber;
-import npclient.core.data.MessageManager;
-import npclient.core.entity.ChatItem;
-import npclient.core.entity.Message;
-import npclient.gui.utils.FXMLUtils;
+import npclient.gui.manager.MessageManager;
+import npclient.gui.entity.ChatItem;
+import npclient.gui.entity.TextMessage;
+import npclient.gui.util.UIUtils;
 import npclient.gui.view.ChatBox;
 import npclient.gui.view.ChatItemCell;
 import nputils.Constants;
 import nputils.DataTransfer;
 
 import java.io.IOException;
-import java.net.DatagramPacket;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -38,6 +42,8 @@ public class BaseController implements Initializable {
     private AnchorPane paneChatbox;
     @FXML
     private ListView<ChatItem> lvChatItem;
+
+    private Stage voiceChatStage;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -71,42 +77,19 @@ public class BaseController implements Initializable {
                         String action = message.data.toString();
                         switch (action) {
                             case Constants.VOICE_REQUEST:
-                                FXMLUtils.showSimpleAlert(Alert.AlertType.CONFIRMATION, message.name + " is calling you");
-                                final String resTopic = String.format("voice/%s", message.name);
-                                new Publisher(resTopic, username)
-                                        .putData(Constants.VOICE_ACCEPT)
-                                        .setSuccessListener(new OnPublishMessageSuccess() {
-                                            @Override
-                                            public void onReceive(DataTransfer message) {
-                                                byte[] buf = new byte[Constants.BUFFER_SIZE];
-                                                System.arraycopy(username.getBytes(), 0, buf, 0, username.getBytes().length);
-                                                try {
-                                                    DatagramPacket packet = new DatagramPacket(buf, buf.length,
-                                                            UDPConnection.getServInetAddr(),
-                                                            CliConstants.UDP_PORT
-                                                    );
-                                                    MyAccount.getInstance().getUdpConn().send(packet);
-                                                } catch (IOException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                        })
-                                        .post();
-
-
+                                onReceiveVoiceRequest(message);
                                 break;
 
                             case Constants.VOICE_ACCEPT:
-                                byte[] buf = new byte[Constants.BUFFER_SIZE];
-                                DatagramPacket packet = new DatagramPacket(buf, buf.length);
-                                try {
-                                    MyAccount.getInstance().getUdpConn().receive(packet);
-                                    System.out.println("Receive " + new String(packet.getData()));
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-
+                                onReceiveVoiceAccept(message);
                                 break;
+
+                            case Constants.VOICE_REJECT:
+                                onReceiveVoiceReject(message);
+                                break;
+
+                            case Constants.VOICE_QUIT:
+                                onReceiveVoiceQuit(message);
 
                         }
                     }
@@ -171,7 +154,7 @@ public class BaseController implements Initializable {
                     public void onReceive(DataTransfer message) {
                         Object content = message.data;
                         if (content instanceof String) {
-                            Message m = new Message();
+                            TextMessage m = new TextMessage();
                             m.setFrom(message.name);
                             m.setTime(message.datetime);
                             m.setContent(content.toString());
@@ -214,5 +197,93 @@ public class BaseController implements Initializable {
 
         clearChatBox();
         paneChatbox.getChildren().add(chatBox);
+    }
+
+    private void onReceiveVoiceQuit(DataTransfer message) {
+        closeVoiceChatDialog();
+    }
+
+    private void onReceiveVoiceReject(DataTransfer message) {
+        MyAccount.getInstance().setInCall(false);
+    }
+
+    private void onReceiveVoiceAccept(DataTransfer message) {
+        openVoiceChatDialog(message.name);
+    }
+
+    private void onReceiveVoiceRequest(DataTransfer message) {
+        boolean inCall = MyAccount.getInstance().isInCall();
+        final String username = MyAccount.getInstance().getName();
+        final String resTopic = String.format("voice/%s", message.name);
+
+        if (inCall) {
+            new Publisher(resTopic, username)
+                    .putData(Constants.VOICE_REJECT)
+                    .post();
+        } else {
+            MyAccount.getInstance().setInCall(true);
+            String content = String.format("%s is calling you. Answer?", message.name);
+            UIUtils.showYesNoAlert(content, new OnAcceptListener() {
+                @Override
+                public void onAccept() {
+                    new Publisher(resTopic, username)
+                            .putData(Constants.VOICE_ACCEPT)
+                            .setSuccessListener(new OnPublishMessageSuccess() {
+                                @Override
+                                public void onReceive(DataTransfer message) {
+                                    openVoiceChatDialog(message.name);
+                                }
+                            })
+                            .post();
+                }
+            }, new OnRejectListener() {
+                @Override
+                public void onReject() {
+                    new Publisher(resTopic, username)
+                            .putData(Constants.VOICE_REJECT)
+                            .setSuccessListener(new OnPublishMessageSuccess() {
+                                @Override
+                                public void onReceive(DataTransfer message) {
+                                    MyAccount.getInstance().setInCall(false);
+                                }
+                            })
+                            .post();
+                }
+            });
+        }
+    }
+
+    private void openVoiceChatDialog(String target) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/voice_chat.fxml"));
+            Parent root = loader.load();
+            VoiceChatController controller = loader.getController();
+            controller.setUser1(MyAccount.getInstance().getName());
+            controller.setUser2(target);
+
+            Scene scene = new Scene(root);
+
+            voiceChatStage = new Stage();
+            voiceChatStage.setTitle("Voice Chat");
+            voiceChatStage.setScene(scene);
+
+            voiceChatStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent event) {
+                    controller.stop();
+                }
+            });
+
+            voiceChatStage.show();
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void closeVoiceChatDialog() {
+        if (voiceChatStage != null) {
+            voiceChatStage.close();
+        }
     }
 }

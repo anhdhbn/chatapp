@@ -5,7 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
-import npclient.core.entity.ChatItem;
+import npclient.gui.entity.ChatItem;
 
 import java.io.IOException;
 

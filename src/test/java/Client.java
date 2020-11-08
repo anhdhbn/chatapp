@@ -1,3 +1,5 @@
+import nputils.Constants;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -28,7 +30,7 @@ public class Client
             {
                 while(true)
                 {
-                    byte[] bytes = new byte[1024];
+                    byte[] bytes = new byte[Constants.BUFFER_SIZE];
                     DatagramPacket packet = new DatagramPacket(bytes, bytes.length);
                     try
                     {
@@ -63,7 +65,7 @@ public class Client
 
     private void connectToSupervisor()
     {
-        byte[] bytes = new byte[1024];
+        byte[] bytes = new byte[Constants.BUFFER_SIZE];
         System.out.println("Greeting server");
 //        System.arraycopy("".getBytes(), 0, bytes, 0, 4);
         try
