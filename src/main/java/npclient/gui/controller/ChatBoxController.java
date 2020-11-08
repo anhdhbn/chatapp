@@ -98,49 +98,15 @@ public class ChatBoxController implements Initializable {
         target = title;
         lTitle.setText(target);
 
-//        // disconnect from subs
-//        disconnectSubscriber();
-
         // load exist message
         Messages existMessages = MessageManager.getInstance().get(target);
         if (existMessages != null)
-            lvMessage.getItems().setAll(existMessages);
-
-        // listen message
-//        generateSubscriber(target);
-//        messageSubscriber.listen();
+            setItem(existMessages);
     }
 
     public final String getTitle() {
         return target;
     }
-
-//    private void disconnectSubscriber() {
-//        if (messageSubscriber != null) {
-//            messageSubscriber.cancel();
-//        }
-//    }
-//
-//    private void generateSubscriber(final String target) {
-//        final String topic = String.format("chat/%s", target);
-//        final String username = MyAccount.getInstance().getName();
-//
-//        messageSubscriber = new Subscriber(topic, username)
-//                .setNewMessageListener(new SubscribedTopicListener() {
-//                    @Override
-//                    public void onReceive(DataTransfer message) {
-//                        Object content = message.data;
-//                        if (content instanceof String) {
-//                            TextMessage m = new TextMessage();
-//                            m.setFrom(message.name);
-//                            m.setTime(message.datetime);
-//                            m.setContent(content.toString());
-//                            Messages messages = MessageManager.getInstance().append(target, m);
-//                            lvMessage.getItems().setAll(messages);
-//                        }
-//                    }
-//                });
-//    }
 
     public void setItem(Messages messages) {
         lvMessage.getItems().setAll(messages);
