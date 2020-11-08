@@ -1,7 +1,7 @@
 package npclient.core.command;
 
 import javafx.application.Platform;
-import npclient.core.TCPConnection;
+import npclient.CliConstants;
 import npclient.core.UDPConnection;
 import npclient.exception.ExistUserException;
 import nputils.Constants;
@@ -55,7 +55,7 @@ public class LoginPublisher extends TCPPublisher {
 
         DatagramPacket initPacket = new DatagramPacket(initBuf, initBuf.length,
                 UDPConnection.getServInetAddr(),
-                npclient.Constants.UDP_PORT
+                CliConstants.UDP_PORT
         );
 
         udpConn.send(initPacket);

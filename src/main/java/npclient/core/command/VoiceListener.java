@@ -1,7 +1,7 @@
 package npclient.core.command;
 
 import npclient.CliLogger;
-import npclient.Constants;
+import npclient.CliConstants;
 import npclient.core.UDPConnection;
 
 import javax.sound.sampled.TargetDataLine;
@@ -48,7 +48,7 @@ public class VoiceListener extends AbstractPublisher {
 
                 DatagramPacket data = new DatagramPacket(buffer, buffer.length,
                         UDPConnection.getServInetAddr(),
-                        Constants.UDP_PORT
+                        CliConstants.UDP_PORT
                 );
                 connection.send(data);
 
