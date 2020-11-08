@@ -29,6 +29,7 @@ public class LoginController implements Initializable {
 
     @FXML
     public void onEnter(ActionEvent actionEvent) {
+        tfUsername.setDisable(true);
         String username = tfUsername.getText();
         login(username);
     }
@@ -40,6 +41,7 @@ public class LoginController implements Initializable {
                     public void onReceive(DataTransfer message) {
                         UDPConnection udpConn = (UDPConnection) message.data;
                         loginSuccess(message.name, udpConn);
+                        tfUsername.setDisable(false);
                     }
                 })
                 .setErrorListener(new ErrorListener() {
