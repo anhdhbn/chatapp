@@ -22,6 +22,7 @@ public class ExtensionTest extends  ServerHandlerTest{
         this.generateClient();
         this.delay();
         DataTransfer data = handler1.receiveObj();
+        data = handler1.receiveObj();
         ArrayList<String> members = (ArrayList<String>)data.data;
         Assertions.assertEquals(handlers.size(), members.size());
     }
