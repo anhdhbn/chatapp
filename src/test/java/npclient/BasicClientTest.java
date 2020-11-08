@@ -80,12 +80,12 @@ public class BasicClientTest {
     @Test
     public void asyncChatTest() throws InterruptedException {
         new LoginPublisher("lamnt1")
-                .setOnLoginSuccess(new OnLoginSuccess() {
+                .setSuccessListener(new OnPublishMessageSuccess() {
                     @Override
-                    public void onLogin(String username, TCPConnection connection) {
+                    public void onReceive(DataTransfer message) {
                         try {
                             Thread.sleep(10000);
-                            new Publisher("chat/lamnt2", username)
+                            new Publisher("chat/lamnt2", message.name)
                                     .putData("Hello")
                                     .setSuccessListener(new OnPublishMessageSuccess() {
                                         @Override
@@ -108,12 +108,12 @@ public class BasicClientTest {
                 .post();
 
         new LoginPublisher("lamnt2")
-                .setOnLoginSuccess(new OnLoginSuccess() {
+                .setSuccessListener(new OnPublishMessageSuccess() {
                     @Override
-                    public void onLogin(String username, TCPConnection connection) {
+                    public void onReceive(DataTransfer message) {
                         try {
                             Thread.sleep(3000);
-                            new Subscriber("chat/lamnt1", username)
+                            new Subscriber("chat/lamnt1", message.name)
                                     .setNewMessageListener(new SubscribedTopicListener() {
                                         @Override
                                         public void onReceive(DataTransfer message) {

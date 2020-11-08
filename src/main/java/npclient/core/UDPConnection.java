@@ -1,9 +1,8 @@
 package npclient.core;
 
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.SocketException;
+import npclient.Constants;
+
+import java.net.*;
 
 public class UDPConnection extends DatagramSocket {
 
@@ -11,7 +10,7 @@ public class UDPConnection extends DatagramSocket {
         super();
     }
 
-    public UDPConnection(int port, InetAddress laddr) throws SocketException {
-        super(port, laddr);
+    public static InetAddress getServInetAddr() throws UnknownHostException {
+        return InetAddress.getByName(Constants.NP_HOST);
     }
 }

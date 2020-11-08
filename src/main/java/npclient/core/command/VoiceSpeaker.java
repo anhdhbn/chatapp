@@ -1,6 +1,5 @@
 package npclient.core.command;
 
-import javafx.application.Platform;
 import npclient.CliLogger;
 import npclient.core.UDPConnection;
 
@@ -29,7 +28,7 @@ public class VoiceSpeaker extends AbstractTask {
     @Override
     public void run(){
         try {
-            byte[] buffer = new byte[512];
+            byte[] buffer = new byte[1024];
             DatagramPacket incoming = new DatagramPacket(buffer, buffer.length);
 
             logger.debug("Waiting for incoming data...");
@@ -47,15 +46,9 @@ public class VoiceSpeaker extends AbstractTask {
 
             logger.debug("Audio is drain and close");
 
-        } catch (IOException ex) {
-            logger.error(ex.getMessage());
-            if (errorListener != null) {
-                try {
-                    Platform.runLater(() -> errorListener.onReceive(ex));
-                } catch (IllegalStateException e) {
-                    errorListener.onReceive(ex);
-                }
-            }
+        } catch (IOException e) {
+            logger.error("Failed to subscribe: " + e.getMessage());
+            handleError(e);
         }
     }
 

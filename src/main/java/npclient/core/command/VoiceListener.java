@@ -1,14 +1,12 @@
 package npclient.core.command;
 
-import javafx.application.Platform;
 import npclient.CliLogger;
+import npclient.Constants;
 import npclient.core.UDPConnection;
 
 import javax.sound.sampled.TargetDataLine;
 import java.io.IOException;
 import java.net.DatagramPacket;
-import java.net.InetAddress;
-import java.net.SocketException;
 
 public class VoiceListener extends AbstractPublisher {
 
@@ -40,10 +38,7 @@ public class VoiceListener extends AbstractPublisher {
 
     @Override
     public void run() {
-        InetAddress inetAddr = connection.getInetAddress();
-        int port = connection.getPort();
-
-        byte[] buffer = new byte[512];
+        byte[] buffer = new byte[1024];
         long pack = 0L;
 
         while (!isCancel) {
@@ -51,15 +46,17 @@ public class VoiceListener extends AbstractPublisher {
                 int read = audioInput.read(buffer, 0, buffer.length);
                 logger.debug("Read " + read + " bytes from audio input");
 
-                DatagramPacket data = new DatagramPacket(buffer, buffer.length, inetAddr, port);
+                DatagramPacket data = new DatagramPacket(buffer, buffer.length,
+                        UDPConnection.getServInetAddr(),
+                        Constants.UDP_PORT
+                );
                 connection.send(data);
 
                 logger.debug("Send packet #" + pack);
 
             } catch (IOException ex) {
-                logger.error(ex.getMessage());
-                if (errorListener != null)
-                    errorListener.onReceive(ex);
+                logger.error("Failed to listen: " + ex.getMessage());
+                handleError(ex);
             }
         }
 

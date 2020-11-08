@@ -1,5 +1,6 @@
 package npclient.core.command;
 
+import javafx.application.Platform;
 import npclient.core.callback.ErrorListener;
 
 public abstract class AbstractTask implements Runnable {
@@ -15,5 +16,13 @@ public abstract class AbstractTask implements Runnable {
     public AbstractTask setErrorListener(ErrorListener listener) {
         this.errorListener = listener;
         return this;
+    }
+
+    protected void handleError(Exception e) {
+        if (errorListener != null) {
+            Platform.runLater(() -> errorListener.onReceive(e));
+        } else {
+            e.printStackTrace();
+        }
     }
 }
