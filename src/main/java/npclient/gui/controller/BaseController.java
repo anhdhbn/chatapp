@@ -220,6 +220,7 @@ public class BaseController implements Initializable {
 
     private void onReceiveVoiceQuit(DataTransfer message) {
         closeVoiceChatDialog();
+        MyAccount.getInstance().setInCall(false);
     }
 
     private void onReceiveVoiceReject(DataTransfer message) {
