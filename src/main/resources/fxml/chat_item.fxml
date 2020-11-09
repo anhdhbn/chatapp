@@ -14,8 +14,7 @@
 <!--<fx:root fx:id="container" alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="320.0" prefHeight="96.0" type="javafx.scene.layout.HBox" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">-->
 <HBox fx:id="container" alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="320.0" prefHeight="96.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <CircleImageView radius="40.0" url="/img/avatar-100.jpg" />
-<!--      <Circle radius="40.0" smooth="true" />-->
+      <CircleImageView fx:id="civAvatar" radius="36.0"/>
       <VBox HBox.hgrow="ALWAYS">
          <children>
             <Text fx:id="tTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">

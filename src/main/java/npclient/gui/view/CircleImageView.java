@@ -5,12 +5,24 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import npclient.gui.util.UIUtils;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 public class CircleImageView extends Circle {
 
-    public CircleImageView(@NamedArg("radius") float radius, @NamedArg("url") String url) {
+    public CircleImageView(@NamedArg("radius") float radius) {
         super(radius);
-        Image image = new Image(url);
-        setFill(new ImagePattern(image));
+    }
+
+    public void update(String name) {
+        try {
+            InputStream stream = UIUtils.retrieveAvatar(name);
+            Image image = new Image(stream);
+            setFill(new ImagePattern(image));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

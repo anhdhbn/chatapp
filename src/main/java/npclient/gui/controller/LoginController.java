@@ -6,6 +6,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import npclient.MyAccount;
 import npclient.core.UDPConnection;
 import npclient.core.callback.ErrorListener;
@@ -15,13 +17,17 @@ import npclient.gui.manager.StageManager;
 import npclient.gui.util.UIUtils;
 import nputils.DataTransfer;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
 
     @FXML
-    public TextField tfUsername;
+    private TextField tfUsername;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

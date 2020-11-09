@@ -1,12 +1,7 @@
 package npclient.core;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-import java.net.UnknownHostException;
+import java.io.*;
+import java.net.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.DigestInputStream;
@@ -29,5 +24,31 @@ public class Utils {
         }
 
         return sb.toString();
+    }
+
+    public static void main(String[] args) throws IOException {
+        String url = "https://ui-avatars.com/api/";
+        String charset = "UTF-8";
+        String background = "random";
+        String name = "Tung Lam";
+
+        String query = String.format("background=%s&name=%s",
+                URLEncoder.encode(background, charset),
+                URLEncoder.encode(name, charset));
+
+        URLConnection connection = new URL(url + "?" + query).openConnection();
+        connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95 Safari/537.11");
+        InputStream response = connection.getInputStream();
+        connection.connect();
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(response));
+        String inputLine;
+        StringBuffer content = new StringBuffer();
+        while ((inputLine = in.readLine()) != null) {
+            content.append(inputLine);
+        }
+        in.close();
+//        connection.d
+        System.out.println(content);
     }
 }

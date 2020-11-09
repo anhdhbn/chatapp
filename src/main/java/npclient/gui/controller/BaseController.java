@@ -8,6 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import npclient.MyAccount;
@@ -24,6 +25,7 @@ import npclient.gui.manager.MessageSubscribeManager;
 import npclient.gui.util.UIUtils;
 import npclient.gui.view.ChatBox;
 import npclient.gui.view.ChatItemCell;
+import npclient.gui.view.CircleImageView;
 import npclient.gui.view.VoiceChatDialog;
 import nputils.Constants;
 import nputils.DataTransfer;
@@ -34,6 +36,10 @@ import java.util.ResourceBundle;
 
 public class BaseController implements Initializable {
 
+    @FXML
+    private Text tUsername;
+    @FXML
+    private CircleImageView civAvatar;
     @FXML
     private AnchorPane paneChatBox;
     @FXML
@@ -61,6 +67,10 @@ public class BaseController implements Initializable {
         listenOnlineUsers();
 
         listenVoiceCall();
+
+        final String name = MyAccount.getInstance().getName();
+        this.tUsername.setText(name);
+        this.civAvatar.update(name);
     }
 
     /**
