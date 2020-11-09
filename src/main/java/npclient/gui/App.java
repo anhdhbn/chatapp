@@ -17,7 +17,7 @@ public class App extends Application {
 
         primaryStage.setTitle("Chatapp");
         primaryStage.setScene(scene);
-        primaryStage.setFullScreen(true);
+//        primaryStage.setFullScreen(true);
         primaryStage.show();
 
         StageManager.getInstance().setPrimaryStage(primaryStage);
