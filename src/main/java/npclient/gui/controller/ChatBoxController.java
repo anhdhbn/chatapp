@@ -12,7 +12,7 @@ import javafx.util.Callback;
 import npclient.MyAccount;
 import npclient.core.callback.OnPublishMessageSuccess;
 import npclient.core.command.Publisher;
-import npclient.core.transferable.FileInfo;
+import nputils.FileInfo;
 import npclient.gui.entity.FileMessage;
 import npclient.gui.manager.MessageManager;
 import npclient.gui.entity.Messages;

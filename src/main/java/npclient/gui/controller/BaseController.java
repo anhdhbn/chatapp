@@ -20,7 +20,7 @@ import npclient.core.callback.OnRejectListener;
 import npclient.core.callback.SubscribedTopicListener;
 import npclient.core.command.Publisher;
 import npclient.core.command.Subscriber;
-import npclient.core.transferable.FileInfo;
+import nputils.FileInfo;
 import npclient.exception.DuplicateGroupException;
 import npclient.gui.entity.*;
 import npclient.gui.manager.MessageManager;

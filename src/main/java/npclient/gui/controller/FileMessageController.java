@@ -3,9 +3,8 @@ package npclient.gui.controller;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.text.Text;
-import npclient.core.transferable.FileInfo;
+import nputils.FileInfo;
 
-import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 

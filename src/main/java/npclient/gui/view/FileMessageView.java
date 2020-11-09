@@ -1,6 +1,6 @@
 package npclient.gui.view;
 
-import npclient.core.transferable.FileInfo;
+import nputils.FileInfo;
 import npclient.gui.controller.FileMessageController;
 
 public class FileMessageView extends AbstractMessageView<FileInfo, FileMessageController> {
