@@ -21,7 +21,7 @@ public class FileInfo implements Serializable {
 
     }
 
-    public FileInfo(File file) throws IOException, NoSuchAlgorithmException, BigFileTransferException {
+    public FileInfo(File file) throws IOException, BigFileTransferException {
         if (file == null)
             throw new FileNotFoundException();
 
@@ -32,7 +32,7 @@ public class FileInfo implements Serializable {
             throw new BigFileTransferException(name);
 
         this.data = Files.readAllBytes(file.toPath());
-        this.md5 = Utils.computeMd5(file);
+        this.md5 = Utils.computeMd5(data);
     }
 
     public byte[] getData() {
