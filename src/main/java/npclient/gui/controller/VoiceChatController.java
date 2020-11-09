@@ -39,11 +39,19 @@ public class VoiceChatController implements Initializable {
             logger.debug("Start audio output");
             SourceDataLine audioOutput = AudioSystem.getSourceDataLine(format);
             audioOutput.open(format);
+            if (audioOutput.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
+                FloatControl volume = (FloatControl) audioOutput.getControl(FloatControl.Type.MASTER_GAIN);
+                volume.setValue(100.0F);
+            }
             audioOutput.start();
 
             logger.debug("Start audio input");
             TargetDataLine audioInput = AudioSystem.getTargetDataLine(format);
             audioInput.open(format);
+            if (audioInput.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
+                FloatControl volume = (FloatControl) audioInput.getControl(FloatControl.Type.MASTER_GAIN);
+                volume.setValue(100.0F);
+            }
             audioInput.start();
 
             final UDPConnection udpConn = MyAccount.getInstance().getUdpConn();
