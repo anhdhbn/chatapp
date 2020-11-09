@@ -1,4 +1,4 @@
-package npclient.core.transferable;
+package nputils;
 
 import npclient.core.Utils;
 

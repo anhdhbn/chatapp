@@ -1,6 +1,6 @@
 package npclient.gui.entity;
 
-import npclient.core.transferable.FileInfo;
+import nputils.FileInfo;
 
 public class FileMessage extends Message {
 
