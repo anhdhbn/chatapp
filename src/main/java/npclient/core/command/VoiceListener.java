@@ -45,7 +45,7 @@ public class VoiceListener extends AbstractPublisher {
 
         while (!isCancel) {
             try {
-                int read = audioInput.read(buffer, 1, buffer.length - 1);
+                int read = audioInput.read(buffer, 1, buffer.length);
                 buffer[0] = 1;
                 logger.debug("Read " + read + " bytes from audio input");
 
