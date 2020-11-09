@@ -17,7 +17,7 @@ public class MessageSubscribeManager extends HashMap<String, Subscriber> {
         return instance;
     }
 
-    public void clearOffline(List<String> online) {
+    public synchronized void clearOffline(List<String> online) {
         Set<String> keys = keySet();
         for (String user : keys) {
             if (!online.contains(user)) {

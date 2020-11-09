@@ -25,6 +25,10 @@ public class StageManager {
     }
 
     public void changeScene(Parent scene) {
-        primaryStage.getScene().setRoot(scene);
+        try {
+            primaryStage.getScene().setRoot(scene);
+        } catch (NullPointerException e) {
+            System.exit(1);
+        }
     }
 }
