@@ -2,11 +2,13 @@ package npclient.gui.controller;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -19,6 +21,7 @@ import npclient.core.callback.SubscribedTopicListener;
 import npclient.core.command.Publisher;
 import npclient.core.command.Subscriber;
 import npclient.core.transferable.FileInfo;
+import npclient.exception.DuplicateGroupException;
 import npclient.gui.entity.*;
 import npclient.gui.manager.MessageManager;
 import npclient.gui.manager.MessageSubscribeManager;
@@ -37,30 +40,34 @@ import java.util.ResourceBundle;
 public class BaseController implements Initializable {
 
     @FXML
+    private TextField tfGroup;
+    @FXML
+    private ListView<ChatItem> lvGroupItem;
+    @FXML
     private Text tUsername;
     @FXML
     private CircleImageView civAvatar;
     @FXML
     private AnchorPane paneChatBox;
     @FXML
-    private ListView<ChatItem> lvChatItem;
+    private ListView<ChatItem> lvUserItem;
 
     private Stage voiceChatStage;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        lvChatItem.setCellFactory(new Callback<ListView<ChatItem>, ListCell<ChatItem>>() {
+        lvUserItem.setCellFactory(new Callback<ListView<ChatItem>, ListCell<ChatItem>>() {
             @Override
             public ListCell<ChatItem> call(ListView<ChatItem> param) {
                 return new ChatItemCell();
             }
         });
 
-        lvChatItem.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<ChatItem>() {
+        lvUserItem.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<ChatItem>() {
             @Override
             public void changed(ObservableValue<? extends ChatItem> observable, ChatItem oldChat, ChatItem newChat) {
                 if (newChat != null)
-                    changeChatBox(newChat.getName());
+                    changeChatBox(newChat.getName(), false);
             }
         });
 
@@ -125,7 +132,7 @@ public class BaseController implements Initializable {
                         boolean isCurrentOnline = current == null;
 
                         // Clear all exist chat item
-                        lvChatItem.getItems().clear();
+                        lvUserItem.getItems().clear();
 
                         // Retrieve online users
                         List<String> onlineUsers = (List<String>) message.data;
@@ -137,17 +144,20 @@ public class BaseController implements Initializable {
                         for (String user : onlineUsers) {
                             // Add user (not your self) into listview
                             if (!username.equals(user)) {
-                                ChatItem item = new ChatItem();
+                                ChatItem item = new UserChatItem();
                                 item.setName(user);
-                                lvChatItem.getItems().add(item);
+                                lvUserItem.getItems().add(item);
 
                                 // Check whether current user still online
                                 if (user.equals(current))
                                     isCurrentOnline = true;
-                                else if (!MessageSubscribeManager.getInstance().containsKey(user)) {
-                                    // with other user listen message
-                                    Subscriber subscriber = subscribeMessages(username, user);
-                                    MessageSubscribeManager.getInstance().put(user, subscriber);
+                                else {
+                                    String topic = String.format("chat/%s", user);
+                                    if (!MessageSubscribeManager.getInstance().containsKey(topic)) {
+                                        // with other user listen message
+                                        Subscriber subscriber = subscribeMessages(username, topic);
+                                        MessageSubscribeManager.getInstance().put(topic, subscriber);
+                                    }
                                 }
                             }
                         }
@@ -165,16 +175,15 @@ public class BaseController implements Initializable {
     /**
      * Generate subscriber subscribe listen to message from a user
      * @param username of current user
-     * @param target username
+     * @param topic topic
      * @return subscriber
      */
-    private Subscriber subscribeMessages(String username, String target) {
-        final String topic = String.format("chat/%s", target);
+    private Subscriber subscribeMessages(String username, String topic) {
         Subscriber subscriber = new Subscriber(topic, username)
                 .setNewMessageListener(new SubscribedTopicListener() {
                     @Override
                     public void onReceive(DataTransfer message) {
-                        onReceiveNewMessage(target, message);
+                        onReceiveNewMessage(topic, message);
                     }
                 });
         subscriber.listen();
@@ -183,10 +192,10 @@ public class BaseController implements Initializable {
 
     /**
      * Callback fires when receive new message from user
-     * @param from username
+     * @param topic subscribed topic
      * @param message received
      */
-    private void onReceiveNewMessage(String from, DataTransfer message) {
+    private void onReceiveNewMessage(String topic, DataTransfer message) {
         Message msg = null;
 
         Object content = message.data;
@@ -204,7 +213,7 @@ public class BaseController implements Initializable {
             msg.setFrom(message.name);
             msg.setTime(message.datetime);
 
-            Messages messages = MessageManager.getInstance().append(from, msg);
+            Messages messages = MessageManager.getInstance().append(topic, msg);
 
             boolean isCurrentChat = false;
             ChatBox chatBox = getCurrentChat();
@@ -249,11 +258,12 @@ public class BaseController implements Initializable {
 
     /**
      * Change chat box section by username
-     * @param target username
+     * @param target name
+     * @param isGroup is group chat
      */
-    private void changeChatBox(String target) {
+    private void changeChatBox(String target, boolean isGroup) {
         ChatBox chatBox = new ChatBox();
-        chatBox.setTarget(target);
+        chatBox.setTarget(target, isGroup);
 
         clearChatBox();
         paneChatBox.getChildren().add(chatBox);
@@ -337,7 +347,6 @@ public class BaseController implements Initializable {
 //            });
 
         voiceChatStage.show();
-
     }
 
     private void closeVoiceChatDialog() {
@@ -347,7 +356,7 @@ public class BaseController implements Initializable {
     }
 
     private synchronized void updateChatItems(Messages messages) {
-        ChatItem chatItem = lvChatItem.getItems().stream()
+        ChatItem chatItem = lvUserItem.getItems().stream()
                 .filter(i -> i.getName().equals(messages.getName()))
                 .findFirst()
                 .orElse(null);
@@ -357,8 +366,37 @@ public class BaseController implements Initializable {
             chatItem.update(messages);
 
             // swap to first
-            lvChatItem.getItems().remove(chatItem);
-            lvChatItem.getItems().add(0, chatItem);
+            lvUserItem.getItems().remove(chatItem);
+            lvUserItem.getItems().add(0, chatItem);
+        }
+    }
+
+    public synchronized void join(String group) throws DuplicateGroupException {
+        String topic = String.format("group/%s", group);
+        if (!MessageSubscribeManager.getInstance().containsKey(topic)) {
+            ChatItem item = new UserChatItem();
+            item.setName(group);
+            item.setSeen(true);
+
+            if (!lvGroupItem.getItems().contains(item)) {
+                lvGroupItem.getItems().add(item);
+            }
+
+            // with other user listen message
+            final String username = MyAccount.getInstance().getName();
+            Subscriber subscriber = subscribeMessages(username, topic);
+            MessageSubscribeManager.getInstance().put(topic, subscriber);
+
+        } else
+            throw new DuplicateGroupException(group);
+    }
+
+    public void joinGroup(ActionEvent actionEvent) {
+        String group = tfGroup.getText().trim();
+        try {
+            join(group);
+        } catch (DuplicateGroupException e) {
+            UIUtils.showErrorAlert(e.getMessage());
         }
     }
 }

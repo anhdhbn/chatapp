@@ -40,8 +40,7 @@ public class ChatBoxController implements Initializable {
     private TextField tfInput;
 
     private String target;
-
-//    private Subscriber messageSubscriber;
+    private boolean isGroup;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -82,7 +81,7 @@ public class ChatBoxController implements Initializable {
     }
 
     private void sendFile(File file) {
-        final String topic = String.format("chat/%s", target);
+        final String topic = getMessageTopic();
         final String username = MyAccount.getInstance().getName();
 
         try {
@@ -96,7 +95,7 @@ public class ChatBoxController implements Initializable {
                             m.setFrom(username);
                             m.setFileInfo(fileInfo);
                             m.setTime(System.currentTimeMillis());
-                            Messages messages = MessageManager.getInstance().append(target, m);
+                            Messages messages = MessageManager.getInstance().append(topic, m);
                             lvMessage.getItems().setAll(messages);
                         }
                     }).post();
@@ -108,7 +107,7 @@ public class ChatBoxController implements Initializable {
     }
 
     private void sendText(String input) {
-        final String topic = String.format("chat/%s", target);
+        final String topic = getMessageTopic();
         final String username = MyAccount.getInstance().getName();
 
         new Publisher(topic, username)
@@ -120,7 +119,7 @@ public class ChatBoxController implements Initializable {
                         m.setFrom(username);
                         m.setContent(input);
                         m.setTime(System.currentTimeMillis());
-                        Messages messages = MessageManager.getInstance().append(target, m);
+                        Messages messages = MessageManager.getInstance().append(topic, m);
                         lvMessage.getItems().setAll(messages);
                         clearInput();
                     }
@@ -131,14 +130,23 @@ public class ChatBoxController implements Initializable {
         tfInput.clear();
     }
 
-    public void setTitle(String title) {
-        target = title;
-        lTitle.setText(target);
+    public void setTitle(String title, boolean isGroup) {
+        this.target = title;
+        this.lTitle.setText(target);
+        this.isGroup = isGroup;
 
         // load exist message
-        Messages existMessages = MessageManager.getInstance().get(target);
+        String topic = getMessageTopic();
+        Messages existMessages = MessageManager.getInstance().get(topic);
         if (existMessages != null)
             setItem(existMessages);
+    }
+
+    private String getMessageTopic() {
+        String topic;
+        if (isGroup) topic = String.format("group/%s", target);
+        else topic = String.format("chat/%s", target);
+        return topic;
     }
 
     public final String getTitle() {

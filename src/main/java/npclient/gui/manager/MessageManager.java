@@ -2,6 +2,7 @@ package npclient.gui.manager;
 
 import npclient.gui.entity.Message;
 import npclient.gui.entity.Messages;
+import nputils.Constants;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -22,12 +23,12 @@ public class MessageManager implements Map<String, Messages> {
         return instance;
     }
 
-    public synchronized Messages append(String name, Message m) {
-        Messages messages = get(name);
+    public synchronized Messages append(String topic, Message m) {
+        Messages messages = get(topic);
 
         if (messages == null) {
-            messages = new Messages(name);
-            put(name, messages);
+            messages = new Messages(topic);
+            put(topic, messages);
         }
 
         Message lastMsg = messages.peek();
@@ -41,9 +42,12 @@ public class MessageManager implements Map<String, Messages> {
 
     public synchronized void clearOffline(List<String> online) {
         Set<String> keys = keySet();
-        for (String user : keys) {
-            if (!online.contains(user))
-                remove(user);
+        for (String topic : keys) {
+            if (topic.startsWith(Constants.PREFIX_CHAT)) {
+                String user = topic.split(Constants.SPLITTER)[1];
+                if (!online.contains(user))
+                    remove(topic);
+            }
         }
     }
 

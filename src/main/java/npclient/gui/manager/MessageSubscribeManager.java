@@ -1,6 +1,7 @@
 package npclient.gui.manager;
 
 import npclient.core.command.Subscriber;
+import nputils.Constants;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -24,10 +25,13 @@ public class MessageSubscribeManager implements Map<String, Subscriber> {
 
     public synchronized void clearOffline(List<String> online) {
         Set<String> keys = keySet();
-        for (String user : keys) {
-            if (!online.contains(user)) {
-                Subscriber subscriber = remove(user);
-                subscriber.cancel();
+        for (String topic : keys) {
+            if (topic.startsWith(Constants.PREFIX_CHAT)) {
+                String user = topic.split(Constants.SPLITTER)[1];
+                if (!online.contains(user)) {
+                    Subscriber subscriber = remove(user);
+                    subscriber.cancel();
+                }
             }
         }
     }

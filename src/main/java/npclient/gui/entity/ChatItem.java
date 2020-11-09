@@ -1,11 +1,11 @@
 package npclient.gui.entity;
 
-public class ChatItem implements Comparable<ChatItem> {
+public abstract class ChatItem implements Comparable<ChatItem> {
 
-    private String name;
-    private String lastMessage;
-    private long time;
-    private boolean seen;
+    protected String name;
+    protected String lastMessage;
+    protected long time;
+    protected boolean seen;
 
     public String getName() {
         return name;
