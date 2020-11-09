@@ -63,6 +63,7 @@ public class MessageCell extends ListCell<Message> {
             final String username = MyAccount.getInstance().getName();
             if (item.getFrom().equals(username)) {
                 container.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+                tName.setVisible(false);
             } else {
                 container.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
             }
