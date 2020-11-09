@@ -19,7 +19,7 @@ public class MessageSubscribeManager implements Map<String, Subscriber> {
     }
 
     public MessageSubscribeManager() {
-        ref = new AtomicReference<>();
+        ref = new AtomicReference<>(new HashMap<>());
     }
 
     public synchronized void clearOffline(List<String> online) {
