@@ -2,6 +2,7 @@ package nputils;
 
 import java.io.*;
 import java.net.*;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.DigestInputStream;
@@ -10,19 +11,38 @@ import java.security.NoSuchAlgorithmException;
 
 public class Utils {
 
-    public static String computeMd5(File file) throws IOException, NoSuchAlgorithmException {
-        InputStream is = Files.newInputStream(file.toPath());
-
-        MessageDigest md = MessageDigest.getInstance("MD5");
-        DigestInputStream dis = new DigestInputStream(is, md);
-        byte[] hash = md.digest();
-
-        //converting byte array to Hexadecimal String
-        StringBuilder sb = new StringBuilder(2*hash.length);
-        for (byte b : hash) {
-            sb.append(String.format("%02x", b&0xff));
+    public static String computeMd5(File file){
+        String digest = null;
+        try {
+            byte[] bytes = Files.readAllBytes(file.toPath());
+            digest = computeMd5(bytes);
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
+        return digest;
+    }
 
-        return sb.toString();
+    public static String computeMd5(byte[] bytes) {
+        String digest = null;
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] hash = md.digest(bytes);
+
+            //converting byte array to Hexadecimal String
+            StringBuilder sb = new StringBuilder(2*hash.length);
+            for(byte b : hash){
+                sb.append(String.format("%02x", b&0xff));
+            }
+
+            digest = sb.toString();
+
+        } catch (NoSuchAlgorithmException ex) {
+            ex.printStackTrace();
+        }
+        return digest;
+    }
+
+    public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
+        System.out.println(computeMd5(new File("/Users/lamnt/Downloads/akautauto-5.0.1.jar")));
     }
 }

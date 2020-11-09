@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -20,6 +21,7 @@ import npclient.core.callback.OnRejectListener;
 import npclient.core.callback.SubscribedTopicListener;
 import npclient.core.command.Publisher;
 import npclient.core.command.Subscriber;
+import npclient.gui.util.AudioUtils;
 import nputils.FileInfo;
 import npclient.exception.DuplicateGroupException;
 import npclient.gui.entity.*;
@@ -52,7 +54,7 @@ public class BaseController implements Initializable {
     @FXML
     private ListView<ChatItem> lvUserItem;
 
-    private Stage voiceChatStage;
+    private VoiceChatDialog voiceChatStage;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -279,12 +281,15 @@ public class BaseController implements Initializable {
     }
 
     private void onReceiveVoiceQuit(DataTransfer message) {
-        closeVoiceChatDialog();
         MyAccount.getInstance().setInCall(false);
+        closeVoiceChatDialog();
+        UIUtils.showSimpleAlert(Alert.AlertType.INFORMATION, "Called end.");
     }
 
     private void onReceiveVoiceReject(DataTransfer message) {
         MyAccount.getInstance().setInCall(false);
+        String content = String.format("%s rejected your call request.", message.name);
+        UIUtils.showSimpleAlert(Alert.AlertType.INFORMATION, content);
     }
 
     private void onReceiveVoiceAccept(DataTransfer message) {
@@ -296,7 +301,7 @@ public class BaseController implements Initializable {
         final String username = MyAccount.getInstance().getName();
         final String resTopic = String.format("voice/%s", message.name);
 
-        if (inCall) {
+        if (inCall || !AudioUtils.isVoiceChatSupported()) {
             new Publisher(resTopic, username)
                     .putData(Constants.VOICE_REJECT)
                     .post();
@@ -334,27 +339,9 @@ public class BaseController implements Initializable {
     }
 
     private void openVoiceChatDialog(String target) {
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/voice_chat.fxml"));
-//            Parent root = loader.load();
-//            VoiceChatController controller = loader.getController();
-//            controller.setUser1(MyAccount.getInstance().getName());
-//            controller.setUser2(target);
-//
-//            Scene scene = new Scene(root);
-
         voiceChatStage = new VoiceChatDialog();
-//            voiceChatStage.setTitle("Voice Chat");
-//            voiceChatStage.setScene(scene);
-//
-//            voiceChatStage.initOwner(StageManager.getInstance().getPrimaryStage());
-//
-//            voiceChatStage.setOnHiding(new EventHandler<WindowEvent>() {
-//                @Override
-//                public void handle(WindowEvent event) {
-//                    controller.stop();
-//                }
-//            });
-
+        voiceChatStage.setUsername(MyAccount.getInstance().getName());
+        voiceChatStage.setTarget(target);
         voiceChatStage.show();
     }
 
