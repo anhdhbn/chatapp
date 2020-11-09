@@ -237,8 +237,9 @@ public class BaseController implements Initializable {
                 messages.setSeen(true);
             } else {
                 messages.setSeen(false);
-                updateChatItems(messages);
             }
+
+            updateChatItems(messages);
         }
     }
 
