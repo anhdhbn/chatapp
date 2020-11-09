@@ -408,6 +408,8 @@ public class BaseController implements Initializable {
             join(group);
         } catch (DuplicateGroupException e) {
             UIUtils.showErrorAlert(e.getMessage());
+        } finally {
+            tfGroup.clear();
         }
     }
 }
