@@ -220,12 +220,14 @@ public class BaseController implements Initializable {
             msg.setTime(message.datetime);
 
             Messages messages = MessageManager.getInstance().append(topic, msg);
+            boolean isGroup = messages.isGroup();
 
             boolean isCurrentChat = false;
             ChatBox chatBox = getCurrentChat();
             if (chatBox != null) {
                 String current = chatBox.getTarget();
-                if (message.name.equals(current)) {
+                if ((!isGroup && message.name.equals(current))
+                        || (isGroup && topic.equals(String.format("group/%s", current)))) {
                     isCurrentChat = true;
                 }
             }
