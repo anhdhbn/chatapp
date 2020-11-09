@@ -18,6 +18,8 @@ public class ChatItemCell extends ListCell<ChatItem> {
     private Text tTitle;
     @FXML
     private Text tLastMsg;
+    @FXML
+    private CircleImageView civAvatar;
 
     @Override
     protected void updateItem(ChatItem item, boolean empty) {
@@ -41,6 +43,7 @@ public class ChatItemCell extends ListCell<ChatItem> {
 
             tTitle.setText(item.getName());
             tLastMsg.setText(item.getLastMessage());
+            civAvatar.update(item.getName());
 
             setText(null);
             setGraphic(container);
