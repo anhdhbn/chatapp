@@ -1,14 +1,11 @@
 package nputils;
 
-import npclient.core.Utils;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 
 public class FileInfo implements Serializable {
 
