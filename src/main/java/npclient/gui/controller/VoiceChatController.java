@@ -41,7 +41,7 @@ public class VoiceChatController implements Initializable {
             audioOutput.open(format);
             if (audioOutput.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
                 FloatControl volume = (FloatControl) audioOutput.getControl(FloatControl.Type.MASTER_GAIN);
-                volume.setValue(100.0F);
+                volume.setValue(volume.getMaximum());
             }
             audioOutput.start();
 
@@ -50,7 +50,7 @@ public class VoiceChatController implements Initializable {
             audioInput.open(format);
             if (audioInput.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
                 FloatControl volume = (FloatControl) audioInput.getControl(FloatControl.Type.MASTER_GAIN);
-                volume.setValue(100.0F);
+                volume.setValue(volume.getMaximum());
             }
             audioInput.start();
 
