@@ -8,6 +8,7 @@ import npclient.CliLogger;
 import npclient.MyAccount;
 import npclient.core.UDPConnection;
 import npclient.core.command.Publisher;
+import npclient.core.command.UDPRegister;
 import npclient.core.command.VoiceListener;
 import npclient.core.command.VoiceSpeaker;
 import npclient.gui.util.AudioUtils;
@@ -47,20 +48,12 @@ public class VoiceChatController implements Initializable {
             audioInput.start();
 
             final UDPConnection udpConn = MyAccount.getInstance().getUdpConn();
+            final String name = MyAccount.getInstance().getName();
 
-            String name = MyAccount.getInstance().getName();
-            byte[] nameBytes = name.getBytes();
-            byte[] initBuf = new byte[Constants.BUFFER_SIZE];
-            initBuf[0] = 0;
-            initBuf[1] = (byte) name.length();
-            System.arraycopy(nameBytes, 0, initBuf, 2, nameBytes.length);
-
-            DatagramPacket initPacket = new DatagramPacket(initBuf, initBuf.length,
-                    UDPConnection.getServInetAddr(),
-                    CliConstants.UDP_PORT
-            );
-
-            udpConn.send(initPacket);
+            new UDPRegister()
+                    .setName(name)
+                    .setConnection(udpConn)
+                    .register();
 
             listener = new VoiceListener()
                     .setConnection(udpConn)
