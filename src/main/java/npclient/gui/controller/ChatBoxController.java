@@ -20,7 +20,7 @@ import npclient.gui.entity.Message;
 import npclient.gui.entity.TextMessage;
 import npclient.gui.manager.StageManager;
 import npclient.gui.util.UIUtils;
-import npclient.gui.view.SendMessageCell;
+import npclient.gui.view.MessageCell;
 import nputils.Constants;
 import nputils.DataTransfer;
 
@@ -48,7 +48,7 @@ public class ChatBoxController implements Initializable {
         lvMessage.setCellFactory(new Callback<ListView<Message>, ListCell<Message>>() {
             @Override
             public ListCell<Message> call(ListView<Message> param) {
-                return new SendMessageCell();
+                return new MessageCell();
             }
         });
     }

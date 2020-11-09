@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<fx:root type="javafx.scene.layout.VBox" maxHeight="-Infinity" maxWidth="480.0" minHeight="-Infinity" minWidth="200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="npclient.gui.controller.TextMessageController">
+<!--<VBox maxHeight="-Infinity" maxWidth="480.0" minHeight="-Infinity" minWidth="200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">-->
+   <children>
+      <Text fx:id="tContent" strokeType="OUTSIDE" strokeWidth="0.0" text="I have had this similar need in a simple dialog box. The root of the dialog box is a 2x2 GridPane. Each row contains an HBox that spans both columns. I use a Label to display a message in the HBox in row 0. To wrap the text I use the following: Label label = new Label(message); label.setWrapText(true);" />
+   </children>
+<!--</VBox>-->
+</fx:root>
