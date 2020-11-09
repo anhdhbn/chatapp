@@ -2,10 +2,12 @@ package npclient.gui.view;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.NodeOrientation;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import npclient.MyAccount;
 import npclient.gui.entity.FileMessage;
 import npclient.gui.entity.Message;
 import npclient.gui.entity.TextMessage;
@@ -56,6 +58,13 @@ public class MessageCell extends ListCell<Message> {
                 FileMessageView messageView = new FileMessageView();
                 messageView.setContent(((FileMessage) item).getFileInfo());
                 paneContent.getChildren().add(messageView);
+            }
+
+            final String username = MyAccount.getInstance().getName();
+            if (item.getFrom().equals(username)) {
+                container.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+            } else {
+                container.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
             }
 
             setText(null);
