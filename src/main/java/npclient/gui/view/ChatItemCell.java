@@ -21,6 +21,8 @@ public class ChatItemCell extends ListCell<ChatItem> {
     @FXML
     private CircleImageView civAvatar;
 
+    private String prev;
+
     @Override
     protected void updateItem(ChatItem item, boolean empty) {
         super.updateItem(item, empty);
@@ -41,9 +43,13 @@ public class ChatItemCell extends ListCell<ChatItem> {
                 }
             }
 
-            tTitle.setText(item.getName());
-            tLastMsg.setText(item.getLastMessage());
-            civAvatar.update(item.getName());
+            String name = item.getName();
+            if (!name.equals(prev)) {
+                tTitle.setText(item.getName());
+                tLastMsg.setText(item.getLastMessage());
+                civAvatar.update(item.getName());
+            }
+            prev = name;
 
             setText(null);
             setGraphic(container);
