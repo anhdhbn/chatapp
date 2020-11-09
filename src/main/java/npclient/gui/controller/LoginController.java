@@ -5,27 +5,25 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import npclient.MyAccount;
 import npclient.core.UDPConnection;
 import npclient.core.callback.ErrorListener;
 import npclient.core.callback.OnPublishMessageSuccess;
 import npclient.core.command.LoginPublisher;
+import npclient.exception.InvalidNameException;
 import npclient.gui.manager.StageManager;
 import npclient.gui.util.UIUtils;
 import nputils.DataTransfer;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
 
+    @FXML
+    private Button btnEnter;
     @FXML
     private TextField tfUsername;
 
@@ -35,9 +33,19 @@ public class LoginController implements Initializable {
 
     @FXML
     public void onEnter(ActionEvent actionEvent) {
-        tfUsername.setDisable(true);
-        String username = tfUsername.getText();
+        lock();
+        String username = tfUsername.getText().trim();
         login(username);
+    }
+
+    private void lock() {
+        tfUsername.setDisable(true);
+        btnEnter.setDisable(true);
+    }
+
+    private void unlock() {
+        tfUsername.setDisable(false);
+        btnEnter.setDisable(false);
     }
 
     private void login(String username) {
@@ -47,13 +55,14 @@ public class LoginController implements Initializable {
                     public void onReceive(DataTransfer message) {
                         UDPConnection udpConn = (UDPConnection) message.data;
                         loginSuccess(message.name, udpConn);
-                        tfUsername.setDisable(false);
+                        unlock();
                     }
                 })
                 .setErrorListener(new ErrorListener() {
                     @Override
                     public void onReceive(Exception err) {
-                        loginFailure();
+                        loginFailure(err);
+                        unlock();
                     }
                 })
                 .post();
@@ -65,7 +74,13 @@ public class LoginController implements Initializable {
         StageManager.getInstance().changeScene(baseScene);
     }
 
-    private void loginFailure() {
-        UIUtils.showSimpleAlert(Alert.AlertType.ERROR, "Failed to login! Please check your connection");
+    private void loginFailure(Exception err) {
+        String content;
+        if (err instanceof InvalidNameException)
+            content = err.getMessage();
+        else
+            content = "Failed to login! Please check your connection";
+
+        UIUtils.showSimpleAlert(Alert.AlertType.ERROR, content);
     }
 }

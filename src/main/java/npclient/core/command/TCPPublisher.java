@@ -44,6 +44,8 @@ public abstract class TCPPublisher extends AbstractPublisher {
     @Override
     public void run() {
         try {
+            preprocess(dataTransfer);
+
             logger.debug("Initialize a publish connection");
             TCPConnection publishConn = new TCPConnection();
 
@@ -65,6 +67,10 @@ public abstract class TCPPublisher extends AbstractPublisher {
             logger.error("Failed to publish: " + e.getMessage());
             handleError(e);
         }
+    }
+
+    protected void preprocess(DataTransfer message) throws Exception {
+
     }
 
     protected void handlePublish(ObjectOutputStream outputStream, ObjectInputStream inputStream) throws Exception {

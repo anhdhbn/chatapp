@@ -20,7 +20,7 @@
          </VBox.margin>
       </Text>
       <TextField fx:id="tfUsername" maxWidth="320.0" onAction="#onEnter" />
-      <Button minWidth="100.0" mnemonicParsing="false" onAction="#onEnter" text="Enter">
+      <Button fx:id="btnEnter" minWidth="100.0" mnemonicParsing="false" onAction="#onEnter" text="Enter">
          <VBox.margin>
             <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
          </VBox.margin>

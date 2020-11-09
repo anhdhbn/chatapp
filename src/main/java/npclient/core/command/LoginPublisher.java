@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import npclient.CliConstants;
 import npclient.core.UDPConnection;
 import npclient.exception.ExistUserException;
+import npclient.exception.InvalidNameException;
 import nputils.Constants;
 import nputils.DataTransfer;
 
@@ -52,5 +53,15 @@ public class LoginPublisher extends TCPPublisher {
                 .setConnection(udpConn)
                 .register();
         return udpConn;
+    }
+
+    @Override
+    protected void preprocess(DataTransfer message) throws Exception {
+        if (!isNameValid(message.name))
+            throw new InvalidNameException(message.name);
+    }
+
+    private boolean isNameValid(String name) {
+        return name.matches("[a-zA-Z0-9_\\s]+") && !name.isEmpty();
     }
 }

@@ -30,8 +30,8 @@ public class ChatBox extends AnchorPane {
         AnchorPane.setLeftAnchor(this,0.0);
     }
 
-    public void setTarget(String title) {
-        controller.setTitle(title);
+    public void setTarget(String title, boolean isGroup) {
+        controller.setTitle(title, isGroup);
     }
 
     public final String getTarget() {
