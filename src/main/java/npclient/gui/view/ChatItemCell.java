@@ -43,10 +43,11 @@ public class ChatItemCell extends ListCell<ChatItem> {
                 }
             }
 
+            tLastMsg.setText(item.getLastMessage());
+
             String name = item.getName();
             if (!name.equals(prev)) {
                 tTitle.setText(item.getName());
-                tLastMsg.setText(item.getLastMessage());
                 civAvatar.update(item.getName());
             }
             prev = name;
