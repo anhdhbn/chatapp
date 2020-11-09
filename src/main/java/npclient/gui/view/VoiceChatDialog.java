@@ -19,10 +19,10 @@ public class VoiceChatDialog extends Stage {
         setTitle("Voice Chat");
 
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader();
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/voice_chat.fxml"));
             AnchorPane view = new AnchorPane();
             fxmlLoader.setRoot(view);
-            fxmlLoader.load(getClass().getResourceAsStream("/fxml/voice_chat.fxml"));
+            fxmlLoader.load();
 
             controller = fxmlLoader.getController();
 
