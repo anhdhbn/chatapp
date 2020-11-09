@@ -56,20 +56,26 @@ public class BaseController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        lvUserItem.setCellFactory(new Callback<ListView<ChatItem>, ListCell<ChatItem>>() {
+        Callback<ListView<ChatItem>, ListCell<ChatItem>> cellFactory = new Callback<ListView<ChatItem>, ListCell<ChatItem>>() {
             @Override
             public ListCell<ChatItem> call(ListView<ChatItem> param) {
                 return new ChatItemCell();
             }
-        });
+        };
 
-        lvUserItem.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<ChatItem>() {
+        lvUserItem.setCellFactory(cellFactory);
+        lvGroupItem.setCellFactory(cellFactory);
+
+        ChangeListener<ChatItem> itemChangeListener = new ChangeListener<ChatItem>() {
             @Override
             public void changed(ObservableValue<? extends ChatItem> observable, ChatItem oldChat, ChatItem newChat) {
                 if (newChat != null)
                     changeChatBox(newChat.getName(), false);
             }
-        });
+        };
+
+        lvUserItem.getSelectionModel().selectedItemProperty().addListener(itemChangeListener);
+        lvGroupItem.getSelectionModel().selectedItemProperty().addListener(itemChangeListener);
 
         listenOnlineUsers();
 
@@ -356,8 +362,11 @@ public class BaseController implements Initializable {
     }
 
     private synchronized void updateChatItems(Messages messages) {
-        ChatItem chatItem = lvUserItem.getItems().stream()
-                .filter(i -> i.getName().equals(messages.getName()))
+        ListView<ChatItem> listView = messages.isGroup() ? lvGroupItem : lvUserItem;
+        String name = messages.getTopic().split(Constants.SPLITTER)[1];
+
+        ChatItem chatItem = listView.getItems().stream()
+                .filter(i -> i.getName().equals(name))
                 .findFirst()
                 .orElse(null);
 
@@ -366,15 +375,15 @@ public class BaseController implements Initializable {
             chatItem.update(messages);
 
             // swap to first
-            lvUserItem.getItems().remove(chatItem);
-            lvUserItem.getItems().add(0, chatItem);
+            listView.getItems().remove(chatItem);
+            listView.getItems().add(0, chatItem);
         }
     }
 
     public synchronized void join(String group) throws DuplicateGroupException {
         String topic = String.format("group/%s", group);
         if (!MessageSubscribeManager.getInstance().containsKey(topic)) {
-            ChatItem item = new UserChatItem();
+            ChatItem item = new GroupChatItem();
             item.setName(group);
             item.setSeen(true);
 
