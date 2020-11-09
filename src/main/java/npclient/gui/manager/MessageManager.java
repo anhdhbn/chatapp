@@ -30,7 +30,11 @@ public class MessageManager implements Map<String, Messages> {
             put(name, messages);
         }
 
-        messages.add(m);
+        Message lastMsg = messages.peek();
+        if (lastMsg != null && lastMsg.getFrom().equals(m.getFrom()) && lastMsg.getTime() == m.getTime()) {
+            // duplicate data ????
+        } else
+            messages.add(m);
 
         return messages;
     }
