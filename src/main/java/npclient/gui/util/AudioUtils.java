@@ -4,14 +4,14 @@ import javax.sound.sampled.*;
 
 public class AudioUtils {
 
-    public static AudioFormat getAudioFormat(){
-        float sampleRate = 8000.0F;
-        int sampleSizeInBits = 16;
-        int channels = 2;
-        boolean signed = true;
-        boolean bigEndian = false;
+    private static final float RATE = 8000.0F;
+    private static final int BITS_SIZE = 16;
+    private static final int CHANNELS = 2;
+    private static final boolean SIGNED = true;
+    private static final boolean BIG_ENDIAN = false;
 
-        return new AudioFormat(sampleRate, sampleSizeInBits, channels, signed, bigEndian);
+    public static AudioFormat getAudioFormat(){
+        return new AudioFormat(RATE, BITS_SIZE, CHANNELS, SIGNED, BIG_ENDIAN);
     }
 
     public static boolean isVoiceChatSupported() {

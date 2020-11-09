@@ -1,6 +1,6 @@
 package npclient.gui.entity;
 
-public class ChatItem {
+public class ChatItem implements Comparable<ChatItem> {
 
     private String name;
     private String lastMessage;
@@ -37,5 +37,28 @@ public class ChatItem {
 
     public void setSeen(boolean seen) {
         this.seen = seen;
+    }
+
+    public void update(Messages messages) {
+        setSeen(messages.isSeen());
+
+        String rawLastMsg = null;
+        Message lastMsg = messages.peek();
+        if (lastMsg != null) {
+            if (lastMsg instanceof FileMessage) {
+                rawLastMsg = String.format("%s sent your a attachment", getName());
+            } else if (lastMsg instanceof TextMessage) {
+                rawLastMsg = ((TextMessage) lastMsg).getContent();
+            }
+
+            setTime(lastMsg.getTime());
+        }
+
+        setLastMessage(rawLastMsg);
+    }
+
+    @Override
+    public int compareTo(ChatItem o) {
+        return Long.compare(time, o.time);
     }
 }

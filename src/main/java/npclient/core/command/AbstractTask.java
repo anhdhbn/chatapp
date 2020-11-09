@@ -20,7 +20,11 @@ public abstract class AbstractTask implements Runnable {
 
     protected void handleError(Exception e) {
         if (errorListener != null) {
-            Platform.runLater(() -> errorListener.onReceive(e));
+            try {
+                Platform.runLater(() -> errorListener.onReceive(e));
+            } catch (IllegalStateException ex) {
+                errorListener.onReceive(e);
+            }
         } else {
             e.printStackTrace();
         }

@@ -26,7 +26,7 @@ public class MessageManager implements Map<String, Messages> {
         Messages messages = get(name);
 
         if (messages == null) {
-            messages = new Messages();
+            messages = new Messages(name);
             put(name, messages);
         }
 

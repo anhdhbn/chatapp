@@ -28,6 +28,10 @@ public class UIUtils {
         alert.showAndWait();
     }
 
+    public static void showErrorAlert(String error) {
+        showSimpleAlert(Alert.AlertType.ERROR, error);
+    }
+
     public static void showYesNoAlert(String content, OnAcceptListener aL, OnRejectListener rL) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, content, ButtonType.YES, ButtonType.NO);
         alert.initOwner(StageManager.getInstance().getPrimaryStage());
