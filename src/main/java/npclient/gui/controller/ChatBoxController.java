@@ -12,6 +12,7 @@ import javafx.util.Callback;
 import npclient.MyAccount;
 import npclient.core.callback.OnPublishMessageSuccess;
 import npclient.core.command.Publisher;
+import npclient.exception.BigFileTransferException;
 import nputils.FileInfo;
 import npclient.gui.entity.FileMessage;
 import npclient.gui.manager.MessageManager;
@@ -99,7 +100,7 @@ public class ChatBoxController implements Initializable {
                             lvMessage.getItems().setAll(messages);
                         }
                     }).post();
-        } catch (NoSuchAlgorithmException | IOException e) {
+        } catch (NoSuchAlgorithmException | IOException | BigFileTransferException e) {
             UIUtils.showErrorAlert("Can't attach chosen file: " + e.getMessage());
         }
     }
