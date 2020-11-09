@@ -32,18 +32,29 @@ public class UdpConnManagement {
     }
 
 
-    public synchronized static String getUserByConn(String addr){
+    public synchronized static String getUserByConn(String addr) {
         return userUdpConn.get().get(addr);
     }
 
     public synchronized static void addMapping(String username, InetAddress host, int port){
         String strAdd = createAddr(host.getHostAddress(), port);
         IPInfo ipInfo = new IPInfo(host, port);
-        if(userUdpConn.get().get(strAdd) == null && userAddr.get().get(username) == null ){
-            LOGGER.info("{}: map ==> ({})", strAdd, username);
-            userUdpConn.get().put(strAdd, username);
-            userAddr.get().put(username, ipInfo);
+
+        for (Map.Entry<String, String> e : userUdpConn.get().entrySet()) {
+            if (e.getValue().equals(username)) {
+                userUdpConn.get().remove(e.getKey());
+                break;
+            }
         }
+        LOGGER.info("{}: map ==> ({})", strAdd, username);
+        userUdpConn.get().put(strAdd, username);
+        userAddr.get().put(username, ipInfo);
+
+//        userUdpConn.get().put(strAdd, username);
+
+//        if(userUdpConn.get().get(strAdd) == null && userAddr.get().get(username) == null ){
+
+//        }
     }
 
     public synchronized static IPInfo getPartnerIpInfo(String sender){

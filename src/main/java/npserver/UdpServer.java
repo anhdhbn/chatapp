@@ -32,19 +32,21 @@ public class UdpServer {
             int port = recvPacket.getPort();
             String ipAdr = UdpConnManagement.createAddr(strAdr, port);
 
-            String sender = UdpConnManagement.getUserByConn(ipAdr);
-            if(sender == null){
-                LOGGER.info("{}: Server recv data: ({})", ipAdr, new String(recvPacket.getData()));
-                int len = recvPacket.getData()[0];
+            boolean isRegisterSignal = recvPacket.getData()[0] == 0;
+
+            if(isRegisterSignal){
+                LOGGER.info("{}: Server recv register signal: ({})", ipAdr, new String(recvPacket.getData()));
+                int len = recvPacket.getData()[1];
                 if(len > 0){
                     byte[] newBuff = new byte[len];
-                    System.arraycopy(recvPacket.getData(), 1, newBuff, 0, len);
+                    System.arraycopy(recvPacket.getData(), 2, newBuff, 0, len);
                     String username = new String(newBuff);
                     UdpConnManagement.addMapping(username, recvPacket.getAddress(), port);
-                    DatagramPacket sendPacket = new DatagramPacket(recvData, recvData.length, recvPacket.getAddress(), port);
-                    server.send(sendPacket);
+//                    DatagramPacket sendPacket = new DatagramPacket(recvData, recvData.length, recvPacket.getAddress(), port);
+//                    server.send(sendPacket);
                 }
             } else {
+                String sender = UdpConnManagement.getUserByConn(ipAdr);
                 UdpConnManagement.IPInfo ipInfo = UdpConnManagement.getPartnerIpInfo(sender);
                 if(ipInfo != null){
                     DatagramPacket sendPacket = new DatagramPacket(recvData, recvData.length, ipInfo.host, ipInfo.port);
