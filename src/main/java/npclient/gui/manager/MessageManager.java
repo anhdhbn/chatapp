@@ -22,7 +22,7 @@ public class MessageManager implements Map<String, Messages> {
         return instance;
     }
 
-    public Messages append(String name, Message m) {
+    public synchronized Messages append(String name, Message m) {
         Messages messages = get(name);
 
         if (messages == null) {
@@ -35,7 +35,7 @@ public class MessageManager implements Map<String, Messages> {
         return messages;
     }
 
-    public void clearOffline(List<String> online) {
+    public synchronized void clearOffline(List<String> online) {
         Set<String> keys = keySet();
         for (String user : keys) {
             if (!online.contains(user))
