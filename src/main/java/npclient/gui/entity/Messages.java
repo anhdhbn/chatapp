@@ -1,14 +1,16 @@
 package npclient.gui.entity;
 
+import nputils.Constants;
+
 import java.util.PriorityQueue;
 
 public class Messages extends PriorityQueue<Message> {
 
-    private final String name;
+    private final String topic;
     private boolean seen = false;
 
-    public Messages(String name) {
-        this.name = name;
+    public Messages(String topic) {
+        this.topic = topic;
     }
 
     public boolean isSeen() {
@@ -19,7 +21,11 @@ public class Messages extends PriorityQueue<Message> {
         this.seen = seen;
     }
 
-    public String getName() {
-        return name;
+    public String getTopic() {
+        return topic;
+    }
+
+    public boolean isGroup() {
+        return topic.startsWith(Constants.PREFIX_GROUP);
     }
 }
