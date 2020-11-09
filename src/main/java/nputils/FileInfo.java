@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 
 public class FileInfo implements Serializable {
 
