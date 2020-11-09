@@ -115,11 +115,6 @@ public class ServerTest {
         );
 
         udpConn.send(initPacket);
-
-        byte[] recvBuf =  new byte[Constants.BUFFER_SIZE];
-        DatagramPacket recvPacket = new DatagramPacket(recvBuf, recvBuf.length);
-        udpConn.receive(recvPacket);
-
         return udpConn;
     }
 

@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.net.*;
 
 public class UdpServerTest extends ServerTest {
-    @Test
     public void clientPublishToUdpServer() throws IOException, InterruptedException {
         byte[] sendData = new byte[Constants.BUFFER_SIZE];
         byte[] sendRecv = new byte[Constants.BUFFER_SIZE];

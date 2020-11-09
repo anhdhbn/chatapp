@@ -12,7 +12,6 @@ import java.net.*;
 import java.util.UUID;
 
 public class VoiceCallTest extends ServerTest {
-    @Test
     public void clientCanCallEachOther() throws IOException, InterruptedException {
         this.generateClient(2);
         ReadWriteHandler handler1 = this.handlers.get(0);
