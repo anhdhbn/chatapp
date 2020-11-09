@@ -2,18 +2,13 @@ package npclient.gui.controller;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import npclient.MyAccount;
 import npclient.core.callback.OnAcceptListener;
@@ -22,19 +17,17 @@ import npclient.core.callback.OnRejectListener;
 import npclient.core.callback.SubscribedTopicListener;
 import npclient.core.command.Publisher;
 import npclient.core.command.Subscriber;
-import npclient.gui.entity.Messages;
+import npclient.core.transferable.FileInfo;
+import npclient.gui.entity.*;
 import npclient.gui.manager.MessageManager;
-import npclient.gui.entity.ChatItem;
-import npclient.gui.entity.TextMessage;
 import npclient.gui.manager.MessageSubscribeManager;
-import npclient.gui.manager.StageManager;
 import npclient.gui.util.UIUtils;
 import npclient.gui.view.ChatBox;
 import npclient.gui.view.ChatItemCell;
+import npclient.gui.view.VoiceChatDialog;
 import nputils.Constants;
 import nputils.DataTransfer;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -42,7 +35,7 @@ import java.util.ResourceBundle;
 public class BaseController implements Initializable {
 
     @FXML
-    private AnchorPane paneChatbox;
+    private AnchorPane paneChatBox;
     @FXML
     private ListView<ChatItem> lvChatItem;
 
@@ -70,6 +63,9 @@ public class BaseController implements Initializable {
         listenVoiceCall();
     }
 
+    /**
+     * Listen to voice call signal
+     */
     private void listenVoiceCall() {
         final String username = MyAccount.getInstance().getName();
         final String topic = String.format("voice/%s", username);
@@ -101,7 +97,7 @@ public class BaseController implements Initializable {
     }
 
     /**
-     * Listen for online users
+     * Listen to online users
      */
     private void listenOnlineUsers() {
         final String username = MyAccount.getInstance().getName();
@@ -156,28 +152,19 @@ public class BaseController implements Initializable {
                 .listen();
     }
 
+    /**
+     * Generate subscriber subscribe listen to message from a user
+     * @param username of current user
+     * @param target username
+     * @return subscriber
+     */
     private Subscriber subscribeMessages(String username, String target) {
         final String topic = String.format("chat/%s", target);
         Subscriber subscriber = new Subscriber(topic, username)
                 .setNewMessageListener(new SubscribedTopicListener() {
                     @Override
                     public void onReceive(DataTransfer message) {
-                        Object content = message.data;
-                        if (content instanceof String) {
-                            TextMessage m = new TextMessage();
-                            m.setFrom(message.name);
-                            m.setTime(message.datetime);
-                            m.setContent(content.toString());
-                            Messages messages = MessageManager.getInstance().append(target, m);
-
-                            ChatBox chatBox = getCurrentChat();
-                            if (chatBox != null) {
-                                String current = chatBox.getTarget();
-                                if (message.name.equals(current)) {
-                                    chatBox.setItems(messages);
-                                }
-                            }
-                        }
+                        onReceiveNewMessage(target, message);
                     }
                 });
         subscriber.listen();
@@ -185,12 +172,56 @@ public class BaseController implements Initializable {
     }
 
     /**
+     * Callback fires when receive new message from user
+     * @param from username
+     * @param message received
+     */
+    private void onReceiveNewMessage(String from, DataTransfer message) {
+        Message msg = null;
+
+        Object content = message.data;
+        if (content instanceof String) {
+            TextMessage textMessage = new TextMessage();
+            textMessage.setContent(content.toString());
+            msg = textMessage;
+        } else if (content instanceof FileInfo) {
+            FileMessage fileMessage = new FileMessage();
+            fileMessage.setFileInfo((FileInfo) content);
+            msg = fileMessage;
+        }
+
+        if (msg != null) {
+            msg.setFrom(message.name);
+            msg.setTime(message.datetime);
+
+            Messages messages = MessageManager.getInstance().append(from, msg);
+
+            boolean isCurrentChat = false;
+            ChatBox chatBox = getCurrentChat();
+            if (chatBox != null) {
+                String current = chatBox.getTarget();
+                if (message.name.equals(current)) {
+                    isCurrentChat = true;
+                }
+            }
+
+            if (isCurrentChat) {
+                chatBox.setItems(messages);
+                messages.setSeen(true);
+            } else {
+                messages.setSeen(false);
+                updateChatItems(messages);
+            }
+        }
+    }
+
+    /**
      * Get current chatting user
      * @return current chatting username
      */
     private ChatBox getCurrentChat() {
-        if (!paneChatbox.getChildren().isEmpty()) {
-            Node first = paneChatbox.getChildren().get(0);
+        if (!paneChatBox.getChildren().isEmpty()) {
+            Node first = paneChatBox.getChildren().get(0);
             if (first instanceof ChatBox) {
                 return (ChatBox) first;
             }
@@ -203,7 +234,7 @@ public class BaseController implements Initializable {
      * Clear chat box section
      */
     private void clearChatBox() {
-        paneChatbox.getChildren().clear();
+        paneChatBox.getChildren().clear();
     }
 
     /**
@@ -215,7 +246,7 @@ public class BaseController implements Initializable {
         chatBox.setTarget(target);
 
         clearChatBox();
-        paneChatbox.getChildren().add(chatBox);
+        paneChatBox.getChildren().add(chatBox);
     }
 
     private void onReceiveVoiceQuit(DataTransfer message) {
@@ -274,38 +305,50 @@ public class BaseController implements Initializable {
     }
 
     private void openVoiceChatDialog(String target) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/voice_chat.fxml"));
-            Parent root = loader.load();
-            VoiceChatController controller = loader.getController();
-            controller.setUser1(MyAccount.getInstance().getName());
-            controller.setUser2(target);
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/voice_chat.fxml"));
+//            Parent root = loader.load();
+//            VoiceChatController controller = loader.getController();
+//            controller.setUser1(MyAccount.getInstance().getName());
+//            controller.setUser2(target);
+//
+//            Scene scene = new Scene(root);
 
-            Scene scene = new Scene(root);
+        voiceChatStage = new VoiceChatDialog();
+//            voiceChatStage.setTitle("Voice Chat");
+//            voiceChatStage.setScene(scene);
+//
+//            voiceChatStage.initOwner(StageManager.getInstance().getPrimaryStage());
+//
+//            voiceChatStage.setOnHiding(new EventHandler<WindowEvent>() {
+//                @Override
+//                public void handle(WindowEvent event) {
+//                    controller.stop();
+//                }
+//            });
 
-            voiceChatStage = new Stage();
-            voiceChatStage.setTitle("Voice Chat");
-            voiceChatStage.setScene(scene);
+        voiceChatStage.show();
 
-            voiceChatStage.initOwner(StageManager.getInstance().getPrimaryStage());
-
-            voiceChatStage.setOnHiding(new EventHandler<WindowEvent>() {
-                @Override
-                public void handle(WindowEvent event) {
-                    controller.stop();
-                }
-            });
-
-            voiceChatStage.show();
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
     }
 
     private void closeVoiceChatDialog() {
         if (voiceChatStage != null) {
             voiceChatStage.close();
+        }
+    }
+
+    private synchronized void updateChatItems(Messages messages) {
+        ChatItem chatItem = lvChatItem.getItems().stream()
+                .filter(i -> i.getName().equals(messages.getName()))
+                .findFirst()
+                .orElse(null);
+
+        if (chatItem != null) {
+            // update chat item info
+            chatItem.update(messages);
+
+            // swap to first
+            lvChatItem.getItems().remove(chatItem);
+            lvChatItem.getItems().add(0, chatItem);
         }
     }
 }

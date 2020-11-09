@@ -3,7 +3,6 @@ package npclient.gui.controller;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import npclient.CliConstants;
 import npclient.CliLogger;
 import npclient.MyAccount;
 import npclient.core.UDPConnection;
@@ -12,13 +11,12 @@ import npclient.core.command.UDPRegister;
 import npclient.core.command.VoiceListener;
 import npclient.core.command.VoiceSpeaker;
 import npclient.gui.util.AudioUtils;
+import npclient.gui.util.UIUtils;
 import nputils.Constants;
 
 import javax.sound.sampled.*;
 import java.io.IOException;
-import java.net.DatagramPacket;
 import java.net.URL;
-import java.net.UnknownHostException;
 import java.util.ResourceBundle;
 
 public class VoiceChatController implements Initializable {
@@ -38,11 +36,12 @@ public class VoiceChatController implements Initializable {
         try {
             AudioFormat format = AudioUtils.getAudioFormat();
 
+            logger.debug("Start audio output");
             SourceDataLine audioOutput = AudioSystem.getSourceDataLine(format);
-
             audioOutput.open(format);
             audioOutput.start();
 
+            logger.debug("Start audio input");
             TargetDataLine audioInput = AudioSystem.getTargetDataLine(format);
             audioInput.open(format);
             audioInput.start();
@@ -50,23 +49,27 @@ public class VoiceChatController implements Initializable {
             final UDPConnection udpConn = MyAccount.getInstance().getUdpConn();
             final String name = MyAccount.getInstance().getName();
 
+            logger.debug("Register UDP Connection to the server");
             new UDPRegister()
                     .setName(name)
                     .setConnection(udpConn)
                     .register();
 
+            logger.debug("Start voice listener");
             listener = new VoiceListener()
                     .setConnection(udpConn)
                     .setAudioInput(audioInput);
             listener.post();
 
+            logger.debug("Start voice speaker");
             speaker = new VoiceSpeaker()
                     .setConnection(udpConn)
                     .setAudioOutput(audioOutput);
             speaker.listen();
 
         } catch (LineUnavailableException | IOException e) {
-            e.printStackTrace();
+            logger.error("System not support voice chat: " + e.getMessage());
+            UIUtils.showErrorAlert("System not support voice chat: " + e.getMessage());
         }
     }
 
@@ -79,9 +82,15 @@ public class VoiceChatController implements Initializable {
     }
 
     public void stop() {
+        logger.debug("Cancel listener & speaker");
         listener.cancel();
         speaker.cancel();
-        new Publisher("voice/" + lUser2.getText(), lUser1.getText())
+
+        logger.debug("Send Voice Quit signal to the partner");
+        final String topic = "voice/" + lUser2.getText();
+        final String username = lUser1.getText();
+
+        new Publisher(topic, username)
                 .putData(Constants.VOICE_QUIT)
                 .post();
     }

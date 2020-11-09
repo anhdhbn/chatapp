@@ -6,21 +6,28 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import npclient.MyAccount;
 import npclient.core.callback.OnPublishMessageSuccess;
-import npclient.core.callback.SubscribedTopicListener;
 import npclient.core.command.Publisher;
-import npclient.core.command.Subscriber;
+import npclient.core.transferable.FileInfo;
+import npclient.gui.entity.FileMessage;
 import npclient.gui.manager.MessageManager;
 import npclient.gui.entity.Messages;
 import npclient.gui.entity.Message;
 import npclient.gui.entity.TextMessage;
+import npclient.gui.manager.StageManager;
+import npclient.gui.util.UIUtils;
 import npclient.gui.view.SendMessageCell;
 import nputils.Constants;
 import nputils.DataTransfer;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.security.NoSuchAlgorithmException;
 import java.util.ResourceBundle;
 
 public class ChatBoxController implements Initializable {
@@ -48,12 +55,16 @@ public class ChatBoxController implements Initializable {
 
     @FXML
     public void onEnter() {
-        send(tfInput.getText());
+        sendText(tfInput.getText());
     }
 
     @FXML
     public void attachFile() {
-
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Choose File");
+        Stage primaryStage = StageManager.getInstance().getPrimaryStage();
+        File file = chooser.showOpenDialog(primaryStage);
+        sendFile(file);
     }
 
     @FXML void startVoiceCall() {
@@ -70,7 +81,33 @@ public class ChatBoxController implements Initializable {
                 .post();
     }
 
-    private void send(String input) {
+    private void sendFile(File file) {
+        final String topic = String.format("chat/%s", target);
+        final String username = MyAccount.getInstance().getName();
+
+        try {
+            FileInfo fileInfo = new FileInfo(file);
+            new Publisher(topic, username)
+                    .putData(fileInfo)
+                    .setSuccessListener(new OnPublishMessageSuccess() {
+                        @Override
+                        public void onReceive(DataTransfer message) {
+                            FileMessage m = new FileMessage();
+                            m.setFrom(username);
+                            m.setFileInfo(fileInfo);
+                            m.setTime(System.currentTimeMillis());
+                            Messages messages = MessageManager.getInstance().append(target, m);
+                            lvMessage.getItems().setAll(messages);
+                        }
+                    }).post();
+        } catch (NoSuchAlgorithmException | IOException e) {
+            UIUtils.showErrorAlert("Can't attach chosen file: " + e.getMessage());
+        }
+
+
+    }
+
+    private void sendText(String input) {
         final String topic = String.format("chat/%s", target);
         final String username = MyAccount.getInstance().getName();
 

@@ -3,6 +3,7 @@ package npclient.core.transferable;
 import npclient.core.Utils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Files;
@@ -20,6 +21,9 @@ public class FileInfo implements Serializable {
     }
 
     public FileInfo(File file) throws IOException, NoSuchAlgorithmException {
+        if (file == null)
+            throw new FileNotFoundException();
+
         this.size = file.length();
         this.name = file.getName();
         this.data = Files.readAllBytes(file.toPath());
