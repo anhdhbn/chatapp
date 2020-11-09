@@ -102,8 +102,6 @@ public class ChatBoxController implements Initializable {
         } catch (NoSuchAlgorithmException | IOException e) {
             UIUtils.showErrorAlert("Can't attach chosen file: " + e.getMessage());
         }
-
-
     }
 
     private void sendText(String input) {
@@ -144,8 +142,10 @@ public class ChatBoxController implements Initializable {
 
     private String getMessageTopic() {
         String topic;
-        if (isGroup) topic = String.format("group/%s", target);
-        else topic = String.format("chat/%s", target);
+        if (isGroup)
+            topic = String.format("group/%s", target);
+        else
+            topic = String.format("chat/%s", target);
         return topic;
     }
 
@@ -156,4 +156,6 @@ public class ChatBoxController implements Initializable {
     public void setItem(Messages messages) {
         lvMessage.getItems().setAll(messages);
     }
+
+
 }
