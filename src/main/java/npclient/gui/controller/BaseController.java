@@ -70,7 +70,7 @@ public class BaseController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends ChatItem> observable, ChatItem oldChat, ChatItem newChat) {
                 if (newChat != null)
-                    changeChatBox(newChat.getName(), false);
+                    changeChatBox(newChat.getName(), newChat instanceof GroupChatItem);
             }
         };
 
