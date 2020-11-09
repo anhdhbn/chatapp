@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
 public class FileInfo implements Serializable {
 
@@ -60,5 +61,14 @@ public class FileInfo implements Serializable {
 
     public void setSize(long size) {
         this.size = size;
+    }
+
+    @Override
+    public String toString() {
+        return "File{" +
+                "name='" + name + '\'' +
+                ", size=" + size +
+                ", md5='" + md5 + '\'' +
+                '}';
     }
 }

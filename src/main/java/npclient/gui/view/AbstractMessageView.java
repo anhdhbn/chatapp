@@ -7,13 +7,13 @@ import java.io.IOException;
 
 public abstract class AbstractMessageView<T, C> extends VBox {
 
-    private FXMLLoader fxmlLoader;
+    private final FXMLLoader fxmlLoader;
 
     public AbstractMessageView(String path) {
-        fxmlLoader = new FXMLLoader();
+        fxmlLoader = new FXMLLoader(getClass().getResource(path));
         fxmlLoader.setRoot(this);
         try {
-            fxmlLoader.load(getClass().getResourceAsStream(path));
+            fxmlLoader.load();
         } catch (IOException e) {
             e.printStackTrace();
         }
