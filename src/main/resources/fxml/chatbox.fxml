@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
 <?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -23,7 +21,8 @@
         <items>
           <Button mnemonicParsing="false" onAction="#attachFile" text="Attach File" />
             <Button mnemonicParsing="false" onAction="#startVoiceCall" text="Voice Call" />
-            <TextField fx:id="tfInput" onAction="#onEnter" prefHeight="27.0" prefWidth="572.0">
+            <Button layoutX="91.0" layoutY="10.0" mnemonicParsing="false" onAction="#onSendEmoji" text="Emoji" />
+            <TextField fx:id="tfInput" onAction="#onEnter" prefHeight="27.0" prefWidth="520.0">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>

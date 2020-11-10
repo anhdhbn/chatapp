@@ -8,9 +8,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import npclient.MyAccount;
+import npclient.gui.entity.EmojiMessage;
 import npclient.gui.entity.FileMessage;
 import npclient.gui.entity.Message;
 import npclient.gui.entity.TextMessage;
+import nputils.Emoji;
 
 import java.io.IOException;
 import java.util.Date;
@@ -56,7 +58,11 @@ public class MessageCell extends ListCell<Message> {
                 paneContent.getChildren().add(messageView);
             } else if (item instanceof FileMessage) {
                 FileMessageView messageView = new FileMessageView();
-                messageView.setContent(((FileMessage) item).getFileInfo());
+                messageView.setContent(((FileMessage) item).getContent());
+                paneContent.getChildren().add(messageView);
+            } else if (item instanceof EmojiMessage) {
+                EmojiView messageView = new EmojiView();
+                messageView.setContent(((EmojiMessage) item).getContent());
                 paneContent.getChildren().add(messageView);
             }
 

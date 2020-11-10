@@ -1,9 +1,18 @@
 package npclient.gui.entity;
 
-public abstract class Message implements Comparable<Message> {
+public abstract class Message<T> implements Comparable<Message<T>> {
 
     private String from;
     private long time;
+    private T content;
+
+    public T getContent() {
+        return content;
+    }
+
+    public void setContent(T content) {
+        this.content = content;
+    }
 
     public String getFrom() {
         return from;

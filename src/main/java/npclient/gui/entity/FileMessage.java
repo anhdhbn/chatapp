@@ -2,15 +2,6 @@ package npclient.gui.entity;
 
 import nputils.FileInfo;
 
-public class FileMessage extends Message {
+public class FileMessage extends Message<FileInfo> {
 
-    private FileInfo fileInfo;
-
-    public FileInfo getFileInfo() {
-        return fileInfo;
-    }
-
-    public void setFileInfo(FileInfo fileInfo) {
-        this.fileInfo = fileInfo;
-    }
 }
