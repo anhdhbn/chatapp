@@ -4,10 +4,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import npclient.CliConstants;
 import npclient.core.callback.OnAcceptListener;
 import npclient.core.callback.OnRejectListener;
 import npclient.gui.manager.StageManager;
+import nputils.Emoji;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -103,5 +106,17 @@ public class UIUtils {
 
     public static void main(String[] args) {
         System.out.println(mapNameToColor("Lamnt"));
+    }
+
+    public static class Emoji {
+
+        public static Image toImage(nputils.Emoji emoji) {
+            String name = emoji.name().substring(1);
+            String filePath = String.format("/img/emoji/%s.png", name);
+            filePath = filePath.replace("_", "-");
+            return new Image(filePath);
+//            return new ImageView(image);
+        }
+
     }
 }

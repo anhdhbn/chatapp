@@ -46,9 +46,11 @@ public abstract class ChatItem implements Comparable<ChatItem> {
         Message lastMsg = messages.peek();
         if (lastMsg != null) {
             if (lastMsg instanceof FileMessage) {
-                rawLastMsg = String.format("%s sent your a attachment", getName());
+                rawLastMsg = String.format("%s sent you a attachment", getName());
             } else if (lastMsg instanceof TextMessage) {
                 rawLastMsg = ((TextMessage) lastMsg).getContent();
+            } else if (lastMsg instanceof EmojiMessage) {
+                rawLastMsg = String.format("%s sent you a emoji", getName());
             }
 
             setTime(lastMsg.getTime());

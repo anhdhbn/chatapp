@@ -1,6 +1,5 @@
 package npclient.gui.controller;
 
-import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -14,22 +13,20 @@ import npclient.MyAccount;
 import npclient.core.callback.OnPublishMessageSuccess;
 import npclient.core.command.Publisher;
 import npclient.exception.BigFileTransferException;
-import nputils.FileInfo;
-import npclient.gui.entity.FileMessage;
+import npclient.gui.entity.*;
 import npclient.gui.manager.MessageManager;
-import npclient.gui.entity.Messages;
-import npclient.gui.entity.Message;
-import npclient.gui.entity.TextMessage;
 import npclient.gui.manager.StageManager;
 import npclient.gui.util.UIUtils;
+import npclient.gui.view.EmojiChooser;
 import npclient.gui.view.MessageCell;
 import nputils.Constants;
 import nputils.DataTransfer;
+import nputils.Emoji;
+import nputils.FileInfo;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.security.NoSuchAlgorithmException;
 import java.util.ResourceBundle;
 
 public class ChatBoxController implements Initializable {
@@ -71,7 +68,8 @@ public class ChatBoxController implements Initializable {
             sendFile(file);
     }
 
-    @FXML void startVoiceCall() {
+    @FXML
+    public void startVoiceCall() {
         final String topic = String.format("voice/%s", target);
         final String username = MyAccount.getInstance().getName();
         new Publisher(topic, username)
@@ -83,6 +81,37 @@ public class ChatBoxController implements Initializable {
                     }
                 })
                 .post();
+    }
+
+    @FXML
+    public void onSendEmoji() {
+        EmojiChooser chooser = new EmojiChooser()
+                .setListener(new EmojiChooser.OnEmojiListener() {
+                    @Override
+                    public void onSelect(Emoji emoji) {
+                        sendEmoji(emoji);
+                    }
+                });
+        chooser.showAndWait();
+    }
+
+    private void sendEmoji(Emoji emoji) {
+        final String topic = getMessageTopic();
+        final String username = MyAccount.getInstance().getName();
+
+        new Publisher(topic, username)
+                .putData(emoji)
+                .setSuccessListener(new OnPublishMessageSuccess() {
+                    @Override
+                    public void onReceive(DataTransfer message) {
+                        EmojiMessage m = new EmojiMessage();
+                        m.setFrom(username);
+                        m.setContent(emoji);
+                        m.setTime(System.currentTimeMillis());
+                        Messages messages = MessageManager.getInstance().append(topic, m);
+                        lvMessage.getItems().setAll(messages);
+                    }
+                }).post();
     }
 
     private void sendFile(File file) {
@@ -98,7 +127,7 @@ public class ChatBoxController implements Initializable {
                         public void onReceive(DataTransfer message) {
                             FileMessage m = new FileMessage();
                             m.setFrom(username);
-                            m.setFileInfo(fileInfo);
+                            m.setContent(fileInfo);
                             m.setTime(System.currentTimeMillis());
                             Messages messages = MessageManager.getInstance().append(topic, m);
                             lvMessage.getItems().setAll(messages);
@@ -128,6 +157,8 @@ public class ChatBoxController implements Initializable {
                     }
                 }).post();
     }
+
+
 
     private void clearInput() {
         tfInput.clear();

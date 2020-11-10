@@ -3,6 +3,7 @@ package npclient.gui.controller;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -10,6 +11,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
@@ -22,16 +24,14 @@ import npclient.core.command.Publisher;
 import npclient.core.command.Subscriber;
 import npclient.exception.InvalidNameException;
 import npclient.gui.util.AudioUtils;
+import npclient.gui.view.*;
+import nputils.Emoji;
 import nputils.FileInfo;
 import npclient.exception.DuplicateGroupException;
 import npclient.gui.entity.*;
 import npclient.gui.manager.MessageManager;
 import npclient.gui.manager.MessageSubscribeManager;
 import npclient.gui.util.UIUtils;
-import npclient.gui.view.ChatBox;
-import npclient.gui.view.ChatItemCell;
-import npclient.gui.view.CircleImageView;
-import npclient.gui.view.VoiceChatDialog;
 import nputils.Constants;
 import nputils.DataTransfer;
 
@@ -88,6 +88,14 @@ public class BaseController implements Initializable {
         final String name = MyAccount.getInstance().getName();
         this.tUsername.setText(name);
         this.civAvatar.update(name);
+
+        this.civAvatar.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                EmojiChooser chooser = new EmojiChooser();
+                chooser.show();
+            }
+        });
     }
 
     /**
@@ -215,8 +223,12 @@ public class BaseController implements Initializable {
             msg = textMessage;
         } else if (content instanceof FileInfo) {
             FileMessage fileMessage = new FileMessage();
-            fileMessage.setFileInfo((FileInfo) content);
+            fileMessage.setContent((FileInfo) content);
             msg = fileMessage;
+        } else if (content instanceof Emoji) {
+            EmojiMessage emojiMessage = new EmojiMessage();
+            emojiMessage.setContent((Emoji) content);
+            msg = emojiMessage;
         }
 
         if (msg != null) {
