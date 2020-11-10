@@ -128,9 +128,12 @@ public class ChatBoxController implements Initializable {
         tfInput.clear();
     }
 
-    public void setTitle(String title, boolean isGroup) {
-        this.target = title;
-        this.lTitle.setText(target);
+    public void setTitle(String target, boolean isGroup) {
+        this.target = target;
+        String title;
+        if (isGroup) title = String.format("u:/%s", target);
+        else title = String.format("g:/%s", target);
+        this.lTitle.setText(title);
         this.isGroup = isGroup;
 
         // load exist message
