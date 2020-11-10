@@ -1,17 +1,16 @@
 package npclient.core.command;
 
 import javafx.application.Platform;
-import npclient.CliConstants;
 import npclient.core.UDPConnection;
 import npclient.exception.ExistUserException;
 import npclient.exception.InvalidNameException;
+import npclient.gui.util.UIUtils;
 import nputils.Constants;
 import nputils.DataTransfer;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.DatagramPacket;
 
 public class LoginPublisher extends TCPPublisher {
 
@@ -57,11 +56,7 @@ public class LoginPublisher extends TCPPublisher {
 
     @Override
     protected void preprocess(DataTransfer message) throws Exception {
-        if (!isNameValid(message.name))
+        if (UIUtils.isInvalid(message.name))
             throw new InvalidNameException(message.name);
-    }
-
-    private boolean isNameValid(String name) {
-        return name.matches("[a-zA-Z0-9_\\s]+") && !name.isEmpty();
     }
 }

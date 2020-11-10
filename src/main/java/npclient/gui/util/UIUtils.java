@@ -50,8 +50,9 @@ public class UIUtils {
     }
 
     public static InputStream retrieveAvatar(String name) throws IOException {
-        String query = String.format("name=%s", URLEncoder.encode(name, CliConstants.CHARSET));
-        String url = CliConstants.AVATAR_URL + query;
+        String nameEncode = URLEncoder.encode(name, CliConstants.CHARSET);
+        String background = mapNameToColor(name);
+        String url = String.format(CliConstants.AVATAR_URL, background, nameEncode);
         URLConnection connection = new URL(url).openConnection();
         connection.setRequestProperty("User-Agent",
                 "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/" +
@@ -61,5 +62,46 @@ public class UIUtils {
         );
         connection.connect();
         return connection.getInputStream();
+    }
+
+    private static String mapNameToColor(String name) {
+        final float BOUND = 26 + 10;
+
+        char[] nameBuf = name.toCharArray();
+
+        byte[] colorBuf = new byte[3];
+        colorBuf[2] = (byte) (name.hashCode()  % Character.MAX_VALUE);
+
+        for (int i = 0; i < colorBuf.length - 1;) {
+            if (i < nameBuf.length) {
+                byte b;
+                char c = nameBuf[i];
+                if (Character.isDigit(c)) {
+                    b = (byte) ((c - '0') / BOUND * Character.MAX_VALUE);
+                } else if (Character.isAlphabetic(nameBuf[i])) {
+                    char lower = Character.toLowerCase(nameBuf[i]);
+                    b = (byte) ((c - 'a' + 9) / BOUND * Character.MAX_VALUE);
+                } else b = (byte) c;
+                colorBuf[i] = b;
+                i++;
+            } else
+                break;
+        }
+
+        StringBuilder sb = new StringBuilder(colorBuf.length * 2);
+        for (byte b : colorBuf){
+            sb.append(String.format("%02x", b&0xff));
+        }
+
+        return sb.toString();
+    }
+
+    public static boolean isInvalid(String name) {
+        final String trimName = name.trim();
+        return trimName.isEmpty() || !trimName.matches("[\\w_\\s]{3,255}");
+    }
+
+    public static void main(String[] args) {
+        System.out.println(mapNameToColor("Lamnt"));
     }
 }
