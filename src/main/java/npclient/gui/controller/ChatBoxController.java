@@ -12,6 +12,7 @@ import javafx.util.Callback;
 import npclient.MyAccount;
 import npclient.core.callback.OnPublishMessageSuccess;
 import npclient.core.command.Publisher;
+import npclient.exception.BigFileTransferException;
 import nputils.FileInfo;
 import npclient.gui.entity.FileMessage;
 import npclient.gui.manager.MessageManager;
@@ -54,7 +55,9 @@ public class ChatBoxController implements Initializable {
 
     @FXML
     public void onEnter() {
-        sendText(tfInput.getText());
+        String message = tfInput.getText().trim();
+        if (!message.isEmpty())
+            sendText(message);
     }
 
     @FXML
@@ -63,7 +66,8 @@ public class ChatBoxController implements Initializable {
         chooser.setTitle("Choose File");
         Stage primaryStage = StageManager.getInstance().getPrimaryStage();
         File file = chooser.showOpenDialog(primaryStage);
-        sendFile(file);
+        if (file != null)
+            sendFile(file);
     }
 
     @FXML void startVoiceCall() {
@@ -99,7 +103,7 @@ public class ChatBoxController implements Initializable {
                             lvMessage.getItems().setAll(messages);
                         }
                     }).post();
-        } catch (NoSuchAlgorithmException | IOException e) {
+        } catch (IOException | BigFileTransferException e) {
             UIUtils.showErrorAlert("Can't attach chosen file: " + e.getMessage());
         }
     }

@@ -39,11 +39,13 @@ public class VoiceChatController implements Initializable {
             logger.debug("Start audio output");
             SourceDataLine audioOutput = AudioSystem.getSourceDataLine(format);
             audioOutput.open(format);
+            increaseVolume(audioOutput);
             audioOutput.start();
 
             logger.debug("Start audio input");
             TargetDataLine audioInput = AudioSystem.getTargetDataLine(format);
             audioInput.open(format);
+            increaseVolume(audioInput);
             audioInput.start();
 
             final UDPConnection udpConn = MyAccount.getInstance().getUdpConn();
@@ -70,6 +72,13 @@ public class VoiceChatController implements Initializable {
         } catch (LineUnavailableException | IOException e) {
             logger.error("System not support voice chat: " + e.getMessage());
             UIUtils.showErrorAlert("System not support voice chat: " + e.getMessage());
+        }
+    }
+
+    private void increaseVolume(DataLine dataLine) {
+        if (dataLine.isControlSupported(FloatControl.Type.VOLUME)) {
+            FloatControl volume = (FloatControl) dataLine.getControl(FloatControl.Type.VOLUME);
+            volume.setValue(volume.getMaximum());
         }
     }
 

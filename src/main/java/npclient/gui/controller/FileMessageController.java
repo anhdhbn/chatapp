@@ -67,8 +67,10 @@ public class FileMessageController implements Initializable {
     }
 
     private void save(File file) {
-        try (FileOutputStream stream = new FileOutputStream(file)) {
+        try {
+            FileOutputStream stream = new FileOutputStream(file);
             stream.write(fileInfo.getData());
+            stream.close();
         } catch (IOException e) {
             UIUtils.showErrorAlert("Can't save file " + file.getName() + ": " + e.getMessage());
         }
