@@ -12,7 +12,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import javafx.util.Callback;
 import npclient.MyAccount;
 import npclient.core.callback.OnAcceptListener;
@@ -21,6 +20,7 @@ import npclient.core.callback.OnRejectListener;
 import npclient.core.callback.SubscribedTopicListener;
 import npclient.core.command.Publisher;
 import npclient.core.command.Subscriber;
+import npclient.exception.InvalidNameException;
 import npclient.gui.util.AudioUtils;
 import nputils.FileInfo;
 import npclient.exception.DuplicateGroupException;
@@ -382,7 +382,10 @@ public class BaseController implements Initializable {
         }
     }
 
-    public synchronized void join(String group) throws DuplicateGroupException {
+    public synchronized void join(String group) throws DuplicateGroupException, InvalidNameException {
+        if (UIUtils.isInvalid(group))
+            throw new InvalidNameException(group);
+
         String topic = String.format("group/%s", group);
         if (!MessageSubscribeManager.getInstance().containsKey(topic)) {
             ChatItem item = new GroupChatItem();
@@ -406,7 +409,7 @@ public class BaseController implements Initializable {
         String group = tfGroup.getText().trim();
         try {
             join(group);
-        } catch (DuplicateGroupException e) {
+        } catch (DuplicateGroupException | InvalidNameException e) {
             UIUtils.showErrorAlert(e.getMessage());
         } finally {
             tfGroup.clear();
