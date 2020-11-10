@@ -1,5 +1,6 @@
 package npclient.gui.controller;
 
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -135,8 +136,8 @@ public class ChatBoxController implements Initializable {
     public void setTitle(String target, boolean isGroup) {
         this.target = target;
         String title;
-        if (isGroup) title = String.format("u:/%s", target);
-        else title = String.format("g:/%s", target);
+        if (isGroup) title = String.format("g:/%s", target);
+        else title = String.format("u:/%s", target);
         this.lTitle.setText(title);
         this.isGroup = isGroup;
 

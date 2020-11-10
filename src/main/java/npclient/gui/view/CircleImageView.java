@@ -2,7 +2,6 @@ package npclient.gui.view;
 
 import javafx.beans.NamedArg;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import npclient.gui.util.UIUtils;
@@ -17,12 +16,14 @@ public class CircleImageView extends Circle {
     }
 
     public void update(String name) {
+        Image image;
         try {
             InputStream stream = UIUtils.retrieveAvatar(name);
-            Image image = new Image(stream);
+            image = new Image(stream);
             setFill(new ImagePattern(image));
         } catch (IOException e) {
-            e.printStackTrace();
+            image = new Image("/img/avatar-100.jpg");
         }
+        setFill(new ImagePattern(image));
     }
 }
