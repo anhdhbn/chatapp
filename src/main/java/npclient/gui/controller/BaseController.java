@@ -35,6 +35,8 @@ import npclient.gui.view.VoiceChatDialog;
 import nputils.Constants;
 import nputils.DataTransfer;
 
+import javax.sound.sampled.LineUnavailableException;
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -339,10 +341,20 @@ public class BaseController implements Initializable {
     }
 
     private void openVoiceChatDialog(String target) {
-        voiceChatStage = new VoiceChatDialog();
-        voiceChatStage.setUsername(MyAccount.getInstance().getName());
-        voiceChatStage.setTarget(target);
-        voiceChatStage.show();
+        try {
+            voiceChatStage = new VoiceChatDialog();
+            voiceChatStage.setUsername(MyAccount.getInstance().getName());
+            voiceChatStage.setTarget(target);
+            voiceChatStage.show();
+        } catch (LineUnavailableException | IOException e) {
+            // Quit if catch a exception
+            final String topic = "voice/" + target;
+            final String username = MyAccount.getInstance().getName();
+            new Publisher(topic, username)
+                    .putData(Constants.VOICE_QUIT)
+                    .post();
+            UIUtils.showErrorAlert("System not support voice chat: " + e.getMessage());
+        }
     }
 
     private void closeVoiceChatDialog() {

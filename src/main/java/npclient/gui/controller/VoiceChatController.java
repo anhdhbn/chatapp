@@ -10,8 +10,6 @@ import npclient.core.command.Publisher;
 import npclient.core.command.UDPRegister;
 import npclient.core.command.VoiceListener;
 import npclient.core.command.VoiceSpeaker;
-import npclient.gui.util.AudioUtils;
-import npclient.gui.util.UIUtils;
 import nputils.Constants;
 
 import javax.sound.sampled.*;
@@ -33,46 +31,42 @@ public class VoiceChatController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        try {
-            AudioFormat format = AudioUtils.getAudioFormat();
 
-            logger.debug("Start audio output");
-            SourceDataLine audioOutput = AudioSystem.getSourceDataLine(format);
-            audioOutput.open(format);
-            increaseVolume(audioOutput);
-            audioOutput.start();
+    }
 
-            logger.debug("Start audio input");
-            TargetDataLine audioInput = AudioSystem.getTargetDataLine(format);
-            audioInput.open(format);
-            increaseVolume(audioInput);
-            audioInput.start();
+    public void setAudioFormat(AudioFormat format) throws IOException, LineUnavailableException {
+        logger.debug("Start audio output");
+        SourceDataLine audioOutput = AudioSystem.getSourceDataLine(format);
+        audioOutput.open(format);
+        increaseVolume(audioOutput);
+        audioOutput.start();
 
-            final UDPConnection udpConn = MyAccount.getInstance().getUdpConn();
-            final String name = MyAccount.getInstance().getName();
+        logger.debug("Start audio input");
+        TargetDataLine audioInput = AudioSystem.getTargetDataLine(format);
+        audioInput.open(format);
+        increaseVolume(audioInput);
+        audioInput.start();
 
-            logger.debug("Register UDP Connection to the server");
-            new UDPRegister()
-                    .setName(name)
-                    .setConnection(udpConn)
-                    .register();
+        final UDPConnection udpConn = MyAccount.getInstance().getUdpConn();
+        final String name = MyAccount.getInstance().getName();
 
-            logger.debug("Start voice listener");
-            listener = new VoiceListener()
-                    .setConnection(udpConn)
-                    .setAudioInput(audioInput);
-            listener.post();
+        logger.debug("Register UDP Connection to the server");
+        new UDPRegister()
+                .setName(name)
+                .setConnection(udpConn)
+                .register();
 
-            logger.debug("Start voice speaker");
-            speaker = new VoiceSpeaker()
-                    .setConnection(udpConn)
-                    .setAudioOutput(audioOutput);
-            speaker.listen();
+        logger.debug("Start voice listener");
+        listener = new VoiceListener()
+                .setConnection(udpConn)
+                .setAudioInput(audioInput);
+        listener.post();
 
-        } catch (LineUnavailableException | IOException e) {
-            logger.error("System not support voice chat: " + e.getMessage());
-            UIUtils.showErrorAlert("System not support voice chat: " + e.getMessage());
-        }
+        logger.debug("Start voice speaker");
+        speaker = new VoiceSpeaker()
+                .setConnection(udpConn)
+                .setAudioOutput(audioOutput);
+        speaker.listen();
     }
 
     private void increaseVolume(DataLine dataLine) {
