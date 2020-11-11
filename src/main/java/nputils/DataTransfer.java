@@ -11,7 +11,7 @@ public class DataTransfer implements Serializable {
     public Object data;
 
     public DataTransfer() {
-        this.datetime = System.currentTimeMillis();
+        this.datetime = System.currentTimeMillis() / 1000L;
     }
 
     public DataTransfer(String topic, String name, String command) {
