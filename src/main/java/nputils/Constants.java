@@ -21,4 +21,6 @@ public final class Constants {
     public static final String SPLITTER = "/";
 
     public static final int BUFFER_SIZE = 1024;
+    public static final long MAX_FILE_SIZE = 20 * 1024 * 1024;
+    public static final String INITIALIZE_TOPIC = null;
 }

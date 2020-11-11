@@ -1,12 +1,14 @@
 package nputils;
 
+import npclient.CliConstants;
+import npclient.exception.BigFileTransferException;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 
 public class FileInfo implements Serializable {
 
@@ -19,14 +21,18 @@ public class FileInfo implements Serializable {
 
     }
 
-    public FileInfo(File file) throws IOException, NoSuchAlgorithmException {
+    public FileInfo(File file) throws IOException, BigFileTransferException {
         if (file == null)
             throw new FileNotFoundException();
 
-        this.size = file.length();
         this.name = file.getName();
+
+        this.size = file.length();
+        if (this.size > CliConstants.MAX_FILE_SIZE)
+            throw new BigFileTransferException(name);
+
         this.data = Files.readAllBytes(file.toPath());
-        this.md5 = Utils.computeMd5(file);
+        this.md5 = Utils.computeMd5(data);
     }
 
     public byte[] getData() {
