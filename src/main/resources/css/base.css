@@ -26,6 +26,24 @@
     -fx-background-radius: 6px;
 }
 
+.chatbox {
+    -fx-padding: 9px;
+    -fx-background-color: #0001;
+    -fx-background-radius: 6px;
+    -fx-end-margin: 6px;
+}
+
+.chatbox-btn {
+    -fx-background-color: transparent;
+    -fx-min-width: 50;
+    -fx-opacity: 0.8;
+}
+
+.chatbox-btn:hover {
+    -fx-background-color: #0001;
+    -fx-opacity: 1;
+}
+
 .message {
     -fx-background-color: #fff;
     -fx-padding: 6px;

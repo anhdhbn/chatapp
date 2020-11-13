@@ -52,10 +52,9 @@
             </TabPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="paneChatBox" prefHeight="200.0" prefWidth="200.0">
-<!--         <children>-->
-<!--            <ChatBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>-->
-<!--         </children>-->
-      </AnchorPane>
+      <AnchorPane fx:id="paneChatBox" prefHeight="200.0" prefWidth="200.0" style="-fx-padding: 9px;" styleClass="bg">
+         <opaqueInsets>
+            <Insets bottom="10.0" />
+         </opaqueInsets></AnchorPane>
    </items>
 </SplitPane>
