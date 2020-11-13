@@ -8,14 +8,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import npclient.MyAccount;
-import npclient.gui.entity.EmojiMessage;
-import npclient.gui.entity.FileMessage;
 import npclient.gui.entity.Message;
-import npclient.gui.entity.TextMessage;
+import npclient.gui.util.DateTimeUtils;
 import nputils.Emoji;
+import nputils.FileInfo;
 
 import java.io.IOException;
-import java.util.Date;
 
 public class MessageCell extends ListCell<Message> {
 
@@ -47,35 +45,51 @@ public class MessageCell extends ListCell<Message> {
                 }
             }
 
-            tName.setText(item.getFrom());
-            String time = new Date(item.getTime()).toString();
-            tTime.setText(time);
-
-            paneContent.getChildren().clear();
-            if (item instanceof TextMessage) {
-                TextMessageView messageView = new TextMessageView();
-                messageView.setContent(((TextMessage) item).getContent());
-                paneContent.getChildren().add(messageView);
-            } else if (item instanceof FileMessage) {
-                FileMessageView messageView = new FileMessageView();
-                messageView.setContent(((FileMessage) item).getContent());
-                paneContent.getChildren().add(messageView);
-            } else if (item instanceof EmojiMessage) {
-                EmojiView messageView = new EmojiView();
-                messageView.setContent(((EmojiMessage) item).getContent());
-                paneContent.getChildren().add(messageView);
-            }
+            setSender(item.getFrom());
+            setTime(item.getTime());
+            setContent(item.getContent());
 
             final String username = MyAccount.getInstance().getName();
-            if (item.getFrom().equals(username)) {
-                container.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
-                tName.setVisible(false);
-            } else {
-                container.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
-            }
+            boolean isFromMe = item.getFrom().equals(username);
+            setMessageAlignment(isFromMe);
 
             setText(null);
             setGraphic(container);
         }
+    }
+
+    private void setMessageAlignment(boolean isFromMe) {
+        if (isFromMe) {
+            container.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+            tName.setVisible(false);
+        } else {
+            container.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
+        }
+    }
+
+    private void setContent(Object content) {
+        paneContent.getChildren().clear();
+        if (content instanceof String) {
+            TextMessageView messageView = new TextMessageView();
+            messageView.setContent((String) content);
+            paneContent.getChildren().add(messageView);
+        } else if (content instanceof FileInfo) {
+            FileMessageView messageView = new FileMessageView();
+            messageView.setContent((FileInfo) content);
+            paneContent.getChildren().add(messageView);
+        } else if (content instanceof Emoji) {
+            EmojiView messageView = new EmojiView();
+            messageView.setContent((Emoji) content);
+            paneContent.getChildren().add(messageView);
+        }
+    }
+
+    private void setSender(String name) {
+        tName.setText(name);
+    }
+
+    private void setTime(long time) {
+        String text = DateTimeUtils.format(time);
+        tTime.setText(text);
     }
 }
