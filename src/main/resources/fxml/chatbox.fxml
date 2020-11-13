@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<fx:root minHeight="800.0" minWidth="800.0" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="npclient.gui.controller.ChatBoxController">
+<fx:root minHeight="800.0" minWidth="800.0" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="npclient.gui.controller.ChatBoxController">
 <!--<AnchorPane minHeight="800.0" minWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="npclient.gui.controller.ChatBoxController">-->
    <children>
       <HBox alignment="CENTER_LEFT" prefHeight="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -22,7 +21,7 @@
           <Button mnemonicParsing="false" onAction="#attachFile" text="Attach File" />
             <Button mnemonicParsing="false" onAction="#startVoiceCall" text="Voice Call" />
             <Button layoutX="91.0" layoutY="10.0" mnemonicParsing="false" onAction="#onSendEmoji" text="Emoji" />
-            <TextField fx:id="tfInput" onAction="#onEnter" prefHeight="27.0" prefWidth="520.0">
+            <TextField fx:id="tfInput" onAction="#onEnter" styleClass="input" stylesheets="@../css/base.css">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>

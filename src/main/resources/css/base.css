@@ -1,11 +1,96 @@
 .button {
     -fx-background-color: #5244c2;
     -fx-font-weight: bold;
-    -fx-font-size: 16px;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 14px;
+    -fx-padding: 9px 6px;
+    -fx-background-radius: 6px;
 }
 
 .button:hover {
     -fx-background-color: #4f3fd0;
     -fx-text-fill: #e6e6e6;
-    -fx-font-size: 16px;
+    -fx-font-size: 14px;
+}
+
+.account {
+    -fx-background-color: #0001;
+    -fx-padding: 6px;
+    -fx-background-radius: 9px;
+}
+
+.input {
+    -fx-font-size: 14px;
+    -fx-background-color: #0001;
+    -fx-padding: 9px 6px;
+    -fx-background-radius: 6px;
+}
+
+.message {
+    -fx-background-color: #fff;
+    -fx-padding: 6px;
+    -fx-background-radius: 9px;
+    -fx-border-radius: 9px;
+    -fx-border-color: #9b9b9b;
+    -fx-border-width: 1;
+    -fx-max-width: 300;
+}
+
+.bg {
+    -fx-background-color: #fff;
+}
+
+.list-view, .split-pane {
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.tab-pane {
+    -fx-tab-min-height: 3em;
+    -fx-tab-max-height: 3em;
+}
+
+.tab .tab-label {
+    -fx-background-color: transparent;
+    -fx-alignment: CENTER;
+    -fx-text-fill: #000000;
+    -fx-font-weight: bolder;
+}
+
+.tab {
+    -fx-end-margin: 9;
+    -fx-background-insets: 0.0;
+    -fx-background-radius: 90;
+    -fx-background-color: transparent;
+    -fx-font-weight: bolder;
+}
+
+.tab:selected {
+    -fx-background-color: #bababa44;
+}
+
+.tab:focused {
+    -fx-focus-color: transparent;
+}
+
+.tab {
+    -fx-padding: 0 30 0 30;
+}
+
+.tab-pane *.tab-header-background {
+    -fx-background-color: transparent;
+}
+
+.tab-pane:top *.tab-header-area {
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.416667em 0.166667em 0.0em 0.0em;
+}
+
+.tab:selected .focus-indicator {
+    -fx-focus-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.list-cell {
+    -fx-background-color: #fff;
 }

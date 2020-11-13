@@ -1,32 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import npclient.gui.view.*?>
 
-<?import npclient.gui.view.CircleImageView?>
-
-<SplitPane dividerPositions="0.36" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="npclient.gui.controller.BaseController">
+<SplitPane dividerPositions="0.36" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" stylesheets="@../css/base.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="npclient.gui.controller.BaseController">
    <items>
-      <AnchorPane minWidth="320.0">
+      <AnchorPane maxWidth="320.0" minWidth="320.0" style="-fx-padding: 9px;" styleClass="bg">
          <children>
-            <VBox alignment="CENTER" prefHeight="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <HBox alignment="CENTER_LEFT" layoutX="0" layoutY="9.0" prefHeight="72.0" prefWidth="320" styleClass="account" stylesheets="@../css/base.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <CircleImageView fx:id="civAvatar" radius="36.0"/>
+                  <CircleImageView fx:id="civAvatar" radius="24.0" />
                   <Text fx:id="tUsername" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
                   </Text>
-               </children></VBox>
-            <TabPane tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="200.0">
+               </children></HBox>
+            <TabPane layoutX="0.0" layoutY="0.0" prefHeight="655.0" prefWidth="320.0" styleClass="bg" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="90.0">
               <tabs>
-                <Tab text="User">
+                <Tab text="USER">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
@@ -35,17 +33,17 @@
                         </AnchorPane>
                   </content>
                 </Tab>
-                <Tab text="Group">
+                <Tab text="GROUP">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <ToolBar AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <ToolBar prefHeight="48.0" prefWidth="302.0" style="-fx-padding: 6px 0px;" styleClass="bg" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                 <items>
-                                    <TextField fx:id="tfGroup" promptText="Group Code" />
-                                  <Button onAction="#joinGroup" mnemonicParsing="false" text="Join Group" />
+                                    <TextField fx:id="tfGroup" prefHeight="31.0" prefWidth="199.0" promptText="Group Code" styleClass="input" />
+                                  <Button mnemonicParsing="false" onAction="#joinGroup" prefHeight="21.0" prefWidth="96.0" text="Join Group" />
                                 </items>
                               </ToolBar>
-                              <ListView fx:id="lvGroupItem" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="39.0" />
+                              <ListView fx:id="lvGroupItem" layoutY="45.0" prefHeight="612.0" prefWidth="302.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="45.0" />
                            </children>
                         </AnchorPane>
                   </content>

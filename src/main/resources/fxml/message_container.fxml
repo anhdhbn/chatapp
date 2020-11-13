@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox fx:id="container" minWidth="800.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="container" minWidth="0.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Text fx:id="tName" nodeOrientation="RIGHT_TO_LEFT" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" textAlignment="RIGHT" />
       <AnchorPane fx:id="paneContent" VBox.vgrow="ALWAYS">
@@ -12,9 +12,9 @@
             <Insets top="10.0" />
          </VBox.margin>
       </AnchorPane>
-      <Text fx:id="tTime" nodeOrientation="RIGHT_TO_LEFT" strokeType="OUTSIDE" strokeWidth="0.0" text="Time" textAlignment="RIGHT" />
+      <Text fx:id="tTime" fill="#434343" nodeOrientation="RIGHT_TO_LEFT" strokeType="OUTSIDE" strokeWidth="0.0" text="Time" textAlignment="RIGHT">
+         <font>
+            <Font size="10.0" />
+         </font></Text>
    </children>
-   <padding>
-      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-   </padding>
 </VBox>
