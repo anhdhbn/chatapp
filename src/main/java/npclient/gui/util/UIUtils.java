@@ -53,7 +53,7 @@ public class UIUtils {
     }
 
     public static InputStream retrieveAvatar(String name) throws IOException {
-        String nameEncode = URLEncoder.encode(name, CliConstants.CHARSET);
+        String nameEncode = URLEncoder.encode(name.replaceAll("\\s+", ""), CliConstants.CHARSET);
         String background = mapNameToColor(name);
         String url = String.format(CliConstants.AVATAR_URL, background, nameEncode);
         URLConnection connection = new URL(url).openConnection();
@@ -115,7 +115,6 @@ public class UIUtils {
             String filePath = String.format("/img/emoji/%s.png", name);
             filePath = filePath.replace("_", "-");
             return new Image(filePath);
-//            return new ImageView(image);
         }
 
     }
