@@ -41,6 +41,8 @@ public class ChatBoxController implements Initializable {
     private String target;
     private boolean isGroup;
 
+    private OnSendListener listener;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         lvMessage.setCellFactory(new Callback<ListView<Message>, ListCell<Message>>() {
@@ -109,7 +111,10 @@ public class ChatBoxController implements Initializable {
                         m.setContent(emoji);
                         m.setTime(System.currentTimeMillis());
                         Messages messages = MessageManager.getInstance().append(topic, m);
-                        lvMessage.getItems().setAll(messages);
+                        setItem(messages);
+                        if (listener != null) {
+                            listener.onSend(messages);
+                        }
                     }
                 }).post();
     }
@@ -130,7 +135,10 @@ public class ChatBoxController implements Initializable {
                             m.setContent(fileInfo);
                             m.setTime(System.currentTimeMillis());
                             Messages messages = MessageManager.getInstance().append(topic, m);
-                            lvMessage.getItems().setAll(messages);
+                            setItem(messages);
+                            if (listener != null) {
+                                listener.onSend(messages);
+                            }
                         }
                     }).post();
         } catch (IOException | BigFileTransferException e) {
@@ -152,8 +160,11 @@ public class ChatBoxController implements Initializable {
                         m.setContent(input);
                         m.setTime(System.currentTimeMillis());
                         Messages messages = MessageManager.getInstance().append(topic, m);
-                        lvMessage.getItems().setAll(messages);
+                        setItem(messages);
                         clearInput();
+                        if (listener != null) {
+                            listener.onSend(messages);
+                        }
                     }
                 }).post();
     }
@@ -197,4 +208,11 @@ public class ChatBoxController implements Initializable {
     }
 
 
+    public void setOnSendListener(OnSendListener listener) {
+        this.listener = listener;
+    }
+
+    public interface OnSendListener {
+        void onSend(Messages messages);
+    }
 }
