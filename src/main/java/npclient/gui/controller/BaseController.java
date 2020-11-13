@@ -287,7 +287,18 @@ public class BaseController implements Initializable {
      * @param isGroup is group chat
      */
     private void changeChatBox(String target, boolean isGroup) {
+        ChatBox prevChatBox = getCurrentChat();
+        // if reselect a target, do nothing
+        if (prevChatBox != null && prevChatBox.getTarget().equals(target))
+            return;
+
         ChatBox chatBox = new ChatBox();
+        chatBox.setOnSendListener(new ChatBoxController.OnSendListener() {
+            @Override
+            public void onSend(Messages messages) {
+                updateChatItems(messages);
+            }
+        });
         chatBox.setTarget(target, isGroup);
 
         clearChatBox();
@@ -391,6 +402,7 @@ public class BaseController implements Initializable {
             // swap to first
             listView.getItems().remove(chatItem);
             listView.getItems().add(0, chatItem);
+            listView.getSelectionModel().select(0);
         }
     }
 

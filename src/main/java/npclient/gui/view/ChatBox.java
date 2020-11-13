@@ -34,6 +34,10 @@ public class ChatBox extends AnchorPane {
         controller.setTitle(title, isGroup);
     }
 
+    public void setOnSendListener(ChatBoxController.OnSendListener listener) {
+        controller.setOnSendListener(listener);
+    }
+
     public final String getTarget() {
         return controller.getTitle();
     }
