@@ -1,3 +1,18 @@
+@font-face {
+    font-weight: regular;
+    src: url('../font/meRegular.otf');
+}
+
+@font-face {
+    font-weight: bold;
+    src: url('../font/meBold.otf');
+}
+
+.root {
+    -fx-font-family: meRegular;
+    -fx-font-size: 16px;
+}
+
 .button {
     -fx-background-color: #5244c2;
     -fx-font-weight: bold;
@@ -15,7 +30,7 @@
 
 .account {
     -fx-background-color: #0001;
-    -fx-padding: 6px;
+    -fx-padding: 6px 12px;
     -fx-background-radius: 9px;
 }
 
@@ -76,18 +91,20 @@
 }
 
 .tab-pane {
-    -fx-tab-min-height: 3em;
-    -fx-tab-max-height: 3em;
+    -fx-tab-min-height: 40px;
+    -fx-tab-max-height: 40px;
 }
 
 .tab .tab-label {
     -fx-background-color: transparent;
     -fx-alignment: CENTER;
     -fx-text-fill: #444;
+    -fx-font-family: meBold;
+    -fx-font-weight: bold;
     -fx-font-style: bold;
-    -fx-font-family: Arial;
-    -fx-font-weight: bolder;
     -fx-pref-width: 82;
+    -fx-font-size: 14px;
+    -fx-padding: 0;
 }
 
 .tab {
@@ -135,7 +152,8 @@
 }
 
 .list-cell {
-    -fx-background-color: #fff;
+    -fx-background-color: transparent;
+    -fx-padding: 9px 0px 0px 0px;
 }
 
 .tab-down-button {
@@ -152,7 +170,7 @@
     -fx-pref-width: 0;
 }
 
-.control-buttons-tab{
+.control-buttons-tab {
     -fx-padding: 0;
     -fx-cell-size: 0;
     -fx-pref-width: 0;

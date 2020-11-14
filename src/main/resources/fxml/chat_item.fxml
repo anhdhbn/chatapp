@@ -9,30 +9,30 @@
 <!--</fx:root>-->
 
 <HBox fx:id="container" alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="0.0" prefHeight="70.0" styleClass="account" stylesheets="@../css/base.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <CircleImageView fx:id="civAvatar" radius="24.0" />
-      <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
-         <children>
-            <Text fx:id="tTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
-               <VBox.margin>
-                  <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
-               </VBox.margin>
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Text>
-            <Text fx:id="tLastMsg" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
-               <VBox.margin>
-                  <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
-               </VBox.margin>
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Text>
-         </children>
-      </VBox>
-   </children>
-   <padding>
-      <Insets bottom="5.0"/>
-   </padding>
+    <children>
+        <CircleImageView fx:id="civAvatar" radius="24.0" />
+        <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+            <children>
+                <Text fx:id="tTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
+                    <VBox.margin>
+                        <Insets bottom="0.0" left="9.0" right="4.0" top="4.0" />
+                    </VBox.margin>
+                    <font>
+                        <Font name="meBold" size="16.0" />
+                    </font>
+                </Text>
+                <Text fx:id="tLastMsg" fill="#4d4d4d" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+                    <VBox.margin>
+                        <Insets bottom="4.0" left="9.0" right="4.0" />
+                    </VBox.margin>
+                    <font>
+                        <Font name="meRegular" size="14.0" />
+                    </font>
+                </Text>
+            </children>
+        </VBox>
+    </children>
+    <padding>
+        <Insets bottom="5.0" />
+    </padding>
 </HBox>
