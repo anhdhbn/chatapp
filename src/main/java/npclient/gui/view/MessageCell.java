@@ -64,6 +64,7 @@ public class MessageCell extends ListCell<Message> {
             tName.setVisible(false);
         } else {
             container.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
+            container.getStyleClass().add("message-receive");
         }
     }
 

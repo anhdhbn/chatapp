@@ -45,13 +45,24 @@
 }
 
 .message {
-    -fx-background-color: #fff;
-    -fx-padding: 6px;
-    -fx-background-radius: 9px;
-    -fx-border-radius: 9px;
-    -fx-border-color: #9b9b9b;
-    -fx-border-width: 1;
+    -fx-background-color: #4e3fc2;
+    -fx-text-fill: #fff;
+    -fx-padding: 12px;
+    -fx-background-radius: 16px;
     -fx-max-width: 300;
+}
+
+.message Text{
+    -fx-fill: #fff;
+    -fx-text-fill: #fff;
+}
+
+.message-receive .message {
+    -fx-background-color: #e3e6ea;
+}
+
+.message-receive .message Text{
+    -fx-fill: #000;
 }
 
 .bg {
