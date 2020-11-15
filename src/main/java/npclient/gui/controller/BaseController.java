@@ -375,6 +375,12 @@ public class BaseController implements Initializable {
             final String username = MyAccount.getInstance().getName();
             new Publisher(topic, username)
                     .putData(Constants.VOICE_QUIT)
+                    .setSuccessListener(new OnPublishMessageSuccess() {
+                        @Override
+                        public void onReceive(DataTransfer message) {
+                            closeVoiceChatDialog();
+                        }
+                    })
                     .post();
             UIUtils.showErrorAlert("System not support voice chat: " + e.getMessage());
         }
