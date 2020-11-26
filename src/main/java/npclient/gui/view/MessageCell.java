@@ -67,14 +67,18 @@ public class MessageCell extends ListCell<Message> implements Initializable {
     }
 
     private void setState(Message.State state) {
-        tState.setText(state.name());
-
         switch (state) {
             case SUCCESS:
                 tState.setVisible(false);
                 break;
 
-            default:
+            case FAILURE:
+                tState.setText("Error!");
+                tState.setVisible(true);
+                break;
+
+            case SENDING:
+                tState.setText("Sending...");
                 tState.setVisible(true);
                 break;
         }
