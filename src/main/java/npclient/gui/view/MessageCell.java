@@ -2,10 +2,13 @@ package npclient.gui.view;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
 import javafx.scene.text.Text;
 import npclient.MyAccount;
 import npclient.gui.entity.Message;
@@ -14,8 +17,10 @@ import nputils.Emoji;
 import nputils.FileInfo;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class MessageCell extends ListCell<Message> {
+public class MessageCell extends ListCell<Message> implements Initializable {
 
     private FXMLLoader mLLoader;
     @FXML
@@ -24,6 +29,8 @@ public class MessageCell extends ListCell<Message> {
     private Text tName, tTime;
     @FXML
     private AnchorPane paneContent;
+
+    private Text tState = new Text();
 
     @Override
     protected void updateItem(Message item, boolean empty) {
@@ -48,6 +55,7 @@ public class MessageCell extends ListCell<Message> {
             setSender(item.getFrom());
             setTime(item.getTime());
             setContent(item.getContent());
+            setState(item.getState());
 
             final String username = MyAccount.getInstance().getName();
             boolean isFromMe = item.getFrom().equals(username);
@@ -55,6 +63,20 @@ public class MessageCell extends ListCell<Message> {
 
             setText(null);
             setGraphic(container);
+        }
+    }
+
+    private void setState(Message.State state) {
+        tState.setText(state.name());
+
+        switch (state) {
+            case SUCCESS:
+                tState.setVisible(false);
+                break;
+
+            default:
+                tState.setVisible(true);
+                break;
         }
     }
 
@@ -91,5 +113,11 @@ public class MessageCell extends ListCell<Message> {
     private void setTime(long time) {
         String text = DateTimeUtils.format(time);
         tTime.setText(text);
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        tState.setFont(Font.font(null, FontPosture.ITALIC, 10));
+        container.getChildren().add(tState);
     }
 }
