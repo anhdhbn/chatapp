@@ -72,6 +72,8 @@ public class LoginController implements Initializable {
         MyAccount.register(name, udpConn);
         Parent baseScene = UIUtils.load("/fxml/base.fxml");
         StageManager.getInstance().changeScene(baseScene);
+        StageManager.getInstance().getPrimaryStage().setMinHeight(864f);
+        StageManager.getInstance().getPrimaryStage().setMinWidth(1140f);
     }
 
     private void loginFailure(Exception err) {
