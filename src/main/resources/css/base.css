@@ -29,21 +29,21 @@
 }
 
 .account {
-    -fx-background-color: #0001;
+    -fx-background-color: #f0f2f5;
     -fx-padding: 6px 12px;
     -fx-background-radius: 9px;
 }
 
 .input {
     -fx-font-size: 14px;
-    -fx-background-color: #0001;
+    -fx-background-color: #f0f2f5;
     -fx-padding: 9px 6px;
     -fx-background-radius: 6px;
 }
 
 .chatbox {
     -fx-padding: 9px;
-    -fx-background-color: #0001;
+    -fx-background-color: #f0f2f5;
     -fx-background-radius: 6px;
     -fx-end-margin: 6px;
 }
@@ -136,7 +136,7 @@
 }
 
 .tab-pane *.tab-header-background {
-    -fx-background-color: #0001;
+    -fx-background-color: #f0f2f5;
     -fx-background-radius: 9px;
     -fx-padding: 0px;
 }
@@ -174,4 +174,9 @@
     -fx-padding: 0;
     -fx-cell-size: 0;
     -fx-pref-width: 0;
+}
+
+.split-pane-divider {
+    -fx-background-color: transparent;
+    -fx-padding: 0 1 0 1
 }

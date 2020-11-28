@@ -21,6 +21,9 @@
                             <HBox.margin>
                                 <Insets left="10.0"/>
                             </HBox.margin>
+                            <font>
+                                <Font name="meBold" size="16.0" />
+                            </font>
                         </Text>
                     </children>
                 </HBox>
