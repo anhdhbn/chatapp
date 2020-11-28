@@ -1,5 +1,7 @@
 package npclient.gui.entity;
 
+import npclient.MyAccount;
+
 public abstract class ChatItem implements Comparable<ChatItem> {
 
     protected String name;
@@ -45,12 +47,14 @@ public abstract class ChatItem implements Comparable<ChatItem> {
         String rawLastMsg = null;
         Message lastMsg = messages.peek();
         if (lastMsg != null) {
+            String lastMsgOwner = lastMsg.getFrom().equals(MyAccount.getInstance().getName()) ? "You" : getName();
+
             if (lastMsg instanceof FileMessage) {
-                rawLastMsg = String.format("%s sent you a attachment", getName());
+                rawLastMsg = String.format("%s sent you a attachment", lastMsgOwner);
             } else if (lastMsg instanceof TextMessage) {
                 rawLastMsg = ((TextMessage) lastMsg).getContent();
             } else if (lastMsg instanceof EmojiMessage) {
-                rawLastMsg = String.format("%s sent you a emoji", getName());
+                rawLastMsg = String.format("%s sent you a emoji", lastMsgOwner);
             }
 
             setTime(lastMsg.getTime());

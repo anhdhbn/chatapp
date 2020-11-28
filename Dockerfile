@@ -2,6 +2,12 @@
 # Build stage
 #
 FROM maven:3.6.0-jdk-8-slim AS build
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y \
+        openjfx \
+        unzip \
+    && apt-get clean \
+    && rm -f /var/lib/apt/lists/*_dists_*
 COPY src /home/app/src
 COPY pom.xml /home/app
 RUN mvn -f /home/app/pom.xml clean package -DskipTests

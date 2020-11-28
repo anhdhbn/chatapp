@@ -1,13 +1,13 @@
 package npclient.gui.controller;
 
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -18,6 +18,7 @@ import npclient.exception.BigFileTransferException;
 import npclient.gui.entity.*;
 import npclient.gui.manager.MessageManager;
 import npclient.gui.manager.StageManager;
+import npclient.gui.task.AddMessageTask;
 import npclient.gui.util.UIUtils;
 import npclient.gui.view.EmojiChooser;
 import npclient.gui.view.MessageCell;
@@ -30,6 +31,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutionException;
 
 public class ChatBoxController implements Initializable {
 
@@ -39,16 +41,6 @@ public class ChatBoxController implements Initializable {
     private ListView<Message> lvMessage;
     @FXML
     private TextField tfInput;
-
-    @FXML
-    private ImageView sendIcon;
-    @FXML
-    private ImageView attachFileIcon;
-    @FXML
-    private ImageView voiceCallIcon;
-    @FXML
-    private ImageView emojiIcon;
-
 
     private String target;
     private boolean isGroup;
@@ -63,14 +55,6 @@ public class ChatBoxController implements Initializable {
                 return new MessageCell();
             }
         });
-        try {
-            sendIcon.setImage(new Image(getClass().getResourceAsStream("/img/send.png")));
-            attachFileIcon.setImage(new Image(getClass().getResourceAsStream("/img/file.png")));
-            voiceCallIcon.setImage(new Image(getClass().getResourceAsStream("/img/call.png")));
-            emojiIcon.setImage(new Image(getClass().getResourceAsStream("/img/emoji.png")));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @FXML
@@ -78,6 +62,7 @@ public class ChatBoxController implements Initializable {
         String message = tfInput.getText().trim();
         if (!message.isEmpty())
             sendText(message);
+        clearInput();
     }
 
     @FXML
@@ -118,78 +103,121 @@ public class ChatBoxController implements Initializable {
     }
 
     private void sendEmoji(Emoji emoji) {
-        final String topic = getMessageTopic();
-        final String username = MyAccount.getInstance().getName();
+        AddMessageTask addMessageTask = generateAddMessageTask(emoji);
+        addMessageTask.start();
 
-        new Publisher(topic, username)
-                .putData(emoji)
-                .setSuccessListener(new OnPublishMessageSuccess() {
-                    @Override
-                    public void onReceive(DataTransfer message) {
-                        EmojiMessage m = new EmojiMessage();
-                        m.setFrom(username);
-                        m.setContent(emoji);
-                        m.setTime(System.currentTimeMillis());
-                        Messages messages = MessageManager.getInstance().append(topic, m);
-                        setItem(messages);
-                        if (listener != null) {
-                            listener.onSend(messages);
-                        }
-                    }
-                }).post();
+//        final String topic = getMessageTopic();
+//        final String username = MyAccount.getInstance().getName();
+//
+//        new Publisher(topic, username)
+//                .putData(emoji)
+//                .setSuccessListener(new OnPublishMessageSuccess() {
+//                    @Override
+//                    public void onReceive(DataTransfer message) {
+//                        EmojiMessage m = new EmojiMessage();
+//                        m.setFrom(username);
+//                        m.setContent(emoji);
+//                        m.setTime(System.currentTimeMillis());
+//                        Messages messages = MessageManager.getInstance().append(topic, m);
+//                        setItem(messages);
+//                        if (listener != null) {
+//                            listener.onSend(messages);
+//                        }
+//                    }
+//                }).post();
     }
 
     private void sendFile(File file) {
-        final String topic = getMessageTopic();
-        final String username = MyAccount.getInstance().getName();
+        AddMessageTask addMessageTask = generateAddMessageTask(file);
 
-        try {
-            FileInfo fileInfo = new FileInfo(file);
-            new Publisher(topic, username)
-                    .putData(fileInfo)
-                    .setSuccessListener(new OnPublishMessageSuccess() {
-                        @Override
-                        public void onReceive(DataTransfer message) {
-                            FileMessage m = new FileMessage();
-                            m.setFrom(username);
-                            m.setContent(fileInfo);
-                            m.setTime(System.currentTimeMillis());
-                            Messages messages = MessageManager.getInstance().append(topic, m);
-                            setItem(messages);
-                            if (listener != null) {
-                                listener.onSend(messages);
-                            }
-                        }
-                    }).post();
-        } catch (IOException | BigFileTransferException e) {
-            UIUtils.showErrorAlert("Can't attach chosen file: " + e.getMessage());
-        }
+        addMessageTask.setOnFailed(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                UIUtils.showErrorAlert("Can't attach chosen file: " + addMessageTask.getException().getMessage());
+            }
+        });
+
+        addMessageTask.start();
+
+//        final String username = MyAccount.getInstance().getName();
+//
+//        try {
+//            FileInfo fileInfo = new FileInfo(file);
+//            new Publisher(topic, username)
+//                    .putData(fileInfo)
+//                    .setSuccessListener(new OnPublishMessageSuccess() {
+//                        @Override
+//                        public void onReceive(DataTransfer message) {
+//                            FileMessage m = new FileMessage();
+//                            m.setFrom(username);
+//                            m.setContent(fileInfo);
+//                            m.setTime(System.currentTimeMillis());
+//                            Messages messages = MessageManager.getInstance().append(topic, m);
+//                            setItem(messages);
+//                            if (listener != null) {
+//                                listener.onSend(messages);
+//                            }
+//                        }
+//                    }).post();
+//        } catch (IOException | BigFileTransferException e) {
+//            UIUtils.showErrorAlert("Can't attach chosen file: " + e.getMessage());
+//        }
     }
 
     private void sendText(String input) {
-        final String topic = getMessageTopic();
-        final String username = MyAccount.getInstance().getName();
+        AddMessageTask addMessageTask = generateAddMessageTask(input);
+        addMessageTask.start();
 
-        new Publisher(topic, username)
-                .putData(input)
-                .setSuccessListener(new OnPublishMessageSuccess() {
-                    @Override
-                    public void onReceive(DataTransfer message) {
-                        TextMessage m = new TextMessage();
-                        m.setFrom(username);
-                        m.setContent(input);
-                        m.setTime(System.currentTimeMillis());
-                        Messages messages = MessageManager.getInstance().append(topic, m);
-                        setItem(messages);
-                        clearInput();
-                        if (listener != null) {
-                            listener.onSend(messages);
-                        }
-                    }
-                }).post();
+//        new Publisher(topic, username)
+//                .putData(input)
+//                .setSuccessListener(new OnPublishMessageSuccess() {
+//                    @Override
+//                    public void onReceive(DataTransfer message) {
+//                        TextMessage m = new TextMessage();
+//                        m.setFrom(username);
+//                        m.setContent(input);
+//                        m.setTime(System.currentTimeMillis());
+//                        clearInput();
+//                        Messages messages = MessageManager.getInstance().append(topic, m);
+//                        setItem(messages);
+//                        if (listener != null) {
+//                            listener.onSend(messages);
+//                        }
+//                        m.setState(Message.State.SUCCESS);
+//                        lvMessage.refresh();
+//                    }
+//                }).post();
     }
 
+    private AddMessageTask generateAddMessageTask(Object content) {
+        final String topic = getMessageTopic();
 
+        AddMessageTask addMessageTask = new AddMessageTask(topic);
+        addMessageTask.setContent(content);
+
+        addMessageTask.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                try {
+                    Messages messages = addMessageTask.get();
+                    if (listener != null)
+                        listener.onSend(messages);
+                    setItem(messages);
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        addMessageTask.setStateChangeListener(new AddMessageTask.OnStateChangeListener() {
+            @Override
+            public void onChange(Message message, Message.State state) {
+                lvMessage.refresh();
+            }
+        });
+
+        return addMessageTask;
+    }
 
     private void clearInput() {
         tfInput.clear();
