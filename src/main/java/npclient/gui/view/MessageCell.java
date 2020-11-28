@@ -122,6 +122,7 @@ public class MessageCell extends ListCell<Message> implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         tState.setFont(Font.font(null, FontPosture.ITALIC, 10));
+        tState.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
         container.getChildren().add(tState);
     }
 }
