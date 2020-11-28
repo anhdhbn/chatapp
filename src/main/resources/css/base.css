@@ -4,6 +4,10 @@
 }
 
 @font-face {
+    src: url('../font/meRegularItalic.otf');
+}
+
+@font-face {
     font-weight: bold;
     src: url('../font/meBold.otf');
 }

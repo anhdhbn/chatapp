@@ -43,7 +43,13 @@ public class ChatItemCell extends ListCell<ChatItem> {
                 }
             }
 
-            tLastMsg.setText(item.getLastMessage());
+            if (item.getLastMessage() == null) {
+                tLastMsg.setText("Tap and wave hand with your friend");
+                tLastMsg.setOpacity(0.6f);
+            } else {
+                tLastMsg.setText(item.getLastMessage());
+                tLastMsg.setOpacity(1f);
+            }
 
             String name = item.getName();
             if (!name.equals(prev)) {
