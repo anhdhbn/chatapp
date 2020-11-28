@@ -8,6 +8,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -42,6 +44,15 @@ public class ChatBoxController implements Initializable {
     @FXML
     private TextField tfInput;
 
+    @FXML
+    private ImageView sendIcon;
+    @FXML
+    private ImageView attachFileIcon;
+    @FXML
+    private ImageView voiceCallIcon;
+    @FXML
+    private ImageView emojiIcon;
+
     private String target;
     private boolean isGroup;
 
@@ -55,6 +66,14 @@ public class ChatBoxController implements Initializable {
                 return new MessageCell();
             }
         });
+        try {
+            sendIcon.setImage(new Image(getClass().getResourceAsStream("/img/send.png")));
+            attachFileIcon.setImage(new Image(getClass().getResourceAsStream("/img/file.png")));
+            voiceCallIcon.setImage(new Image(getClass().getResourceAsStream("/img/call.png")));
+            emojiIcon.setImage(new Image(getClass().getResourceAsStream("/img/emoji.png")));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
