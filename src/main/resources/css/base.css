@@ -32,6 +32,16 @@
     -fx-font-size: 14px;
 }
 
+.overlay-btn{
+    -fx-padding: 6px 9px;
+    -fx-background-radius: 4px;
+    -fx-background-color: #ffffff44;
+}
+
+.overlay-btn:hover{
+    -fx-background-color: #ffffff77;
+}
+
 .account {
     -fx-background-color: #f0f2f5;
     -fx-padding: 6px 12px;
