@@ -1,31 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
 <?import javafx.scene.image.*?>
-<?import javafx.scene.text.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<fx:root maxHeight="-Infinity" maxWidth="480.0" minHeight="-Infinity" minWidth="-Infinity" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="npclient.gui.controller.FileMessageController">
+<fx:root maxHeight="-Infinity" maxWidth="480.0" minHeight="-Infinity" minWidth="-Infinity" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="npclient.gui.controller.FileMessageController">
 <!--<VBox maxHeight="-Infinity" maxWidth="480.0" minHeight="-Infinity" minWidth="200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">-->
    <children>
-      <Text fx:id="tFileName" strokeType="OUTSIDE" strokeWidth="0.0" text="test.txt">
-         <VBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </VBox.margin></Text>
-      <ImageView fitHeight="100.0" fitWidth="100.0" onMouseClicked="#onDownload" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../img/file_thumbnail.png" />
-         </image>
-      </ImageView>
-      <Text fx:id="tFileSize" strokeType="OUTSIDE" strokeWidth="0.0" text="150 KB">
-         <VBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </VBox.margin>
-      </Text>
+      <HBox styleClass="account" >
+         <children>
+            <ImageView fitHeight="60.0" fitWidth="60.0" onMouseClicked="#onDownload" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../img/download.png" />
+               </image>
+            </ImageView>
+            <VBox>
+               <children>
+                  <Text fx:id="tFileName" strokeType="OUTSIDE" strokeWidth="0.0" text="test.txt" />
+                  <Text fx:id="tFileSize" strokeType="OUTSIDE" strokeWidth="0.0" text="150 KB" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
    </children>
 <!--</VBox>-->
 </fx:root>

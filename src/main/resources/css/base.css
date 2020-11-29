@@ -38,6 +38,10 @@
     -fx-background-radius: 9px;
 }
 
+.file-view {
+    -fx-padding: 6px 15px;
+}
+
 .input {
     -fx-font-size: 14px;
     -fx-background-color: #f0f2f5;
