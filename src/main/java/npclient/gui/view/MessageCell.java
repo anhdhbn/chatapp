@@ -98,14 +98,17 @@ public class MessageCell extends ListCell<Message> implements Initializable {
         if (content instanceof String) {
             TextMessageView messageView = new TextMessageView();
             messageView.setContent((String) content);
+            messageView.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
             paneContent.getChildren().add(messageView);
         } else if (content instanceof FileInfo) {
             FileMessageView messageView = new FileMessageView();
             messageView.setContent((FileInfo) content);
+            messageView.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
             paneContent.getChildren().add(messageView);
         } else if (content instanceof Emoji) {
             EmojiView messageView = new EmojiView();
             messageView.setContent((Emoji) content);
+            messageView.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
             paneContent.getChildren().add(messageView);
         }
     }
