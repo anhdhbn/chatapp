@@ -8,31 +8,35 @@
 <!--<fx:root fx:id="container" alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="320.0" prefHeight="96.0" type="javafx.scene.layout.HBox" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">-->
 <!--</fx:root>-->
 
-<HBox fx:id="container" alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="0.0" prefHeight="70.0" styleClass="account" stylesheets="@../css/base.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.scene.control.Label?>
+<HBox fx:id="container" alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="0.0" prefHeight="70.0"
+      styleClass="account" stylesheets="@../css/base.css" xmlns="http://javafx.com/javafx/11.0.1"
+      xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <CircleImageView fx:id="civAvatar" radius="24.0" />
+        <CircleImageView fx:id="civAvatar" radius="24.0"/>
         <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
             <children>
                 <Text fx:id="tTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
                     <VBox.margin>
-                        <Insets bottom="0.0" left="9.0" right="4.0" top="4.0" />
+                        <Insets bottom="0.0" left="9.0" right="4.0" top="4.0"/>
                     </VBox.margin>
                     <font>
-                        <Font name="meBold" size="16.0" />
+                        <Font name="meBold" size="16.0"/>
                     </font>
                 </Text>
-                <Text fx:id="tLastMsg" fill="#4d4d4d" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
+                <Label fx:id="tLastMsg" prefWidth="210.0" textFill="#4d4d4d" ellipsisString="..." textOverrun="ELLIPSIS" wrapText="false"
+                       text="Text">
                     <VBox.margin>
-                        <Insets bottom="4.0" left="9.0" right="4.0" />
+                        <Insets bottom="4.0" left="9.0" right="4.0"/>
                     </VBox.margin>
                     <font>
-                        <Font name="meRegular" size="14.0" />
+                        <Font name="meRegular" size="14.0"/>
                     </font>
-                </Text>
+                </Label>
             </children>
         </VBox>
     </children>
     <padding>
-        <Insets bottom="5.0" />
+        <Insets bottom="5.0"/>
     </padding>
 </HBox>
