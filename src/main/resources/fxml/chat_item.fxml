@@ -24,7 +24,7 @@
                         <Font name="meBold" size="16.0"/>
                     </font>
                 </Text>
-                <Label fx:id="tLastMsg" prefWidth="210.0" textFill="#4d4d4d" ellipsisString="..." textOverrun="ELLIPSIS" wrapText="false"
+                <Label fx:id="tLastMsg" prefWidth="208.0" textFill="#4d4d4d" ellipsisString="..." textOverrun="ELLIPSIS" wrapText="false"
                        text="Text">
                     <VBox.margin>
                         <Insets bottom="4.0" left="9.0" right="4.0"/>
