@@ -19,5 +19,8 @@ public class TextMessageController implements Initializable {
 
     public void setContent(String content) {
         this.tContent.setText(content);
+        if (content.length() > 42) {
+            tContent.setWrappingWidth(264);
+        }
     }
 }
