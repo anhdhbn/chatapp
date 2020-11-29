@@ -94,6 +94,7 @@ public class MessageCell extends ListCell<Message> implements Initializable {
         if (isFromMe) {
             container.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
             tName.setVisible(false);
+            tName.setFont(new Font(0));
         } else {
             container.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
             container.getStyleClass().add("message-receive");
