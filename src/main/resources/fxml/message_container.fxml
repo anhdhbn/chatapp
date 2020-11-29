@@ -23,4 +23,7 @@
             <Font name="meRegular Regular" size="10.0" />
          </font></Text>
    </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
 </VBox>
