@@ -38,10 +38,6 @@
     -fx-background-radius: 9px;
 }
 
-.file-view {
-    -fx-padding: 6px 15px;
-}
-
 .input {
     -fx-font-size: 14px;
     -fx-background-color: #f0f2f5;
@@ -86,6 +82,23 @@
 }
 
 .message-receive .message Text {
+    -fx-fill: #000;
+}
+
+.file-view {
+    -fx-background-color: #4e3fc2;
+}
+
+.file-view Text {
+    -fx-fill: #fff;
+    -fx-text-fill: #fff;
+}
+
+.message-receive .file-view {
+    -fx-background-color: #e3e6ea;
+}
+
+.message-receive .file-view Text {
     -fx-fill: #000;
 }
 

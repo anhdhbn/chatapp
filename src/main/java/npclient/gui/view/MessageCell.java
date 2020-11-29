@@ -30,7 +30,12 @@ public class MessageCell extends ListCell<Message> implements Initializable {
     @FXML
     private AnchorPane paneContent;
 
+    Object content;
+    AbstractMessageView messageView;
+
     private Text tState = new Text();
+
+    private boolean isFromMe;
 
     @Override
     protected void updateItem(Message item, boolean empty) {
@@ -54,11 +59,12 @@ public class MessageCell extends ListCell<Message> implements Initializable {
 
             setSender(item.getFrom());
             setTime(item.getTime());
-            setContent(item.getContent());
+            content = item.getContent();
+            setContent();
             setState(item.getState());
 
             final String username = MyAccount.getInstance().getName();
-            boolean isFromMe = item.getFrom().equals(username);
+            isFromMe = item.getFrom().equals(username);
             setMessageAlignment(isFromMe);
 
             setText(null);
@@ -90,24 +96,34 @@ public class MessageCell extends ListCell<Message> implements Initializable {
             tName.setVisible(false);
         } else {
             container.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
+            container.getStyleClass().add("message-receive");
+            if (content != null && content instanceof FileInfo) {
+                ((FileMessageView) messageView).setIcon(getClass().getResourceAsStream("/img/download.png"));
+            }
         }
     }
 
-    private void setContent(Object content) {
+    private void setContent() {
         paneContent.getChildren().clear();
         if (content instanceof String) {
             TextMessageView messageView = new TextMessageView();
             messageView.setContent((String) content);
+            this.messageView = messageView;
             messageView.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
             paneContent.getChildren().add(messageView);
         } else if (content instanceof FileInfo) {
             FileMessageView messageView = new FileMessageView();
             messageView.setContent((FileInfo) content);
+            this.messageView = messageView;
             messageView.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
+            if (isFromMe) {
+                messageView.setIcon(getClass().getResourceAsStream("/img/download-light.png"));
+            }
             paneContent.getChildren().add(messageView);
         } else if (content instanceof Emoji) {
             EmojiView messageView = new EmojiView();
             messageView.setContent((Emoji) content);
+            this.messageView = messageView;
             messageView.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
             paneContent.getChildren().add(messageView);
         }

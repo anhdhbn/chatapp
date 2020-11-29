@@ -2,6 +2,8 @@ package npclient.gui.controller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -12,6 +14,7 @@ import nputils.FileInfo;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -22,11 +25,18 @@ public class FileMessageController implements Initializable {
     @FXML
     private Text tFileSize;
 
+    @FXML
+    private ImageView fileIcon;
+
     private FileInfo fileInfo;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+    }
+
+    public void setIcon(InputStream url) {
+        fileIcon.setImage(new Image(url));
     }
 
     public void setFileInfo(FileInfo fileInfo) {
