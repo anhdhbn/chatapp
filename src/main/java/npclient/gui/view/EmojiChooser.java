@@ -10,6 +10,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import npclient.CliLogger;
@@ -30,6 +32,8 @@ public class EmojiChooser extends Stage {
         Parent root = initializeView();
         Scene scene = new Scene(root);
         setScene(scene);
+
+        scene.getStylesheets().add(getClass().getResource("/css/base.css").toString());
 
         setResizable(false);
 
@@ -79,6 +83,19 @@ public class EmojiChooser extends Stage {
         ScrollPane scrollPane = new ScrollPane(grid);
         scrollPane.setFitToWidth(true);
         scrollPane.setPrefViewportHeight(HEIGHT);
+
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+        //remove event
+        scrollPane.getStyleClass().add("emoji-popup");
+        scrollPane.addEventFilter(ScrollEvent.SCROLL, new EventHandler<ScrollEvent>() {
+            @Override
+            public void handle(ScrollEvent event) {
+                if (event.getDeltaX() != 0) {
+                    event.consume();
+                }
+            }
+        });
 
         return scrollPane;
     }

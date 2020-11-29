@@ -42,6 +42,11 @@
     -fx-background-color: #ffffff77;
 }
 
+.emoji-popup .scroll-bar:vertical .track {
+    -fx-fill: transparent;
+    -fx-background-color: #ffffff77;
+}
+
 .account {
     -fx-background-color: #f0f2f5;
     -fx-padding: 6px 12px;
