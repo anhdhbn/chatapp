@@ -221,7 +221,7 @@ public class ChatBoxController implements Initializable {
                     Messages messages = addMessageTask.get();
                     if (listener != null)
                         listener.onSend(messages);
-                    setItem(messages);
+                    addItem(messages.newest());
                 } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();
                 }
@@ -254,7 +254,7 @@ public class ChatBoxController implements Initializable {
         String topic = getMessageTopic();
         Messages existMessages = MessageManager.getInstance().get(topic);
         if (existMessages != null)
-            setItem(existMessages);
+            setItems(existMessages);
     }
 
     private String getMessageTopic() {
@@ -270,10 +270,13 @@ public class ChatBoxController implements Initializable {
         return target;
     }
 
-    public void setItem(Messages messages) {
+    public void setItems(Messages messages) {
         lvMessage.getItems().setAll(messages);
     }
 
+    public void addItem(Message message) {
+        lvMessage.getItems().add(message);
+    }
 
     public void setOnSendListener(OnSendListener listener) {
         this.listener = listener;

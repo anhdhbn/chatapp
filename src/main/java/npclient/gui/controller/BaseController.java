@@ -252,7 +252,8 @@ public class BaseController implements Initializable {
             }
 
             if (isCurrentChat) {
-                chatBox.setItems(messages);
+//                chatBox.setItems(messages);
+                chatBox.addItem(msg);
                 messages.setSeen(true);
             } else {
                 messages.setSeen(false);
@@ -417,12 +418,12 @@ public class BaseController implements Initializable {
         if (chatItem != null) {
             // update chat item info
             chatItem.update(messages);
-
+            chatItem.getCell().updateItem(chatItem);
 //            // swap to first
 //            listView.getItems().remove(chatItem);
 //            listView.getItems().add(0, chatItem);
 //            listView.getSelectionModel().select(0);
-            listView.refresh();
+//            listView.refresh();
         }
     }
 

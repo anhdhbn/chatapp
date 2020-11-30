@@ -1,6 +1,7 @@
 package npclient.gui.entity;
 
 import npclient.MyAccount;
+import npclient.gui.view.ChatItemCell;
 
 public abstract class ChatItem implements Comparable<ChatItem> {
 
@@ -8,6 +9,9 @@ public abstract class ChatItem implements Comparable<ChatItem> {
     protected String lastMessage;
     protected long time;
     protected boolean seen;
+
+    // for fast rendering
+    protected ChatItemCell cell;
 
     public String getName() {
         return name;
@@ -61,6 +65,14 @@ public abstract class ChatItem implements Comparable<ChatItem> {
         }
 
         setLastMessage(rawLastMsg);
+    }
+
+    public ChatItemCell getCell() {
+        return cell;
+    }
+
+    public void setCell(ChatItemCell cell) {
+        this.cell = cell;
     }
 
     @Override
