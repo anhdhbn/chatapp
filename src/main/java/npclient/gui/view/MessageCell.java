@@ -57,14 +57,15 @@ public class MessageCell extends ListCell<Message> implements Initializable {
                 }
             }
 
+            final String username = MyAccount.getInstance().getName();
+            isFromMe = item.getFrom().equals(username);
+
             setSender(item.getFrom());
             setTime(item.getTime());
             content = item.getContent();
             setContent();
             setState(item.getState());
 
-            final String username = MyAccount.getInstance().getName();
-            isFromMe = item.getFrom().equals(username);
             setMessageAlignment(isFromMe);
 
             setText(null);
@@ -95,12 +96,15 @@ public class MessageCell extends ListCell<Message> implements Initializable {
             container.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
             tName.setVisible(false);
             tName.setFont(new Font(0));
+            container.getStyleClass().remove("message-receive");
         } else {
             container.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
             container.getStyleClass().add("message-receive");
             if (content != null && content instanceof FileInfo) {
                 ((FileMessageView) messageView).setIcon(getClass().getResourceAsStream("/img/download.png"));
             }
+            tName.setFont(new Font(12));
+            tName.setVisible(true);
         }
     }
 
