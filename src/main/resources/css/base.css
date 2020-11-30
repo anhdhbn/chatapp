@@ -132,6 +132,12 @@
     -fx-background-color: #fff;
 }
 
+.endcall-btn{
+    -fx-background-color: #ff7979;
+    -fx-background-radius: 400px;
+    -fx-padding: 9px;
+}
+
 .list-view, .split-pane {
     -fx-background-insets: 0;
     -fx-padding: 0;

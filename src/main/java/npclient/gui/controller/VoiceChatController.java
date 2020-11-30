@@ -1,8 +1,11 @@
 package npclient.gui.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.stage.Stage;
 import npclient.CliLogger;
 import npclient.MyAccount;
 import npclient.core.UDPConnection;
@@ -96,5 +99,11 @@ public class VoiceChatController implements Initializable {
         new Publisher(topic, username)
                 .putData(Constants.VOICE_QUIT)
                 .post();
+    }
+
+    public void endCall(ActionEvent actionEvent) {
+        stop();
+        Stage stage = (Stage) ((Node) (actionEvent.getSource())).getScene().getWindow();
+        stage.close();
     }
 }
