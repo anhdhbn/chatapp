@@ -26,15 +26,12 @@ import npclient.core.command.Subscriber;
 import npclient.exception.InvalidNameException;
 import npclient.gui.util.AudioUtils;
 import npclient.gui.view.*;
-import nputils.Emoji;
-import nputils.FileInfo;
+import nputils.*;
 import npclient.exception.DuplicateGroupException;
 import npclient.gui.entity.*;
 import npclient.gui.manager.MessageManager;
 import npclient.gui.manager.MessageSubscribeManager;
 import npclient.gui.util.UIUtils;
-import nputils.Constants;
-import nputils.DataTransfer;
 
 import javax.sound.sampled.LineUnavailableException;
 import java.io.IOException;
@@ -193,8 +190,9 @@ public class BaseController implements Initializable {
 
     /**
      * Generate subscriber subscribe listen to message from a user
+     *
      * @param username of current user
-     * @param topic topic
+     * @param topic    topic
      * @return subscriber
      */
     private Subscriber subscribeMessages(String username, String topic) {
@@ -211,11 +209,15 @@ public class BaseController implements Initializable {
 
     /**
      * Callback fires when receive new message from user
-     * @param topic subscribed topic
+     *
+     * @param topic   subscribed topic
      * @param message received
      */
     private void onReceiveNewMessage(String topic, DataTransfer message) {
         Message msg = null;
+
+        NotiAudio notiAudio = new NotiAudio();
+        notiAudio.start();
 
         Object content = message.data;
         if (content instanceof String) {
@@ -262,6 +264,7 @@ public class BaseController implements Initializable {
 
     /**
      * Get current chatting user
+     *
      * @return current chatting username
      */
     private ChatBox getCurrentChat() {
@@ -284,6 +287,7 @@ public class BaseController implements Initializable {
 
     /**
      * Change chat box section by username
+     *
      * @param newChat chat item
      */
     private void changeChatBox(ChatItem newChat) {
