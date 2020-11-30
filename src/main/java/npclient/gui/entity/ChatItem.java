@@ -45,7 +45,7 @@ public abstract class ChatItem implements Comparable<ChatItem> {
         setSeen(messages.isSeen());
 
         String rawLastMsg = null;
-        Message lastMsg = messages.peek();
+        Message lastMsg = messages.newest();
         if (lastMsg != null) {
             String lastMsgOwner = lastMsg.getFrom().equals(MyAccount.getInstance().getName()) ? "You" : getName();
 
