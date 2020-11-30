@@ -4,9 +4,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.NodeOrientation;
+import javafx.scene.Node;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.Text;
@@ -95,17 +99,29 @@ public class MessageCell extends ListCell<Message> implements Initializable {
         if (isFromMe) {
             container.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
             tName.setVisible(false);
+            changeTextColor(messageView, "white");
             tName.setFont(new Font(0));
             messageView.setStyle("-fx-background-color: #5b61b9");
 
         } else {
             container.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
             messageView.setStyle("-fx-background-color: #e3e6ea");
+            changeTextColor(messageView, "black");
             if (content != null && content instanceof FileInfo) {
                 ((FileMessageView) messageView).setIcon(getClass().getResourceAsStream("/img/download.png"));
             }
             tName.setFont(new Font(12));
             tName.setVisible(true);
+        }
+    }
+
+    private void changeTextColor(Node root, String color) {
+        if (root instanceof Pane) {
+            for (Node child : ((Pane) root).getChildren()) {
+                changeTextColor(child, color);
+            }
+        } else if (root instanceof Text) {
+            root.setStyle("-fx-fill: " + color);
         }
     }
 
