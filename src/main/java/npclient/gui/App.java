@@ -1,9 +1,11 @@
 package npclient.gui;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import npclient.gui.manager.StageManager;
 import npclient.gui.util.UIUtils;
 
@@ -17,8 +19,14 @@ public class App extends Application {
 
         primaryStage.setTitle("Chatapp");
         primaryStage.setScene(scene);
-//        primaryStage.setFullScreen(true);
         primaryStage.show();
+
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                System.exit(0);
+            }
+        });
 
         StageManager.getInstance().setPrimaryStage(primaryStage);
     }
