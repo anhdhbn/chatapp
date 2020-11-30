@@ -132,6 +132,13 @@
     -fx-background-color: #fff;
 }
 
+.login-banner{
+    -fx-background-image: url('../img/splash.png');
+    -fx-background-size: 350px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
 .endcall-btn{
     -fx-background-color: #ff7979;
     -fx-background-radius: 400px;
