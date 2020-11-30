@@ -23,4 +23,14 @@ public class FileMessageView extends AbstractMessageView<FileInfo, FileMessageCo
     public void setContent(FileInfo content) {
         getController().setFileInfo(content);
     }
+
+    @Override
+    public void changeBackground(boolean isFromMe) {
+        super.changeBackground(isFromMe);
+
+        if (isFromMe)
+            setIcon(getClass().getResourceAsStream("/img/download-light.png"));
+        else
+            setIcon(getClass().getResourceAsStream("/img/download.png"));
+    }
 }

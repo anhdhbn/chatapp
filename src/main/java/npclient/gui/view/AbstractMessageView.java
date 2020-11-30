@@ -30,9 +30,7 @@ public abstract class AbstractMessageView<T, C> extends VBox {
     public abstract void setContent(T content);
 
     public void changeBackground(boolean isFromMe) {
-        if (this instanceof EmojiView)
-            setStyle("-fx-background-color: transparent");
-        else if (isFromMe) {
+        if (isFromMe) {
             changeTextColor(this, "white");
             setStyle("-fx-background-color: #5b61b9");
         } else {

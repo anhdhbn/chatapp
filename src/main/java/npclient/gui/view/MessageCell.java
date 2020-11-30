@@ -4,13 +4,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.NodeOrientation;
-import javafx.scene.Node;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.Text;
@@ -103,9 +99,9 @@ public class MessageCell extends ListCell<Message> implements Initializable {
 
         } else {
             container.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
-            if (content != null && content instanceof FileInfo) {
-                ((FileMessageView) messageView).setIcon(getClass().getResourceAsStream("/img/download.png"));
-            }
+//            if (content != null && content instanceof FileInfo) {
+//                ((FileMessageView) messageView).setIcon(getClass().getResourceAsStream("/img/download.png"));
+//            }
             tName.setFont(new Font(12));
             tName.setVisible(true);
         }
@@ -126,9 +122,9 @@ public class MessageCell extends ListCell<Message> implements Initializable {
             messageView.setContent((FileInfo) content);
             this.messageView = messageView;
             messageView.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
-            if (isFromMe) {
-                messageView.setIcon(getClass().getResourceAsStream("/img/download-light.png"));
-            }
+//            if (isFromMe) {
+//                messageView.setIcon(getClass().getResourceAsStream("/img/download-light.png"));
+//            }
             paneContent.getChildren().add(messageView);
         } else if (content instanceof Emoji) {
             EmojiView messageView = new EmojiView();

@@ -15,4 +15,9 @@ public class EmojiView extends AbstractMessageView<Emoji, EmojiMessageController
     public void setContent(Emoji content) {
         getController().setEmoji(content);
     }
+
+    @Override
+    public void changeBackground(boolean isFromMe) {
+        setStyle("-fx-background-color: transparent");
+    }
 }
