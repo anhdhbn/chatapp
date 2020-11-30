@@ -58,6 +58,8 @@ public class EmojiChooser extends Stage {
             imageView.setFitHeight(EMOJI_SIZE);
             imageView.setFitWidth(EMOJI_SIZE);
 
+            imageView.getStyleClass().add("emoji");
+
             grid.add(imageView, col, row);
             GridPane.setHalignment(imageView, HPos.CENTER);
             GridPane.setValignment(imageView, VPos.CENTER);
@@ -66,6 +68,7 @@ public class EmojiChooser extends Stage {
                 @Override
                 public void handle(MouseEvent event) {
                     logger.debug("Choose " + emoji.name());
+                    logger.debug(imageView.getStyleClass());
                     if (listener != null) {
                         listener.onSelect(emoji);
                     }

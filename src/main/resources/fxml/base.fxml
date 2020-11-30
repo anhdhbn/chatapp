@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -53,10 +54,14 @@
                 </TabPane>
             </children>
         </AnchorPane>
-        <AnchorPane fx:id="paneChatBox" prefHeight="200.0" prefWidth="200.0" styleClass="bg">
+        <AnchorPane fx:id="paneChatBox" prefHeight="200.0" prefWidth="200.0">
             <opaqueInsets>
                 <Insets bottom="10.0" />
             </opaqueInsets>
+         <styleClass>
+            <String fx:value="bg" />
+            <String fx:value="panel-chatbox" />
+         </styleClass>
         </AnchorPane>
     </items>
 </SplitPane>
