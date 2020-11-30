@@ -96,10 +96,11 @@ public class MessageCell extends ListCell<Message> implements Initializable {
             container.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
             tName.setVisible(false);
             tName.setFont(new Font(0));
-            container.getStyleClass().remove("message-receive");
+            messageView.setStyle("-fx-background-color: #5b61b9");
+
         } else {
             container.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
-            container.getStyleClass().add("message-receive");
+            messageView.setStyle("-fx-background-color: #e3e6ea");
             if (content != null && content instanceof FileInfo) {
                 ((FileMessageView) messageView).setIcon(getClass().getResourceAsStream("/img/download.png"));
             }
