@@ -18,7 +18,7 @@
 }
 
 .button {
-    -fx-background-color: #5244c2;
+    -fx-background-color: #5b61b9;
     -fx-font-weight: bold;
     -fx-text-fill: #ffffff;
     -fx-font-size: 14px;
@@ -27,7 +27,7 @@
 }
 
 .button:hover {
-    -fx-background-color: #4f3fd0;
+    -fx-background-color: #484db1;
     -fx-text-fill: #e6e6e6;
     -fx-font-size: 14px;
 }
@@ -90,7 +90,7 @@
 }
 
 .message {
-    -fx-background-color: #4e3fc2;
+    -fx-background-color: #5b61b9;
     -fx-text-fill: #fff;
     -fx-padding: 12px;
     -fx-background-radius: 1.3em;
@@ -112,7 +112,7 @@
 }
 
 .file-view {
-    -fx-background-color: #4e3fc2;
+    -fx-background-color: #5b61b9;
 }
 
 .file-view Text {
@@ -170,7 +170,7 @@
 }
 
 .tab:selected .tab-label {
-    -fx-text-fill: #4e3fc2;
+    -fx-text-fill: #5b61b9;
 }
 
 .tab:focused {
