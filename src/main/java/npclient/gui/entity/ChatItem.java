@@ -54,11 +54,11 @@ public abstract class ChatItem implements Comparable<ChatItem> {
             String lastMsgOwner = lastMsg.getFrom().equals(MyAccount.getInstance().getName()) ? "You" : getName();
 
             if (lastMsg instanceof FileMessage) {
-                rawLastMsg = String.format("%s sent you a attachment", lastMsgOwner);
+                rawLastMsg = String.format("%s sent a attachment", lastMsgOwner);
             } else if (lastMsg instanceof TextMessage) {
                 rawLastMsg = ((TextMessage) lastMsg).getContent();
             } else if (lastMsg instanceof EmojiMessage) {
-                rawLastMsg = String.format("%s sent you a emoji", lastMsgOwner);
+                rawLastMsg = String.format("%s sent a emoji", lastMsgOwner);
             }
 
             setTime(lastMsg.getTime());

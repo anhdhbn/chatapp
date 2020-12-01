@@ -1,11 +1,7 @@
 package npclient.gui.view;
 
-import javafx.fxml.FXML;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import nputils.FileInfo;
 import npclient.gui.controller.FileMessageController;
+import nputils.FileInfo;
 
 import java.io.InputStream;
 

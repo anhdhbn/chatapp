@@ -64,7 +64,7 @@ public class ChatItemCell extends ListCell<ChatItem> {
             updateLastMsg(lastMsg);
         }
 
-        prevName = name;
+        this.prevName = name;
         this.prevMsg = item.getLastMessage();
 
         setText(null);

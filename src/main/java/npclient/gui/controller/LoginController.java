@@ -4,9 +4,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import npclient.MyAccount;
 import npclient.core.UDPConnection;
 import npclient.core.callback.ErrorListener;
@@ -23,12 +23,17 @@ import java.util.ResourceBundle;
 public class LoginController implements Initializable {
 
     @FXML
+    private Label lBtnLabel;
+    @FXML
     private Button btnEnter;
     @FXML
     private TextField tfUsername;
+    @FXML
+    private HBox indicator;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+//        indicator.visibleProperty().bind(btnEnter.visibleProperty().not());
     }
 
     @FXML
@@ -40,12 +45,16 @@ public class LoginController implements Initializable {
 
     private void lock() {
         tfUsername.setDisable(true);
+        lBtnLabel.setText("");
         btnEnter.setDisable(true);
+        indicator.setVisible(true);
     }
 
     private void unlock() {
         tfUsername.setDisable(false);
+        lBtnLabel.setText("Enter");
         btnEnter.setDisable(false);
+        indicator.setVisible(false);
     }
 
     private void login(String username) {

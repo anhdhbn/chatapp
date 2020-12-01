@@ -3,6 +3,8 @@ package npclient.gui.controller;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -25,6 +27,7 @@ import npclient.core.command.Publisher;
 import npclient.core.command.Subscriber;
 import npclient.exception.InvalidNameException;
 import npclient.gui.util.AudioUtils;
+import npclient.gui.util.JFXSmoothScroll;
 import npclient.gui.view.*;
 import nputils.*;
 import npclient.exception.DuplicateGroupException;
@@ -67,6 +70,9 @@ public class BaseController implements Initializable {
 
         lvUserItem.setCellFactory(cellFactory);
         lvGroupItem.setCellFactory(cellFactory);
+
+        JFXSmoothScroll.smoothScrollingListView(lvUserItem, 1f);
+        JFXSmoothScroll.smoothScrollingListView(lvGroupItem, 1f);
 
         ChangeListener<ChatItem> itemChangeListener = new ChangeListener<ChatItem>() {
             @Override
@@ -139,11 +145,8 @@ public class BaseController implements Initializable {
                     @Override
                     public void onReceive(DataTransfer message) {
                         // Get current user in chat box
-                        String current = null;
-
                         ChatBox currentChatBox = getCurrentChat();
-                        if (currentChatBox != null)
-                            current = currentChatBox.getTarget();
+                        final String current = currentChatBox != null ? currentChatBox.getTarget() : null;
 
                         boolean isCurrentOnline = current == null;
 
