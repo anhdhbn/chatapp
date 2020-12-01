@@ -70,8 +70,8 @@ public class LoginController implements Initializable {
                 .setErrorListener(new ErrorListener() {
                     @Override
                     public void onReceive(Exception err) {
-                        loginFailure(err);
                         unlock();
+                        loginFailure(err);
                     }
                 })
                 .post();
