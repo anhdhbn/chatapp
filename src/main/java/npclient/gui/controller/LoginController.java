@@ -33,7 +33,9 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-//        indicator.visibleProperty().bind(btnEnter.visibleProperty().not());
+        indicator.visibleProperty().bind(btnEnter.disabledProperty());
+        tfUsername.disableProperty().bind(btnEnter.disabledProperty());
+        lBtnLabel.visibleProperty().bind(btnEnter.disabledProperty().not());
     }
 
     @FXML
@@ -44,17 +46,11 @@ public class LoginController implements Initializable {
     }
 
     private void lock() {
-        tfUsername.setDisable(true);
-        lBtnLabel.setText("");
         btnEnter.setDisable(true);
-        indicator.setVisible(true);
     }
 
     private void unlock() {
-        tfUsername.setDisable(false);
-        lBtnLabel.setText("Enter");
         btnEnter.setDisable(false);
-        indicator.setVisible(false);
     }
 
     private void login(String username) {

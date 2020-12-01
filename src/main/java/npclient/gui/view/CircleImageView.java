@@ -1,9 +1,12 @@
 package npclient.gui.view;
 
 import javafx.beans.NamedArg;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import npclient.gui.task.RetrieveAvatarTask;
 import npclient.gui.util.UIUtils;
 
 import java.io.IOException;
@@ -16,14 +19,16 @@ public class CircleImageView extends Circle {
     }
 
     public void update(String name) {
-        Image image;
-        try {
-            InputStream stream = UIUtils.retrieveAvatar(name);
-            image = new Image(stream);
-            setFill(new ImagePattern(image));
-        } catch (IOException e) {
-            image = new Image("/img/avatar-100.jpg");
-        }
-        setFill(new ImagePattern(image));
+        Image defaultImage = new Image("/img/avatar-100.png");
+        setFill(new ImagePattern(defaultImage));
+        RetrieveAvatarTask task = new RetrieveAvatarTask(name);
+        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                Image image = task.getValue();
+                setFill(new ImagePattern(image));
+            }
+        });
+        new Thread(task).start();
     }
 }

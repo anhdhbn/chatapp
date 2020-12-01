@@ -92,14 +92,6 @@ public class BaseController implements Initializable {
         final String name = MyAccount.getInstance().getName();
         this.tUsername.setText(name);
         this.civAvatar.update(name);
-
-        this.civAvatar.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                EmojiChooser chooser = new EmojiChooser();
-                chooser.show();
-            }
-        });
     }
 
     /**
