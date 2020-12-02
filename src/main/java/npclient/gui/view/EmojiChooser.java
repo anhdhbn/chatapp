@@ -7,6 +7,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -20,6 +21,9 @@ import npclient.gui.manager.StageManager;
 import npclient.gui.task.RetrieveEmojiTask;
 import npclient.gui.util.UIUtils;
 import nputils.Emoji;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class EmojiChooser extends Stage {
 
@@ -53,29 +57,33 @@ public class EmojiChooser extends Stage {
         grid.setVgap(PADDING);
         grid.setPadding(new Insets(PADDING));
 
+        ExecutorService es = Executors.newFixedThreadPool(5);
+
         int row = 0, col = 0;
         for (Emoji emoji : Emoji.values()) {
-//            Image image = UIUtils.Emoji.toImage(emoji);
-//            ImageView imageView = new ImageView(image);
+            ProgressIndicator indicator = new ProgressIndicator();
+            indicator.setMaxSize(INDICATOR_SIZE, INDICATOR_SIZE);
+            grid.add(indicator, col, row);
+
             ImageView imageView = new ImageView();
-            new RetrieveEmojiTask(emoji)
-                    .setView(imageView)
-                    .start();
-//            RetrieveEmojiTask task = new RetrieveEmojiTask(emoji);
-//            task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-//                @Override
-//                public void handle(WorkerStateEvent event) {
-//                    Image image = task.getValue();
-//                    imageView.setImage(image);
-//                }
-//            });
-//            new Thread(task).start();
             imageView.setFitHeight(EMOJI_SIZE);
             imageView.setFitWidth(EMOJI_SIZE);
-
             imageView.getStyleClass().add("emoji");
 
             grid.add(imageView, col, row);
+
+            RetrieveEmojiTask task = new RetrieveEmojiTask(emoji);
+
+            task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                @Override
+                public void handle(WorkerStateEvent event) {
+                    Image image = task.getValue();
+                    imageView.setImage(image);
+                    grid.getChildren().remove(indicator);
+                }
+            });
+            es.submit(task);
+
             GridPane.setHalignment(imageView, HPos.CENTER);
             GridPane.setValignment(imageView, VPos.CENTER);
 
@@ -124,6 +132,7 @@ public class EmojiChooser extends Stage {
 
     private static final int PADDING = 20;
     private static final int EMOJI_SIZE = 64;
+    private static final double INDICATOR_SIZE = EMOJI_SIZE * 0.75f;
     private static final int COLUMN = 5;
     private static final int HEIGHT = 400;
 }
