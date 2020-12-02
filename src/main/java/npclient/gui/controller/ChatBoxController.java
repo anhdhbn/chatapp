@@ -4,10 +4,7 @@ import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
@@ -37,6 +34,8 @@ import java.util.concurrent.ExecutionException;
 
 public class ChatBoxController implements Initializable {
 
+    @FXML
+    private Button btnVoiceCall;
     @FXML
     private Label lTitle;
     @FXML
@@ -124,26 +123,6 @@ public class ChatBoxController implements Initializable {
     private void sendEmoji(Emoji emoji) {
         AddMessageTask addMessageTask = generateAddMessageTask(emoji);
         addMessageTask.start();
-
-//        final String topic = getMessageTopic();
-//        final String username = MyAccount.getInstance().getName();
-//
-//        new Publisher(topic, username)
-//                .putData(emoji)
-//                .setSuccessListener(new OnPublishMessageSuccess() {
-//                    @Override
-//                    public void onReceive(DataTransfer message) {
-//                        EmojiMessage m = new EmojiMessage();
-//                        m.setFrom(username);
-//                        m.setContent(emoji);
-//                        m.setTime(System.currentTimeMillis());
-//                        Messages messages = MessageManager.getInstance().append(topic, m);
-//                        setItem(messages);
-//                        if (listener != null) {
-//                            listener.onSend(messages);
-//                        }
-//                    }
-//                }).post();
     }
 
     private void sendFile(File file) {
@@ -157,55 +136,11 @@ public class ChatBoxController implements Initializable {
         });
 
         addMessageTask.start();
-
-//        final String username = MyAccount.getInstance().getName();
-//
-//        try {
-//            FileInfo fileInfo = new FileInfo(file);
-//            new Publisher(topic, username)
-//                    .putData(fileInfo)
-//                    .setSuccessListener(new OnPublishMessageSuccess() {
-//                        @Override
-//                        public void onReceive(DataTransfer message) {
-//                            FileMessage m = new FileMessage();
-//                            m.setFrom(username);
-//                            m.setContent(fileInfo);
-//                            m.setTime(System.currentTimeMillis());
-//                            Messages messages = MessageManager.getInstance().append(topic, m);
-//                            setItem(messages);
-//                            if (listener != null) {
-//                                listener.onSend(messages);
-//                            }
-//                        }
-//                    }).post();
-//        } catch (IOException | BigFileTransferException e) {
-//            UIUtils.showErrorAlert("Can't attach chosen file: " + e.getMessage());
-//        }
     }
 
     private void sendText(String input) {
         AddMessageTask addMessageTask = generateAddMessageTask(input);
         addMessageTask.start();
-
-//        new Publisher(topic, username)
-//                .putData(input)
-//                .setSuccessListener(new OnPublishMessageSuccess() {
-//                    @Override
-//                    public void onReceive(DataTransfer message) {
-//                        TextMessage m = new TextMessage();
-//                        m.setFrom(username);
-//                        m.setContent(input);
-//                        m.setTime(System.currentTimeMillis());
-//                        clearInput();
-//                        Messages messages = MessageManager.getInstance().append(topic, m);
-//                        setItem(messages);
-//                        if (listener != null) {
-//                            listener.onSend(messages);
-//                        }
-//                        m.setState(Message.State.SUCCESS);
-//                        lvMessage.refresh();
-//                    }
-//                }).post();
     }
 
     private AddMessageTask generateAddMessageTask(Object content) {
@@ -243,12 +178,19 @@ public class ChatBoxController implements Initializable {
     }
 
     public void setTitle(String target, boolean isGroup) {
+        this.isGroup = isGroup;
         this.target = target;
         String title;
-        if (isGroup) title = String.format("g:/%s", target);
-        else title = String.format("u:/%s", target);
+        if (isGroup) {
+            title = String.format("g:/%s", target);
+            voiceCallIcon.setOpacity(0.5f);
+            btnVoiceCall.setDisable(true);
+        } else {
+            title = String.format("u:/%s", target);
+            voiceCallIcon.setOpacity(1f);
+            btnVoiceCall.setDisable(false);
+        }
         this.lTitle.setText(title);
-        this.isGroup = isGroup;
 
         // load exist message
         String topic = getMessageTopic();
