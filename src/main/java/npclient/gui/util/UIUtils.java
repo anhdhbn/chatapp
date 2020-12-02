@@ -83,7 +83,7 @@ public class UIUtils {
                     b = (byte) ((c - '0') / BOUND * Character.MAX_VALUE);
                 } else if (Character.isAlphabetic(nameBuf[i])) {
                     char lower = Character.toLowerCase(nameBuf[i]);
-                    b = (byte) ((c - 'a' + 9) / BOUND * Character.MAX_VALUE);
+                    b = (byte) ((lower - 'a' + 9) / BOUND * Character.MAX_VALUE);
                 } else b = (byte) c;
                 colorBuf[i] = b;
                 i++;
