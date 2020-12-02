@@ -1,5 +1,6 @@
 package npclient.gui.view;
 
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -16,6 +17,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import npclient.CliLogger;
 import npclient.gui.manager.StageManager;
+import npclient.gui.task.RetrieveEmojiTask;
 import npclient.gui.util.UIUtils;
 import nputils.Emoji;
 
@@ -53,8 +55,21 @@ public class EmojiChooser extends Stage {
 
         int row = 0, col = 0;
         for (Emoji emoji : Emoji.values()) {
-            Image image = UIUtils.Emoji.toImage(emoji);
-            ImageView imageView = new ImageView(image);
+//            Image image = UIUtils.Emoji.toImage(emoji);
+//            ImageView imageView = new ImageView(image);
+            ImageView imageView = new ImageView();
+            new RetrieveEmojiTask(emoji)
+                    .setView(imageView)
+                    .start();
+//            RetrieveEmojiTask task = new RetrieveEmojiTask(emoji);
+//            task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+//                @Override
+//                public void handle(WorkerStateEvent event) {
+//                    Image image = task.getValue();
+//                    imageView.setImage(image);
+//                }
+//            });
+//            new Thread(task).start();
             imageView.setFitHeight(EMOJI_SIZE);
             imageView.setFitWidth(EMOJI_SIZE);
 

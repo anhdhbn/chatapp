@@ -112,8 +112,9 @@ public class UIUtils {
 
         public static Image toImage(nputils.Emoji emoji) {
             String name = emoji.name().substring(1);
-            String filePath = String.format("/img/emoji/%s.png", name);
+            String filePath = String.format("/img/emoji/%s.gif", name);
             filePath = filePath.replace("_", "-");
+//            filePath = "/img/emoji/face_throwing_a_kiss_256_1.gif";
             return new Image(filePath);
         }
 

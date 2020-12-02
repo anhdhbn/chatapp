@@ -19,17 +19,17 @@
    <children>
       <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0">
          <image>
-            <Image url="@../img/emoji/001-happy.png" />
+            <Image url="@../img/emoji/still/001-happy.png" />
          </image>
       </ImageView>
       <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
          <image>
-            <Image url="@../img/emoji/001-happy.png" />
+            <Image url="@../img/emoji/still/001-happy.png" />
          </image>
       </ImageView>
       <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
          <image>
-            <Image url="@../img/emoji/001-happy.png" />
+            <Image url="@../img/emoji/still/001-happy.png" />
          </image>
       </ImageView>
    </children>
