@@ -24,11 +24,12 @@ public class FileMessageController implements Initializable {
     private Text tFileName;
     @FXML
     private Text tFileSize;
-
     @FXML
     private ImageView fileIcon;
 
     private FileInfo fileInfo;
+
+    private boolean isFromMe;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -62,17 +63,19 @@ public class FileMessageController implements Initializable {
 
     @FXML
     public void onDownload() {
-        if (fileInfo != null) {
-            FileChooser chooser = new FileChooser();
-            chooser.setTitle("Save file");
-            chooser.setInitialFileName(fileInfo.getName());
-            Stage primaryStage = StageManager.getInstance().getPrimaryStage();
-            File file = chooser.showSaveDialog(primaryStage);
-            if (file != null) {
-                save(file);
+        if (!isFromMe) {
+            if (fileInfo != null) {
+                FileChooser chooser = new FileChooser();
+                chooser.setTitle("Save file");
+                chooser.setInitialFileName(fileInfo.getName());
+                Stage primaryStage = StageManager.getInstance().getPrimaryStage();
+                File file = chooser.showSaveDialog(primaryStage);
+                if (file != null) {
+                    save(file);
+                }
+            } else {
+                UIUtils.showErrorAlert("Can't find file's specification");
             }
-        } else {
-            UIUtils.showErrorAlert("Can't find file's specification");
         }
     }
 
@@ -84,5 +87,9 @@ public class FileMessageController implements Initializable {
         } catch (IOException e) {
             UIUtils.showErrorAlert("Can't save file " + file.getName() + ": " + e.getMessage());
         }
+    }
+
+    public void setFromMe(boolean fromMe) {
+        isFromMe = fromMe;
     }
 }

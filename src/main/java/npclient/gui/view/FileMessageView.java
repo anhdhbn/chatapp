@@ -28,5 +28,7 @@ public class FileMessageView extends AbstractMessageView<FileInfo, FileMessageCo
             setIcon(getClass().getResourceAsStream("/img/download-light.png"));
         else
             setIcon(getClass().getResourceAsStream("/img/download.png"));
+
+        getController().setFromMe(isFromMe);
     }
 }
