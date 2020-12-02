@@ -61,37 +61,36 @@ public class BaseController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Callback<ListView<ChatItem>, ListCell<ChatItem>> cellFactory = new Callback<ListView<ChatItem>, ListCell<ChatItem>>() {
-            @Override
-            public ListCell<ChatItem> call(ListView<ChatItem> param) {
-                return new ChatItemCell();
-            }
-        };
-
-        lvUserItem.setCellFactory(cellFactory);
-        lvGroupItem.setCellFactory(cellFactory);
-
-        JFXSmoothScroll.smoothScrollingListView(lvUserItem, 1f);
-        JFXSmoothScroll.smoothScrollingListView(lvGroupItem, 1f);
-
-        ChangeListener<ChatItem> itemChangeListener = new ChangeListener<ChatItem>() {
-            @Override
-            public void changed(ObservableValue<? extends ChatItem> observable, ChatItem oldChat, ChatItem newChat) {
-                if (newChat != null)
-                    changeChatBox(newChat);
-            }
-        };
-
-        lvUserItem.getSelectionModel().selectedItemProperty().addListener(itemChangeListener);
-        lvGroupItem.getSelectionModel().selectedItemProperty().addListener(itemChangeListener);
+        initializeListView(lvUserItem);
+        initializeListView(lvGroupItem);
 
         listenOnlineUsers();
-
         listenVoiceCall();
 
         final String name = MyAccount.getInstance().getName();
         this.tUsername.setText(name);
         this.civAvatar.update(name);
+    }
+
+    private void initializeListView(ListView<ChatItem> listView) {
+        listView.setCellFactory(new Callback<ListView<ChatItem>, ListCell<ChatItem>>() {
+            @Override
+            public ListCell<ChatItem> call(ListView<ChatItem> param) {
+                return new ChatItemCell();
+            }
+        });
+
+        listView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                ChatItem selected = listView.getSelectionModel().getSelectedItem();
+                if (selected != null) {
+                    changeChatBox(selected);
+                }
+            }
+        });
+
+        JFXSmoothScroll.smoothScrollingListView(listView, 1f);
     }
 
     /**

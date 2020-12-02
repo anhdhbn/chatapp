@@ -41,7 +41,7 @@
                                     <children>
                                         <ToolBar prefHeight="48.0" prefWidth="302.0" style="-fx-padding: 6px 0px;" styleClass="bg" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <items>
-                                                <TextField fx:id="tfGroup" prefHeight="31.0" prefWidth="199.0" promptText="Group Code" styleClass="input" />
+                                                <TextField fx:id="tfGroup" onAction="#joinGroup" prefHeight="31.0" prefWidth="199.0" promptText="Group Code" styleClass="input" />
                                                 <Button mnemonicParsing="false" onAction="#joinGroup" prefHeight="21.0" prefWidth="96.0" text="Join Group" />
                                             </items>
                                         </ToolBar>
