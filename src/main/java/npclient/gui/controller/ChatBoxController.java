@@ -152,14 +152,10 @@ public class ChatBoxController implements Initializable {
         addMessageTask.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
             @Override
             public void handle(WorkerStateEvent event) {
-                try {
-                    Messages messages = addMessageTask.get();
-                    if (listener != null)
-                        listener.onSend(messages);
-                    addItem(messages.newest());
-                } catch (InterruptedException | ExecutionException e) {
-                    e.printStackTrace();
-                }
+                Messages messages = addMessageTask.getValue();
+                if (listener != null)
+                    listener.onSend(messages);
+                addItem(messages.newest());
             }
         });
 

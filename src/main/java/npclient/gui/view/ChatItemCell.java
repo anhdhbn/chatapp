@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.HBox;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import npclient.gui.entity.ChatItem;
 
@@ -13,6 +14,7 @@ import java.io.IOException;
 public class ChatItemCell extends ListCell<ChatItem> {
 
     private FXMLLoader mLLoader;
+
     @FXML
     private HBox container;
     @FXML
@@ -21,6 +23,8 @@ public class ChatItemCell extends ListCell<ChatItem> {
     private Label tLastMsg;
     @FXML
     private CircleImageView civAvatar;
+    @FXML
+    private Circle cirSeen;
 
     private String prevName;
     private String prevMsg;
@@ -63,6 +67,8 @@ public class ChatItemCell extends ListCell<ChatItem> {
         } else if (shouldUpdateLastMsg(lastMsg)) {
             updateLastMsg(lastMsg);
         }
+
+        cirSeen.setVisible(!item.isSeen());
 
         this.prevName = name;
         this.prevMsg = item.getLastMessage();

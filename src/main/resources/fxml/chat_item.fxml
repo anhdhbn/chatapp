@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
@@ -9,34 +12,33 @@
 <!--</fx:root>-->
 
 <?import javafx.scene.control.Label?>
-<HBox fx:id="container" alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="0.0" prefHeight="70.0"
-      styleClass="account" stylesheets="@../css/base.css" xmlns="http://javafx.com/javafx/11.0.1"
-      xmlns:fx="http://javafx.com/fxml/1">
+
+<HBox fx:id="container" alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="0.0" prefHeight="70.0" styleClass="account" stylesheets="@../css/base.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <CircleImageView fx:id="civAvatar" radius="24.0"/>
+        <CircleImageView fx:id="civAvatar" radius="24.0" />
         <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
             <children>
                 <Text fx:id="tTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
                     <VBox.margin>
-                        <Insets bottom="0.0" left="9.0" right="4.0" top="4.0"/>
+                        <Insets bottom="0.0" left="9.0" right="4.0" top="4.0" />
                     </VBox.margin>
                     <font>
-                        <Font name="meBold" size="16.0"/>
+                        <Font name="meBold" size="16.0" />
                     </font>
                 </Text>
-                <Label fx:id="tLastMsg" prefWidth="208.0" textFill="#4d4d4d" ellipsisString="..." textOverrun="ELLIPSIS" wrapText="false"
-                       text="Text">
+                <Label fx:id="tLastMsg" ellipsisString="..." prefWidth="208.0" text="Text" textFill="#4d4d4d" textOverrun="ELLIPSIS" wrapText="false">
                     <VBox.margin>
-                        <Insets bottom="4.0" left="9.0" right="4.0"/>
+                        <Insets bottom="4.0" left="9.0" right="4.0" />
                     </VBox.margin>
                     <font>
-                        <Font name="meRegular" size="14.0"/>
+                        <Font name="meRegular" size="14.0" />
                     </font>
                 </Label>
             </children>
         </VBox>
+      <Circle fx:id="cirSeen" fill="#5b61b9" radius="5.4" strokeType="INSIDE" strokeWidth="0.0" />
     </children>
     <padding>
-        <Insets bottom="5.0"/>
+        <Insets bottom="5.0" />
     </padding>
 </HBox>

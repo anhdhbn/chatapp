@@ -245,12 +245,13 @@ public class BaseController implements Initializable {
                 }
             }
 
+            ChatItem chatItem = getChatItemByMessages(messages);
+            if (chatItem != null) {
+                chatItem.setSeen(isCurrentChat);
+            }
+
             if (isCurrentChat) {
-//                chatBox.setItems(messages);
                 chatBox.addItem(msg);
-                messages.setSeen(true);
-            } else {
-                messages.setSeen(false);
             }
 
             updateChatItems(messages);
@@ -288,6 +289,9 @@ public class BaseController implements Initializable {
     private void changeChatBox(ChatItem newChat) {
         String target = newChat.getName();
         boolean isGroup = newChat instanceof GroupChatItem;
+
+        newChat.setSeen(true);
+        newChat.getCell().updateItem(newChat);
 
         ChatBox prevChatBox = getCurrentChat();
         // if reselect a target, do nothing
@@ -397,10 +401,21 @@ public class BaseController implements Initializable {
     }
 
     private synchronized void updateChatItems(Messages messages) {
+        ChatItem chatItem = getChatItemByMessages(messages);
+
+        if (chatItem != null) {
+            // update chat item info
+            chatItem.update(messages);
+            chatItem.getCell().updateItem(chatItem);
+        }
+    }
+
+    private ChatItem getChatItemByMessages(Messages messages) {
         ChatItem chatItem = messages.getChatItem();
-        ListView<ChatItem> listView = messages.isGroup() ? lvGroupItem : lvUserItem;
 
         if (chatItem == null) {
+            ListView<ChatItem> listView = messages.isGroup() ? lvGroupItem : lvUserItem;
+
             String name = messages.getTopic().split(Constants.SPLITTER)[1];
 
             chatItem = listView.getItems().stream()
@@ -409,16 +424,7 @@ public class BaseController implements Initializable {
                     .orElse(null);
         }
 
-        if (chatItem != null) {
-            // update chat item info
-            chatItem.update(messages);
-            chatItem.getCell().updateItem(chatItem);
-//            // swap to first
-//            listView.getItems().remove(chatItem);
-//            listView.getItems().add(0, chatItem);
-//            listView.getSelectionModel().select(0);
-//            listView.refresh();
-        }
+        return chatItem;
     }
 
     public synchronized void join(String group) throws DuplicateGroupException, InvalidNameException {
@@ -429,7 +435,6 @@ public class BaseController implements Initializable {
         if (!MessageSubscribeManager.getInstance().containsKey(topic)) {
             ChatItem item = new GroupChatItem();
             item.setName(group);
-            item.setSeen(true);
 
             if (!lvGroupItem.getItems().contains(item)) {
                 lvGroupItem.getItems().add(item);

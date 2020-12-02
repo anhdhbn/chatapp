@@ -9,7 +9,7 @@ public class Messages extends PriorityQueue<Message> {
     private final String topic;
     // for fast search
     private ChatItem chatItem;
-    private boolean seen = false;
+//    private boolean seen = true;
     private Message newest;
 
     public Messages(String topic) {
@@ -27,13 +27,13 @@ public class Messages extends PriorityQueue<Message> {
         return newest;
     }
 
-    public boolean isSeen() {
-        return seen;
-    }
-
-    public void setSeen(boolean seen) {
-        this.seen = seen;
-    }
+//    public boolean isSeen() {
+//        return seen;
+//    }
+//
+//    public void setSeen(boolean seen) {
+//        this.seen = seen;
+//    }
 
     public String getTopic() {
         return topic;

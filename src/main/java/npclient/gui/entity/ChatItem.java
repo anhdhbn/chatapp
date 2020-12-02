@@ -8,7 +8,7 @@ public abstract class ChatItem implements Comparable<ChatItem> {
     protected String name;
     protected String lastMessage;
     protected long time;
-    protected boolean seen;
+    protected boolean seen = true;
 
     // for fast rendering
     protected ChatItemCell cell;
@@ -46,10 +46,10 @@ public abstract class ChatItem implements Comparable<ChatItem> {
     }
 
     public void update(Messages messages) {
-        setSeen(messages.isSeen());
+//        setSeen(messages.isSeen());
 
         String rawLastMsg = null;
-        Message lastMsg = messages.newest();
+        Message<?> lastMsg = messages.newest();
         if (lastMsg != null) {
             String lastMsgOwner = lastMsg.getFrom().equals(MyAccount.getInstance().getName()) ? "You" : getName();
 
