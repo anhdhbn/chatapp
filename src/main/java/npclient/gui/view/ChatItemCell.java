@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import npclient.gui.entity.ChatItem;
 
@@ -69,6 +70,12 @@ public class ChatItemCell extends ListCell<ChatItem> {
         }
 
         cirSeen.setVisible(!item.isSeen());
+        if (item.isSeen()) {
+            tLastMsg.setStyle("-fx-font-family: meRegular;");
+        } else {
+            tLastMsg.setStyle("-fx-font-family: meBold;");
+        }
+
 
         this.prevName = name;
         this.prevMsg = item.getLastMessage();
