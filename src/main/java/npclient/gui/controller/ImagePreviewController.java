@@ -30,16 +30,18 @@ public class ImagePreviewController implements Initializable {
     private double screenWidth, screenHeight;
     private double offsetX, offsetY, zoomLvl;
     private double initX, initY;
-    private double width, height;
+    private double width, height, initWidth, initHeight;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         ivImage.setCursor(Cursor.OPEN_HAND);
+        ivImage.setPreserveRatio(true);
 
         sldZoom.valueProperty().addListener(e -> {
             zoomLvl = sldZoom.getValue();
             lZoomValue.setText(String.format("%.2f", zoomLvl));
             normalizeOffset();
+
             hScroll.setValue(offsetX);
             vScroll.setValue(height - offsetY);
             renderImage();
@@ -65,7 +67,25 @@ public class ImagePreviewController implements Initializable {
     public void setImage(Image image) {
         ivImage.setImage(image);
 
-        ivImage.setPreserveRatio(false);
+        final double imageRatio = image.getWidth() / image.getHeight();
+        final double screenRatio = screenWidth / screenHeight;
+        if (imageRatio > screenRatio) {
+            initWidth = screenWidth;
+            initHeight = screenWidth / imageRatio;
+            ivImage.setFitWidth(initWidth);
+            ivImage.setFitHeight(0);
+        } else if (imageRatio < screenRatio) {
+            initHeight = screenHeight;
+            initWidth = screenHeight * imageRatio;
+            ivImage.setFitWidth(0);
+            ivImage.setFitHeight(initHeight);
+        } else {
+            initWidth = screenWidth;
+            initHeight = screenHeight;
+            ivImage.setFitWidth(initWidth);
+            ivImage.setFitHeight(initHeight);
+        }
+
         ivImage.setFitWidth(screenWidth);
         ivImage.setFitHeight(screenHeight);
 
@@ -96,6 +116,10 @@ public class ImagePreviewController implements Initializable {
     }
 
     private void renderImage() {
+//        final double scale = initWidth / (width / zoomLvl);
+//        ivImage.setFitWidth(initWidth * scale);
+//        ivImage.setFitHeight(initHeight * scale);
+
         ivImage.setViewport(new Rectangle2D(
                 offsetX - (width / zoomLvl / 2),
                 offsetY - (height / zoomLvl / 2),

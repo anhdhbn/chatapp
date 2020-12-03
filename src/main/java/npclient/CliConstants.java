@@ -9,5 +9,5 @@ public interface CliConstants {
     String AVATAR_URL = "https://ui-avatars.com/api/background=%s&size=128&color=fbfbfb&bold=true&name=%s";
     String CHARSET = "UTF-8";
 
-    long MAX_FILE_SIZE = 20 * 1024 * 1024;
+    long MAX_FILE_SIZE = 200 * 1024 * 1024;
 }
