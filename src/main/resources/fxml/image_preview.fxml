@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<fx:root onMouseClicked="#onImageClicked" onMousePressed="#onImagePressed" onMouseReleased="#onImageReleased" onMouseDragged="#onImageDragged" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" type="javafx.scene.layout.StackPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="npclient.gui.controller.ImagePreviewController">
+<!--<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="npclient.gui.controller.ImagePreviewController" >-->
+   <children>
+      <ImageView fx:id="ivImage" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER" />
+      <HBox alignment="BOTTOM_CENTER" StackPane.alignment="BOTTOM_CENTER">
+         <children>
+            <Slider fx:id="sldZoom" max="4.0" min="1.0" prefWidth="300.0" value="1.0" />
+            <Label fx:id="lZoomValue" text="1.0" />
+         </children>
+         <StackPane.margin>
+            <Insets bottom="12.0" />
+         </StackPane.margin>
+      </HBox>
+      <Slider fx:id="hScroll" visible="false" maxWidth="-Infinity" prefWidth="300.0" StackPane.alignment="TOP_CENTER">
+         <StackPane.margin>
+            <Insets top="12.0" />
+         </StackPane.margin>
+      </Slider>
+      <Slider fx:id="vScroll" visible="false" maxHeight="-Infinity" orientation="VERTICAL" prefHeight="300.0" StackPane.alignment="CENTER_RIGHT">
+         <StackPane.margin>
+            <Insets right="12.0" />
+         </StackPane.margin>
+      </Slider>
+   </children>
+<!--</StackPane>-->
+</fx:root>

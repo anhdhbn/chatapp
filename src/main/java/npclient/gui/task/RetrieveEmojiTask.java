@@ -36,6 +36,9 @@ public class RetrieveEmojiTask extends Task<Image> {
 
     @Override
     protected Image call() {
-        return UIUtils.Emoji.toImage(emoji);
+        String name = emoji.name().substring(1);
+        String filePath = String.format("/img/emoji/%s.gif", name);
+        filePath = filePath.replace("_", "-");
+        return new Image(filePath);
     }
 }

@@ -60,6 +60,11 @@
     -fx-background-radius: 9px;
 }
 
+.image-msg-view {
+    -fx-padding: 6px 0px;
+    -fx-background-color: transparent;
+}
+
 .input {
     -fx-font-size: 14px;
     -fx-background-color: #f0f2f5;
