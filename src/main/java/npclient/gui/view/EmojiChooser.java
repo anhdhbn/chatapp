@@ -57,47 +57,12 @@ public class EmojiChooser extends Stage {
         grid.setVgap(PADDING);
         grid.setPadding(new Insets(PADDING));
 
-        ExecutorService es = Executors.newFixedThreadPool(5);
+        ExecutorService es = Executors.newFixedThreadPool(COLUMN);
 
         int row = 0, col = 0;
         for (Emoji emoji : Emoji.values()) {
-            ProgressIndicator indicator = new ProgressIndicator();
-            indicator.setMaxSize(INDICATOR_SIZE, INDICATOR_SIZE);
-            grid.add(indicator, col, row);
-
-            ImageView imageView = new ImageView();
-            imageView.setFitHeight(EMOJI_SIZE);
-            imageView.setFitWidth(EMOJI_SIZE);
-            imageView.getStyleClass().add("emoji");
-
-            grid.add(imageView, col, row);
-
-            RetrieveEmojiTask task = new RetrieveEmojiTask(emoji);
-
-            task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-                @Override
-                public void handle(WorkerStateEvent event) {
-                    Image image = task.getValue();
-                    imageView.setImage(image);
-                    grid.getChildren().remove(indicator);
-                }
-            });
+            RetrieveEmojiTask task = addEmojiCell(grid, emoji, col, row);
             es.submit(task);
-
-            GridPane.setHalignment(imageView, HPos.CENTER);
-            GridPane.setValignment(imageView, VPos.CENTER);
-
-            imageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    logger.debug("Choose " + emoji.name());
-                    logger.debug(imageView.getStyleClass());
-                    if (listener != null) {
-                        listener.onSelect(emoji);
-                    }
-                    close();
-                }
-            });
 
             col++;
             if (col == COLUMN) {
@@ -124,6 +89,47 @@ public class EmojiChooser extends Stage {
         });
 
         return scrollPane;
+    }
+
+    private RetrieveEmojiTask addEmojiCell(GridPane grid, Emoji emoji, int col, int row) {
+        ProgressIndicator indicator = new ProgressIndicator();
+        indicator.setMaxSize(INDICATOR_SIZE, INDICATOR_SIZE);
+        grid.add(indicator, col, row);
+
+        ImageView imageView = new ImageView();
+        imageView.setFitHeight(EMOJI_SIZE);
+        imageView.setFitWidth(EMOJI_SIZE);
+        imageView.getStyleClass().add("emoji");
+
+        grid.add(imageView, col, row);
+
+        GridPane.setHalignment(imageView, HPos.CENTER);
+        GridPane.setValignment(imageView, VPos.CENTER);
+
+        RetrieveEmojiTask task = new RetrieveEmojiTask(emoji);
+
+        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                Image image = task.getValue();
+                imageView.setImage(image);
+                grid.getChildren().remove(indicator);
+            }
+        });
+
+        imageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                logger.debug("Choose " + emoji.name());
+                logger.debug(imageView.getStyleClass());
+                if (listener != null) {
+                    listener.onSelect(emoji);
+                }
+                close();
+            }
+        });
+
+        return task;
     }
 
     public interface OnEmojiListener {
