@@ -13,7 +13,7 @@
 
 <?import javafx.scene.control.Label?>
 
-<HBox fx:id="container" alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="0.0" prefHeight="70.0" styleClass="account" stylesheets="@../css/base.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<HBox fx:id="container" alignment="CENTER_LEFT" prefWidth="200.0" minHeight="-Infinity" minWidth="0.0" prefHeight="70.0" styleClass="account" stylesheets="@../css/base.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <CircleImageView fx:id="civAvatar" radius="24.0" />
         <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
