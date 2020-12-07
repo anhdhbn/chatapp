@@ -7,6 +7,8 @@ import java.util.PriorityQueue;
 public class Messages extends PriorityQueue<Message> {
 
     private final String topic;
+    // for fast search
+    private ChatItem chatItem;
     private boolean seen = false;
 
     public Messages(String topic) {
@@ -27,5 +29,13 @@ public class Messages extends PriorityQueue<Message> {
 
     public boolean isGroup() {
         return topic.startsWith(Constants.PREFIX_GROUP);
+    }
+
+    public void setChatItem(ChatItem chatItem) {
+        this.chatItem = chatItem;
+    }
+
+    public ChatItem getChatItem() {
+        return chatItem;
     }
 }

@@ -2,22 +2,25 @@ package npclient.gui.view;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
 import javafx.scene.text.Text;
 import npclient.MyAccount;
-import npclient.gui.entity.EmojiMessage;
-import npclient.gui.entity.FileMessage;
 import npclient.gui.entity.Message;
-import npclient.gui.entity.TextMessage;
+import npclient.gui.util.DateTimeUtils;
 import nputils.Emoji;
+import nputils.FileInfo;
 
 import java.io.IOException;
-import java.util.Date;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class MessageCell extends ListCell<Message> {
+public class MessageCell extends ListCell<Message> implements Initializable {
 
     private FXMLLoader mLLoader;
     @FXML
@@ -26,6 +29,8 @@ public class MessageCell extends ListCell<Message> {
     private Text tName, tTime;
     @FXML
     private AnchorPane paneContent;
+
+    private Text tState = new Text();
 
     @Override
     protected void updateItem(Message item, boolean empty) {
@@ -47,35 +52,77 @@ public class MessageCell extends ListCell<Message> {
                 }
             }
 
-            tName.setText(item.getFrom());
-            String time = new Date(item.getTime()).toString();
-            tTime.setText(time);
-
-            paneContent.getChildren().clear();
-            if (item instanceof TextMessage) {
-                TextMessageView messageView = new TextMessageView();
-                messageView.setContent(((TextMessage) item).getContent());
-                paneContent.getChildren().add(messageView);
-            } else if (item instanceof FileMessage) {
-                FileMessageView messageView = new FileMessageView();
-                messageView.setContent(((FileMessage) item).getContent());
-                paneContent.getChildren().add(messageView);
-            } else if (item instanceof EmojiMessage) {
-                EmojiView messageView = new EmojiView();
-                messageView.setContent(((EmojiMessage) item).getContent());
-                paneContent.getChildren().add(messageView);
-            }
+            setSender(item.getFrom());
+            setTime(item.getTime());
+            setContent(item.getContent());
+            setState(item.getState());
 
             final String username = MyAccount.getInstance().getName();
-            if (item.getFrom().equals(username)) {
-                container.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
-                tName.setVisible(false);
-            } else {
-                container.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
-            }
+            boolean isFromMe = item.getFrom().equals(username);
+            setMessageAlignment(isFromMe);
 
             setText(null);
             setGraphic(container);
         }
+    }
+
+    private void setState(Message.State state) {
+        switch (state) {
+            case SUCCESS:
+                tState.setVisible(false);
+                break;
+
+            case FAILURE:
+                tState.setText("Error!");
+                tState.setVisible(true);
+                break;
+
+            case SENDING:
+                tState.setText("Sending...");
+                tState.setVisible(true);
+                break;
+        }
+    }
+
+    private void setMessageAlignment(boolean isFromMe) {
+        if (isFromMe) {
+            container.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+            tName.setVisible(false);
+        } else {
+            container.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
+        }
+    }
+
+    private void setContent(Object content) {
+        paneContent.getChildren().clear();
+        if (content instanceof String) {
+            TextMessageView messageView = new TextMessageView();
+            messageView.setContent((String) content);
+            paneContent.getChildren().add(messageView);
+        } else if (content instanceof FileInfo) {
+            FileMessageView messageView = new FileMessageView();
+            messageView.setContent((FileInfo) content);
+            paneContent.getChildren().add(messageView);
+        } else if (content instanceof Emoji) {
+            EmojiView messageView = new EmojiView();
+            messageView.setContent((Emoji) content);
+            paneContent.getChildren().add(messageView);
+        }
+    }
+
+    private void setSender(String name) {
+        tName.setText(name);
+    }
+
+    private void setTime(long time) {
+        String text = DateTimeUtils.format(time);
+        tTime.setText(text);
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        tState.setFont(Font.font(null, FontPosture.ITALIC, 10));
+        tState.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
+        container.getChildren().add(tState);
     }
 }

@@ -11,7 +11,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import npclient.CliLogger;
 import npclient.gui.manager.StageManager;
@@ -44,9 +43,9 @@ public class EmojiChooser extends Stage {
 
     private Parent initializeView() {
         GridPane grid = new GridPane();
-        grid.setHgap(20);
-        grid.setVgap(20);
-        grid.setPadding(new Insets(20, 20, 20, 20));
+        grid.setHgap(PADDING);
+        grid.setVgap(PADDING);
+        grid.setPadding(new Insets(PADDING));
 
         int row = 0, col = 0;
         for (Emoji emoji : Emoji.values()) {
@@ -79,7 +78,7 @@ public class EmojiChooser extends Stage {
 
         ScrollPane scrollPane = new ScrollPane(grid);
         scrollPane.setFitToWidth(true);
-        scrollPane.setPrefViewportHeight(HEIGH);
+        scrollPane.setPrefViewportHeight(HEIGHT);
 
         return scrollPane;
     }
@@ -88,7 +87,8 @@ public class EmojiChooser extends Stage {
         void onSelect(Emoji emoji);
     }
 
+    private static final int PADDING = 20;
     private static final int EMOJI_SIZE = 64;
     private static final int COLUMN = 5;
-    private static final int HEIGH = 400;
+    private static final int HEIGHT = 400;
 }

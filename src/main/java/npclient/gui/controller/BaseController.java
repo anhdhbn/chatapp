@@ -2,6 +2,7 @@ package npclient.gui.controller;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -74,7 +75,7 @@ public class BaseController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends ChatItem> observable, ChatItem oldChat, ChatItem newChat) {
                 if (newChat != null)
-                    changeChatBox(newChat.getName(), newChat instanceof GroupChatItem);
+                    changeChatBox(newChat);
             }
         };
 
@@ -283,11 +284,26 @@ public class BaseController implements Initializable {
 
     /**
      * Change chat box section by username
-     * @param target name
-     * @param isGroup is group chat
+     * @param newChat chat item
      */
-    private void changeChatBox(String target, boolean isGroup) {
+    private void changeChatBox(ChatItem newChat) {
+        String target = newChat.getName();
+        boolean isGroup = newChat instanceof GroupChatItem;
+
+        ChatBox prevChatBox = getCurrentChat();
+        // if reselect a target, do nothing
+        if (prevChatBox != null && prevChatBox.getTarget().equals(target))
+            return;
+
         ChatBox chatBox = new ChatBox();
+        chatBox.setOnSendListener(new ChatBoxController.OnSendListener() {
+            @Override
+            public void onSend(Messages messages) {
+                if (messages.getChatItem() == null)
+                    messages.setChatItem(newChat);
+                updateChatItems(messages);
+            }
+        });
         chatBox.setTarget(target, isGroup);
 
         clearChatBox();
@@ -364,6 +380,12 @@ public class BaseController implements Initializable {
             final String username = MyAccount.getInstance().getName();
             new Publisher(topic, username)
                     .putData(Constants.VOICE_QUIT)
+                    .setSuccessListener(new OnPublishMessageSuccess() {
+                        @Override
+                        public void onReceive(DataTransfer message) {
+                            closeVoiceChatDialog();
+                        }
+                    })
                     .post();
             UIUtils.showErrorAlert("System not support voice chat: " + e.getMessage());
         }
@@ -376,21 +398,27 @@ public class BaseController implements Initializable {
     }
 
     private synchronized void updateChatItems(Messages messages) {
+        ChatItem chatItem = messages.getChatItem();
         ListView<ChatItem> listView = messages.isGroup() ? lvGroupItem : lvUserItem;
-        String name = messages.getTopic().split(Constants.SPLITTER)[1];
 
-        ChatItem chatItem = listView.getItems().stream()
-                .filter(i -> i.getName().equals(name))
-                .findFirst()
-                .orElse(null);
+        if (chatItem == null) {
+            String name = messages.getTopic().split(Constants.SPLITTER)[1];
+
+            chatItem = listView.getItems().stream()
+                    .filter(i -> i.getName().equals(name))
+                    .findFirst()
+                    .orElse(null);
+        }
 
         if (chatItem != null) {
             // update chat item info
             chatItem.update(messages);
 
-            // swap to first
-            listView.getItems().remove(chatItem);
-            listView.getItems().add(0, chatItem);
+//            // swap to first
+//            listView.getItems().remove(chatItem);
+//            listView.getItems().add(0, chatItem);
+//            listView.getSelectionModel().select(0);
+            listView.refresh();
         }
     }
 
