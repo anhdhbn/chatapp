@@ -6,7 +6,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
@@ -39,11 +39,22 @@ public class ImageMessageController extends AbstractFileMessageController {
                 ImagePreview pane = new ImagePreview();
                 Rectangle2D screen = Screen.getPrimary().getBounds();
                 pane.setImage(image);
+
                 Scene scene = new Scene(pane, screen.getWidth(), screen.getHeight());
+
                 Stage stage = new Stage();
                 stage.setTitle(name);
                 stage.setScene(scene);
                 stage.initOwner(StageManager.getInstance().getPrimaryStage());
+                stage.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+                    @Override
+                    public void handle(KeyEvent e) {
+                        if (e.getCode() == KeyCode.S && e.isShortcutDown()) {
+                            onDownload();
+                        }
+                    }
+                });
+
                 stage.showAndWait();
             }
         });
