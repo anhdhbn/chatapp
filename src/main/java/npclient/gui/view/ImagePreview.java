@@ -6,25 +6,18 @@ import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.util.Duration;
-import npclient.gui.controller.ImagePreviewController;
-
-import java.io.IOException;
 
 public class ImagePreview extends StackPane {
 
@@ -107,10 +100,6 @@ public class ImagePreview extends StackPane {
             return myScale.get();
         }
 
-        public void setScale(double scale) {
-            myScale.set(scale);
-        }
-
         public void setPivot(double x, double y, double scale) {
             // note: pivot value must be untransformed, i. e. without scaling
             // timeline that scales and moves the node
@@ -121,7 +110,6 @@ public class ImagePreview extends StackPane {
                         new KeyFrame(Duration.millis(200), new KeyValue(translateYProperty(), getTranslateY() - y)),
                         new KeyFrame(Duration.millis(200), new KeyValue(myScale, scale))
                 );
-                System.out.println("x=" + x + ",y=" + y + ",scale=" + scale);
                 timeline.play();
             }
         }
@@ -148,10 +136,6 @@ public class ImagePreview extends StackPane {
             double y = getTranslateY();
 
             setPivot(x, y, scale);
-        }
-
-        public double getDeltaY() {
-            return deltaY.get();
         }
 
         public void setDeltaY(double dY) {
@@ -193,7 +177,6 @@ public class ImagePreview extends StackPane {
             public void handle(MouseEvent event) {
                 panAndZoomPane.setTranslateX(sceneDragContext.translateAnchorX + event.getX() - sceneDragContext.mouseAnchorX);
                 panAndZoomPane.setTranslateY(sceneDragContext.translateAnchorY + event.getY() - sceneDragContext.mouseAnchorY);
-                System.out.println("x="+panAndZoomPane.getTranslateX()+",y="+panAndZoomPane.getTranslateY());
                 event.consume();
             }
         };

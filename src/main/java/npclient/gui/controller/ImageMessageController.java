@@ -13,6 +13,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import npclient.gui.manager.StageManager;
 import npclient.gui.view.ImagePreview;
+import npclient.gui.view.ImagePreviewStage;
 import nputils.FileInfo;
 
 import java.io.ByteArrayInputStream;
@@ -36,25 +37,14 @@ public class ImageMessageController extends AbstractFileMessageController {
         rectThumbnail.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                ImagePreview pane = new ImagePreview();
-                Rectangle2D screen = Screen.getPrimary().getBounds();
-                pane.setImage(image);
-
-                Scene scene = new Scene(pane, screen.getWidth(), screen.getHeight());
-
-                Stage stage = new Stage();
+                ImagePreviewStage stage = new ImagePreviewStage(image);
                 stage.setTitle(name);
-                stage.setScene(scene);
-                stage.initOwner(StageManager.getInstance().getPrimaryStage());
-                stage.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+                stage.setOnDownloadListener(new ImagePreviewStage.OnDownloadListener() {
                     @Override
-                    public void handle(KeyEvent e) {
-                        if (e.getCode() == KeyCode.S && e.isShortcutDown()) {
-                            onDownload();
-                        }
+                    public void onDownload() {
+                        ImageMessageController.this.onDownload();
                     }
                 });
-
                 stage.showAndWait();
             }
         });
