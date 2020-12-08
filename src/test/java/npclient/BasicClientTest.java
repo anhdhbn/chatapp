@@ -17,7 +17,6 @@ import java.io.ObjectOutputStream;
 
 public class BasicClientTest {
 
-    @Test
     public void singleThreadTest() throws IOException, ClassNotFoundException, InterruptedException {
         TCPConnection user1 = new TCPConnection("np-server.anhdh.me", 1699);
         ObjectOutputStream outputStream1 = new ObjectOutputStream(user1.getOutputStream());
@@ -47,7 +46,6 @@ public class BasicClientTest {
         Assertions.assertEquals("message", receivedData.data);
     }
 
-    @Test
     public void getActiveUsersTest() throws InterruptedException {
         new Subscriber(Constants.ONLINE_TOPIC, "lamnt")
                                 .setNewMessageListener(new SubscribedTopicListener() {
@@ -76,7 +74,6 @@ public class BasicClientTest {
         Thread.sleep(150000);
     }
 
-    @Test
     public void asyncChatTest() throws InterruptedException {
         new LoginPublisher("lamnt1")
                 .setSuccessListener(new OnPublishMessageSuccess() {

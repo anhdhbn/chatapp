@@ -41,8 +41,4 @@ public class Utils {
         }
         return digest;
     }
-
-    public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
-        System.out.println(computeMd5(new File("/Users/lamnt/Downloads/akautauto-5.0.1.jar")));
-    }
 }
