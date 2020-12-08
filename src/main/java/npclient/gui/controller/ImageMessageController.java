@@ -2,17 +2,11 @@ package npclient.gui.controller;
 
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
-import javafx.scene.input.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Screen;
-import javafx.stage.Stage;
-import npclient.gui.manager.StageManager;
-import npclient.gui.view.ImagePreview;
 import npclient.gui.view.ImagePreviewStage;
 import nputils.FileInfo;
 
