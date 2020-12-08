@@ -4,9 +4,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import npclient.MyAccount;
 import npclient.core.UDPConnection;
 import npclient.core.callback.ErrorListener;
@@ -23,12 +23,19 @@ import java.util.ResourceBundle;
 public class LoginController implements Initializable {
 
     @FXML
+    private Label lBtnLabel;
+    @FXML
     private Button btnEnter;
     @FXML
     private TextField tfUsername;
+    @FXML
+    private HBox indicator;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        indicator.visibleProperty().bind(btnEnter.disabledProperty());
+        tfUsername.disableProperty().bind(btnEnter.disabledProperty());
+        lBtnLabel.visibleProperty().bind(btnEnter.disabledProperty().not());
     }
 
     @FXML
@@ -39,12 +46,10 @@ public class LoginController implements Initializable {
     }
 
     private void lock() {
-        tfUsername.setDisable(true);
         btnEnter.setDisable(true);
     }
 
     private void unlock() {
-        tfUsername.setDisable(false);
         btnEnter.setDisable(false);
     }
 
@@ -61,8 +66,8 @@ public class LoginController implements Initializable {
                 .setErrorListener(new ErrorListener() {
                     @Override
                     public void onReceive(Exception err) {
-                        loginFailure(err);
                         unlock();
+                        loginFailure(err);
                     }
                 })
                 .post();
@@ -72,6 +77,8 @@ public class LoginController implements Initializable {
         MyAccount.register(name, udpConn);
         Parent baseScene = UIUtils.load("/fxml/base.fxml");
         StageManager.getInstance().changeScene(baseScene);
+        StageManager.getInstance().getPrimaryStage().setMinHeight(864f);
+        StageManager.getInstance().getPrimaryStage().setMinWidth(1140f);
     }
 
     private void loginFailure(Exception err) {

@@ -31,7 +31,7 @@ public class MessageManager implements Map<String, Messages> {
             put(topic, messages);
         }
 
-        Message lastMsg = messages.peek();
+        Message lastMsg = messages.newest();
         if (lastMsg != null && lastMsg.getFrom().equals(m.getFrom()) && lastMsg.getTime() == m.getTime()) {
             // duplicate data ????
         } else

@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.image.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/base.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -23,17 +19,17 @@
    <children>
       <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0">
          <image>
-            <Image url="@../img/emoji/001-happy.png" />
+            <Image url="@../img/emoji/still/001-happy.png" />
          </image>
       </ImageView>
       <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
          <image>
-            <Image url="@../img/emoji/001-happy.png" />
+            <Image url="@../img/emoji/still/001-happy.png" />
          </image>
       </ImageView>
       <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
          <image>
-            <Image url="@../img/emoji/001-happy.png" />
+            <Image url="@../img/emoji/still/001-happy.png" />
          </image>
       </ImageView>
    </children>

@@ -12,11 +12,14 @@ import npclient.core.callback.OnRejectListener;
 import npclient.gui.manager.StageManager;
 import nputils.Emoji;
 
+import javax.activation.MimetypesFileTypeMap;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.nio.file.Files;
 import java.util.Optional;
 
 public class UIUtils {
@@ -83,7 +86,7 @@ public class UIUtils {
                     b = (byte) ((c - '0') / BOUND * Character.MAX_VALUE);
                 } else if (Character.isAlphabetic(nameBuf[i])) {
                     char lower = Character.toLowerCase(nameBuf[i]);
-                    b = (byte) ((c - 'a' + 9) / BOUND * Character.MAX_VALUE);
+                    b = (byte) ((lower - 'a' + 9) / BOUND * Character.MAX_VALUE);
                 } else b = (byte) c;
                 colorBuf[i] = b;
                 i++;
@@ -104,18 +107,15 @@ public class UIUtils {
         return trimName.isEmpty() || !trimName.matches("[\\w_\\s]{3,255}");
     }
 
-    public static void main(String[] args) {
-        System.out.println(mapNameToColor("Lamnt"));
-    }
-
-    public static class Emoji {
-
-        public static Image toImage(nputils.Emoji emoji) {
-            String name = emoji.name().substring(1);
-            String filePath = String.format("/img/emoji/%s.png", name);
-            filePath = filePath.replace("_", "-");
-            return new Image(filePath);
+    public static boolean isImage(String fileName) {
+        for (String ext : IMAGE_EXTENSIONS) {
+            if (fileName.endsWith(ext))
+                return true;
         }
 
+        return false;
     }
+
+    private static final String[] IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".gif",
+            ".tiff", ".bmp", ".webp", ".psd", ".raw", ".heif", ".indd"};
 }

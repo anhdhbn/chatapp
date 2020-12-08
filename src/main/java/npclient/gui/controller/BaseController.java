@@ -3,15 +3,14 @@ package npclient.gui.controller;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
@@ -25,16 +24,14 @@ import npclient.core.command.Publisher;
 import npclient.core.command.Subscriber;
 import npclient.exception.InvalidNameException;
 import npclient.gui.util.AudioUtils;
+import npclient.gui.util.JFXSmoothScroll;
 import npclient.gui.view.*;
-import nputils.Emoji;
-import nputils.FileInfo;
+import nputils.*;
 import npclient.exception.DuplicateGroupException;
 import npclient.gui.entity.*;
 import npclient.gui.manager.MessageManager;
 import npclient.gui.manager.MessageSubscribeManager;
 import npclient.gui.util.UIUtils;
-import nputils.Constants;
-import nputils.DataTransfer;
 
 import javax.sound.sampled.LineUnavailableException;
 import java.io.IOException;
@@ -61,42 +58,36 @@ public class BaseController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Callback<ListView<ChatItem>, ListCell<ChatItem>> cellFactory = new Callback<ListView<ChatItem>, ListCell<ChatItem>>() {
-            @Override
-            public ListCell<ChatItem> call(ListView<ChatItem> param) {
-                return new ChatItemCell();
-            }
-        };
-
-        lvUserItem.setCellFactory(cellFactory);
-        lvGroupItem.setCellFactory(cellFactory);
-
-        ChangeListener<ChatItem> itemChangeListener = new ChangeListener<ChatItem>() {
-            @Override
-            public void changed(ObservableValue<? extends ChatItem> observable, ChatItem oldChat, ChatItem newChat) {
-                if (newChat != null)
-                    changeChatBox(newChat);
-            }
-        };
-
-        lvUserItem.getSelectionModel().selectedItemProperty().addListener(itemChangeListener);
-        lvGroupItem.getSelectionModel().selectedItemProperty().addListener(itemChangeListener);
+        initializeListView(lvUserItem);
+        initializeListView(lvGroupItem);
 
         listenOnlineUsers();
-
         listenVoiceCall();
 
         final String name = MyAccount.getInstance().getName();
         this.tUsername.setText(name);
         this.civAvatar.update(name);
+    }
 
-        this.civAvatar.setOnMouseClicked(new EventHandler<MouseEvent>() {
+    private void initializeListView(ListView<ChatItem> listView) {
+        listView.setCellFactory(new Callback<ListView<ChatItem>, ListCell<ChatItem>>() {
             @Override
-            public void handle(MouseEvent event) {
-                EmojiChooser chooser = new EmojiChooser();
-                chooser.show();
+            public ListCell<ChatItem> call(ListView<ChatItem> param) {
+                return new ChatItemCell();
             }
         });
+
+        listView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                ChatItem selected = listView.getSelectionModel().getSelectedItem();
+                if (selected != null) {
+                    changeChatBox(selected);
+                }
+            }
+        });
+
+        JFXSmoothScroll.smoothScrollingListView(listView, 1f);
     }
 
     /**
@@ -142,11 +133,8 @@ public class BaseController implements Initializable {
                     @Override
                     public void onReceive(DataTransfer message) {
                         // Get current user in chat box
-                        String current = null;
-
                         ChatBox currentChatBox = getCurrentChat();
-                        if (currentChatBox != null)
-                            current = currentChatBox.getTarget();
+                        final String current = currentChatBox != null ? currentChatBox.getTarget() : null;
 
                         boolean isCurrentOnline = current == null;
 
@@ -193,8 +181,9 @@ public class BaseController implements Initializable {
 
     /**
      * Generate subscriber subscribe listen to message from a user
+     *
      * @param username of current user
-     * @param topic topic
+     * @param topic    topic
      * @return subscriber
      */
     private Subscriber subscribeMessages(String username, String topic) {
@@ -211,11 +200,15 @@ public class BaseController implements Initializable {
 
     /**
      * Callback fires when receive new message from user
-     * @param topic subscribed topic
+     *
+     * @param topic   subscribed topic
      * @param message received
      */
     private void onReceiveNewMessage(String topic, DataTransfer message) {
         Message msg = null;
+
+        NotiAudio notiAudio = new NotiAudio();
+        notiAudio.start();
 
         Object content = message.data;
         if (content instanceof String) {
@@ -249,11 +242,13 @@ public class BaseController implements Initializable {
                 }
             }
 
+            ChatItem chatItem = getChatItemByMessages(messages);
+            if (chatItem != null) {
+                chatItem.setSeen(isCurrentChat);
+            }
+
             if (isCurrentChat) {
-                chatBox.setItems(messages);
-                messages.setSeen(true);
-            } else {
-                messages.setSeen(false);
+                chatBox.addItem(msg);
             }
 
             updateChatItems(messages);
@@ -262,6 +257,7 @@ public class BaseController implements Initializable {
 
     /**
      * Get current chatting user
+     *
      * @return current chatting username
      */
     private ChatBox getCurrentChat() {
@@ -284,11 +280,15 @@ public class BaseController implements Initializable {
 
     /**
      * Change chat box section by username
+     *
      * @param newChat chat item
      */
     private void changeChatBox(ChatItem newChat) {
         String target = newChat.getName();
         boolean isGroup = newChat instanceof GroupChatItem;
+
+        newChat.setSeen(true);
+        newChat.getCell().updateItem(newChat);
 
         ChatBox prevChatBox = getCurrentChat();
         // if reselect a target, do nothing
@@ -398,10 +398,21 @@ public class BaseController implements Initializable {
     }
 
     private synchronized void updateChatItems(Messages messages) {
+        ChatItem chatItem = getChatItemByMessages(messages);
+
+        if (chatItem != null) {
+            // update chat item info
+            chatItem.update(messages);
+            chatItem.getCell().updateItem(chatItem);
+        }
+    }
+
+    private ChatItem getChatItemByMessages(Messages messages) {
         ChatItem chatItem = messages.getChatItem();
-        ListView<ChatItem> listView = messages.isGroup() ? lvGroupItem : lvUserItem;
 
         if (chatItem == null) {
+            ListView<ChatItem> listView = messages.isGroup() ? lvGroupItem : lvUserItem;
+
             String name = messages.getTopic().split(Constants.SPLITTER)[1];
 
             chatItem = listView.getItems().stream()
@@ -410,16 +421,7 @@ public class BaseController implements Initializable {
                     .orElse(null);
         }
 
-        if (chatItem != null) {
-            // update chat item info
-            chatItem.update(messages);
-
-//            // swap to first
-//            listView.getItems().remove(chatItem);
-//            listView.getItems().add(0, chatItem);
-//            listView.getSelectionModel().select(0);
-            listView.refresh();
-        }
+        return chatItem;
     }
 
     public synchronized void join(String group) throws DuplicateGroupException, InvalidNameException {
@@ -430,7 +432,6 @@ public class BaseController implements Initializable {
         if (!MessageSubscribeManager.getInstance().containsKey(topic)) {
             ChatItem item = new GroupChatItem();
             item.setName(group);
-            item.setSeen(true);
 
             if (!lvGroupItem.getItems().contains(item)) {
                 lvGroupItem.getItems().add(item);

@@ -3,6 +3,7 @@ package npclient.gui.view;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 import npclient.gui.controller.ChatBoxController;
+import npclient.gui.entity.Message;
 import npclient.gui.entity.Messages;
 
 import java.io.IOException;
@@ -43,6 +44,10 @@ public class ChatBox extends AnchorPane {
     }
 
     public void setItems(Messages messages) {
-        controller.setItem(messages);
+        controller.setItems(messages);
+    }
+
+    public void addItem(Message message) {
+        controller.addItem(message);
     }
 }

@@ -1,37 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.geometry.*?>
-<?import javafx.scene.image.*?>
-<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
-
-<?import npclient.gui.view.CircleImageView?>
-
-<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.*?>
+<?import npclient.gui.view.*?>
 
 <!--<fx:root fx:id="container" alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="320.0" prefHeight="96.0" type="javafx.scene.layout.HBox" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">-->
-<HBox fx:id="container" alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="320.0" prefHeight="96.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <CircleImageView fx:id="civAvatar" radius="36.0"/>
-      <VBox HBox.hgrow="ALWAYS">
-         <children>
-            <Text fx:id="tTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
-               <VBox.margin>
-                  <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
-               </VBox.margin>
-            </Text>
-            <Text fx:id="tLastMsg" strokeType="OUTSIDE" strokeWidth="0.0" text="Text">
-               <VBox.margin>
-                  <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
-               </VBox.margin>
-            </Text>
-         </children>
-      </VBox>
-   </children>
-   <padding>
-      <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
-   </padding>
-</HBox>
 <!--</fx:root>-->
+
+<?import javafx.scene.control.Label?>
+
+<HBox fx:id="container" alignment="CENTER_LEFT" prefWidth="200.0" minHeight="-Infinity" minWidth="0.0" prefHeight="70.0" styleClass="account" stylesheets="@../css/base.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <CircleImageView fx:id="civAvatar" radius="24.0" />
+        <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+            <children>
+                <Text fx:id="tTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="Username">
+                    <VBox.margin>
+                        <Insets bottom="0.0" left="9.0" right="4.0" top="4.0" />
+                    </VBox.margin>
+                    <font>
+                        <Font name="meBold" size="16.0" />
+                    </font>
+                </Text>
+                <Label fx:id="tLastMsg" ellipsisString="..." prefWidth="208.0" text="Text" textFill="#4d4d4d" textOverrun="ELLIPSIS" wrapText="false">
+                    <VBox.margin>
+                        <Insets bottom="4.0" left="9.0" right="4.0" />
+                    </VBox.margin>
+                    <font>
+                        <Font name="meRegular" size="14.0" />
+                    </font>
+                </Label>
+            </children>
+        </VBox>
+      <Circle fx:id="cirSeen" fill="#5b61b9" radius="5.4" strokeType="INSIDE" strokeWidth="0.0" />
+    </children>
+    <padding>
+        <Insets bottom="5.0" />
+    </padding>
+</HBox>

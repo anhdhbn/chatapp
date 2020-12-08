@@ -1,0 +1,297 @@
+@font-face {
+    font-weight: regular;
+    src: url('../font/meRegular.otf');
+}
+
+@font-face {
+    src: url('../font/meRegularItalic.otf');
+}
+
+@font-face {
+    font-weight: bold;
+    src: url('../font/meBold.otf');
+}
+
+.root {
+    -fx-font-family: meRegular;
+    -fx-font-size: 16px;
+}
+
+.button {
+    -fx-background-color: #5b61b9;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 14px;
+    -fx-padding: 9px 6px;
+    -fx-background-radius: 6px;
+}
+
+.button:hover {
+    -fx-background-color: #484db1;
+    -fx-text-fill: #e6e6e6;
+    -fx-font-size: 14px;
+}
+
+.overlay-btn {
+    -fx-padding: 6px 9px;
+    -fx-background-radius: 4px;
+    -fx-background-color: #ffffff44;
+}
+
+.overlay-btn:hover {
+    -fx-background-color: #ffffff77;
+}
+
+.emoji-popup .scroll-bar:vertical .track {
+    -fx-fill: transparent;
+    -fx-background-color: #ffffff77;
+}
+
+.panel-chatbox {
+    -fx-background-image: url('../img/splash.png');
+    -fx-background-size: 350px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+.account {
+    -fx-background-color: #f0f2f5;
+    -fx-padding: 6px 12px;
+    -fx-background-radius: 9px;
+}
+
+.image-msg-view {
+    -fx-padding: 6px 0px;
+    -fx-background-color: transparent;
+}
+
+.input {
+    -fx-font-size: 14px;
+    -fx-background-color: #f0f2f5;
+    -fx-padding: 9px 6px;
+    -fx-background-radius: 6px;
+}
+
+.chatbox {
+    -fx-padding: 9px;
+    -fx-background-color: #f0f2f5;
+    -fx-background-radius: 9px;
+    -fx-end-margin: 6px;
+}
+
+.chatbox-list .list-cell {
+    -fx-padding: 0px 9px;
+}
+
+.chatbox-btn {
+    -fx-background-color: transparent;
+    -fx-min-width: 50;
+    -fx-opacity: 0.8;
+}
+
+.chatbox-btn:hover {
+    -fx-background-color: #0001;
+    -fx-opacity: 1;
+}
+
+.message {
+    -fx-background-color: #5b61b9;
+    -fx-text-fill: #fff;
+    -fx-padding: 12px;
+    -fx-background-radius: 1.3em;
+}
+
+.message Text {
+    -fx-fill: #fff;
+    -fx-text-fill: #fff;
+    -fx-min-width: 9;
+    -fx-max-width: 300;
+}
+
+.message-receive .message {
+    -fx-background-color: #e3e6ea;
+}
+
+.message-receive .message Text {
+    -fx-fill: #000;
+}
+
+.file-view {
+    -fx-background-color: #5b61b9;
+}
+
+.file-view Text {
+    -fx-fill: #fff;
+    -fx-text-fill: #fff;
+}
+
+.message-receive .file-view {
+    -fx-background-color: #e3e6ea;
+}
+
+.message-receive .file-view Text {
+    -fx-fill: #000;
+}
+
+.bg {
+    -fx-background-color: #fff;
+}
+
+.list-view .scroll-bar:horizontal .increment-arrow,
+.list-view .scroll-bar:horizontal .decrement-arrow,
+.list-view .scroll-bar:horizontal .increment-button,
+.list-view .scroll-bar:horizontal .decrement-button {
+    -fx-padding:0;
+}
+
+.login-banner{
+    -fx-background-image: url('../img/splash.png');
+    -fx-background-size: 350px;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+.endcall-btn{
+    -fx-background-color: #ff7979;
+    -fx-background-radius: 400px;
+    -fx-padding: 9px;
+}
+
+.list-view, .split-pane {
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.tab-pane {
+    -fx-tab-min-height: 40px;
+    -fx-tab-max-height: 40px;
+}
+
+.tab .tab-label {
+    -fx-background-color: transparent;
+    -fx-alignment: CENTER;
+    -fx-text-fill: #444;
+    -fx-font-family: meBold;
+    -fx-font-weight: bold;
+    -fx-font-style: bold;
+    -fx-pref-width: 82;
+    -fx-font-size: 14px;
+    -fx-padding: 0;
+}
+
+.tab {
+    -fx-end-margin: 0;
+    -fx-background-insets: 0.0;
+    -fx-background-radius: 9px;
+    -fx-background-color: transparent;
+    -fx-font-weight: bolder;
+    -fx-pref-width: 143;
+    -fx-padding: 0;
+    -fx-alignment: CENTER;
+}
+
+.tab:selected {
+    -fx-background-color: #fff;
+}
+
+.tab:selected .tab-label {
+    -fx-text-fill: #5b61b9;
+}
+
+.tab:focused {
+    -fx-focus-color: transparent;
+    -fx-text-fill: #fff;
+}
+
+.tab {
+    -fx-padding: 0 30 0 30;
+}
+
+.tab-pane *.tab-header-background {
+    -fx-background-color: #f0f2f5;
+    -fx-background-radius: 9px;
+    -fx-padding: 0px;
+}
+
+.tab-pane:top *.tab-header-area {
+    -fx-background-insets: 0, 0 -10000 0 0;
+    -fx-padding: 6px;
+}
+
+.tab:selected .focus-indicator {
+    -fx-focus-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.list-cell {
+    -fx-background-color: transparent;
+    -fx-padding: 9px 0px 0px 0px;
+}
+
+.tab-down-button {
+    -fx-padding: 0;
+    visibility: hidden;
+    -fx-cell-size: 0;
+    -fx-pref-width: 0;
+
+}
+
+.tab-down-button .arrow {
+    -fx-padding: 0;
+    -fx-cell-size: 0;
+    -fx-pref-width: 0;
+}
+
+.control-buttons-tab {
+    -fx-padding: 0;
+    -fx-cell-size: 0;
+    -fx-pref-width: 0;
+}
+
+.split-pane-divider {
+    -fx-background-color: transparent;
+    -fx-padding: 0 1 0 1
+}
+
+/* scrollbar */
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track {
+    -fx-fill: transparent;
+    -fx-background-color: #fff;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0em;
+    -fx-border-radius: 2em;
+}
+
+/* The increment and decrement button CSS class of scrollbar */
+.scroll-bar:horizontal .increment-button,
+.scroll-bar:horizontal .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0em;
+    -fx-padding: 0 0 10 0;
+
+}
+
+/* The increment and decrement button CSS class of scrollbar */
+
+.scroll-bar:vertical .increment-button,
+.scroll-bar:vertical .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0em;
+    -fx-padding: 0 10 0 0;
+
+}
+
+.scroll-bar .increment-arrow, .scroll-bar .decrement-arrow {
+    -fx-shape: " ";
+    -fx-padding: 0;
+}
+
+/* The main scrollbar **thumb** CSS class which we drag every time (movable) */
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color: derive(black, 90%);
+    -fx-background-insets: 2, 0, 0;
+    -fx-background-radius: 2em;
+
+}

@@ -1,11 +1,8 @@
 package nputils;
 
-import java.io.*;
-import java.net.*;
-import java.nio.charset.Charset;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 

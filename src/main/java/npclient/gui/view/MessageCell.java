@@ -13,6 +13,7 @@ import javafx.scene.text.Text;
 import npclient.MyAccount;
 import npclient.gui.entity.Message;
 import npclient.gui.util.DateTimeUtils;
+import npclient.gui.util.UIUtils;
 import nputils.Emoji;
 import nputils.FileInfo;
 
@@ -30,7 +31,10 @@ public class MessageCell extends ListCell<Message> implements Initializable {
     @FXML
     private AnchorPane paneContent;
 
-    private Text tState = new Text();
+    private Object content;
+    private AbstractMessageView<?,?> messageView;
+
+    private final Text tState = new Text();
 
     @Override
     protected void updateItem(Message item, boolean empty) {
@@ -52,13 +56,15 @@ public class MessageCell extends ListCell<Message> implements Initializable {
                 }
             }
 
-            setSender(item.getFrom());
-            setTime(item.getTime());
-            setContent(item.getContent());
-            setState(item.getState());
-
             final String username = MyAccount.getInstance().getName();
             boolean isFromMe = item.getFrom().equals(username);
+
+            setSender(item.getFrom());
+            setTime(item.getTime());
+            content = item.getContent();
+            setContent();
+            setState(item.getState());
+
             setMessageAlignment(isFromMe);
 
             setText(null);
@@ -88,24 +94,45 @@ public class MessageCell extends ListCell<Message> implements Initializable {
         if (isFromMe) {
             container.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
             tName.setVisible(false);
+            tName.setFont(new Font(0));
+
         } else {
             container.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
+            tName.setFont(new Font(12));
+            tName.setVisible(true);
         }
+
+        if (messageView != null)
+            messageView.changeBackground(isFromMe);
     }
 
-    private void setContent(Object content) {
+    private void setContent() {
         paneContent.getChildren().clear();
         if (content instanceof String) {
             TextMessageView messageView = new TextMessageView();
             messageView.setContent((String) content);
+            this.messageView = messageView;
+            messageView.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
             paneContent.getChildren().add(messageView);
         } else if (content instanceof FileInfo) {
-            FileMessageView messageView = new FileMessageView();
-            messageView.setContent((FileInfo) content);
+            FileInfo info = (FileInfo) content;
+            String fileName = info.getName();
+            if (UIUtils.isImage(fileName)) {
+                ImageMessageView messageView = new ImageMessageView();
+                messageView.setContent(info);
+                this.messageView = messageView;
+            } else {
+                FileMessageView messageView = new FileMessageView();
+                messageView.setContent(info);
+                this.messageView = messageView;
+            }
+            messageView.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
             paneContent.getChildren().add(messageView);
         } else if (content instanceof Emoji) {
             EmojiView messageView = new EmojiView();
             messageView.setContent((Emoji) content);
+            this.messageView = messageView;
+            messageView.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
             paneContent.getChildren().add(messageView);
         }
     }

@@ -1,13 +1,17 @@
 package npclient.gui.entity;
 
 import npclient.MyAccount;
+import npclient.gui.view.ChatItemCell;
 
 public abstract class ChatItem implements Comparable<ChatItem> {
 
     protected String name;
     protected String lastMessage;
     protected long time;
-    protected boolean seen;
+    protected boolean seen = true;
+
+    // for fast rendering
+    protected ChatItemCell cell;
 
     public String getName() {
         return name;
@@ -42,25 +46,33 @@ public abstract class ChatItem implements Comparable<ChatItem> {
     }
 
     public void update(Messages messages) {
-        setSeen(messages.isSeen());
+//        setSeen(messages.isSeen());
 
         String rawLastMsg = null;
-        Message lastMsg = messages.peek();
+        Message<?> lastMsg = messages.newest();
         if (lastMsg != null) {
             String lastMsgOwner = lastMsg.getFrom().equals(MyAccount.getInstance().getName()) ? "You" : getName();
 
             if (lastMsg instanceof FileMessage) {
-                rawLastMsg = String.format("%s sent you a attachment", lastMsgOwner);
+                rawLastMsg = String.format("%s sent a attachment", lastMsgOwner);
             } else if (lastMsg instanceof TextMessage) {
                 rawLastMsg = ((TextMessage) lastMsg).getContent();
             } else if (lastMsg instanceof EmojiMessage) {
-                rawLastMsg = String.format("%s sent you a emoji", lastMsgOwner);
+                rawLastMsg = String.format("%s sent a emoji", lastMsgOwner);
             }
 
             setTime(lastMsg.getTime());
         }
 
         setLastMessage(rawLastMsg);
+    }
+
+    public ChatItemCell getCell() {
+        return cell;
+    }
+
+    public void setCell(ChatItemCell cell) {
+        this.cell = cell;
     }
 
     @Override

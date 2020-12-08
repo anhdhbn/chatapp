@@ -1,21 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox fx:id="container" minWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="container" minWidth="0.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Text fx:id="tName" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" textAlignment="RIGHT" />
+      <Text fx:id="tName" nodeOrientation="RIGHT_TO_LEFT" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" textAlignment="RIGHT">
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <font>
+            <Font name="meRegular Regular" size="12.0" />
+         </font></Text>
       <AnchorPane fx:id="paneContent" VBox.vgrow="ALWAYS">
          <VBox.margin>
-            <Insets top="10.0" />
+            <Insets />
          </VBox.margin>
       </AnchorPane>
-      <Text fx:id="tTime" nodeOrientation="LEFT_TO_RIGHT" strokeType="OUTSIDE" strokeWidth="0.0" text="Time" textAlignment="RIGHT" />
+      <Text fx:id="tTime" fill="#434343" nodeOrientation="RIGHT_TO_LEFT" opacity="0.9" strokeType="OUTSIDE" strokeWidth="0.0" text="Time" textAlignment="RIGHT">
+         <font>
+            <Font name="meRegular Regular" size="10.0" />
+         </font></Text>
    </children>
-   <padding>
-      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-   </padding>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
 </VBox>
