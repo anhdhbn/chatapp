@@ -1,4 +1,4 @@
-package nputils;
+package npclient.gui.audio;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
