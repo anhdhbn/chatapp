@@ -1,10 +1,5 @@
 package npclient.gui.controller;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -23,6 +18,7 @@ import npclient.core.callback.SubscribedTopicListener;
 import npclient.core.command.Publisher;
 import npclient.core.command.Subscriber;
 import npclient.exception.InvalidNameException;
+import npclient.gui.audio.NotiAudio;
 import npclient.gui.util.AudioUtils;
 import npclient.gui.util.JFXSmoothScroll;
 import npclient.gui.view.*;
@@ -337,8 +333,7 @@ public class BaseController implements Initializable {
                     .post();
         } else {
             MyAccount.getInstance().setInCall(true);
-            String content = String.format("%s is calling you. Answer?", message.name);
-            UIUtils.showYesNoAlert(content, new OnAcceptListener() {
+            UIUtils.showIncomingCallAlert(message.name, new OnAcceptListener() {
                 @Override
                 public void onAccept() {
                     new Publisher(resTopic, username)

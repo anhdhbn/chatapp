@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import npclient.CliConstants;
 import npclient.core.callback.OnAcceptListener;
 import npclient.core.callback.OnRejectListener;
+import npclient.gui.audio.IncomingCallAudio;
 import npclient.gui.manager.StageManager;
 import nputils.Emoji;
 
@@ -44,13 +45,18 @@ public class UIUtils {
         showSimpleAlert(Alert.AlertType.ERROR, error);
     }
 
-    public static void showYesNoAlert(String content, OnAcceptListener aL, OnRejectListener rL) {
+    public static void showIncomingCallAlert(String name, OnAcceptListener aL, OnRejectListener rL) {
+        String content = String.format("%s is calling you. Answer?", name);
+        IncomingCallAudio audio = new IncomingCallAudio();
+        audio.start();
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, content, ButtonType.YES, ButtonType.NO);
         alert.initOwner(StageManager.getInstance().getPrimaryStage());
         Optional<ButtonType> optional = alert.showAndWait();
         if (optional.get().equals(ButtonType.YES)) {
+            audio.stopMedia();
             aL.onAccept();
         } else {
+            audio.stopMedia();
             rL.onReject();
         }
     }
