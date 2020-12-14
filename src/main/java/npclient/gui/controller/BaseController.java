@@ -1,5 +1,7 @@
 package npclient.gui.controller;
 
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -8,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 import npclient.MyAccount;
@@ -19,6 +22,7 @@ import npclient.core.command.Publisher;
 import npclient.core.command.Subscriber;
 import npclient.exception.InvalidNameException;
 import npclient.gui.audio.NotiAudio;
+import npclient.gui.manager.StageManager;
 import npclient.gui.util.AudioUtils;
 import npclient.gui.util.JFXSmoothScroll;
 import npclient.gui.view.*;
@@ -38,6 +42,8 @@ import java.util.ResourceBundle;
 public class BaseController implements Initializable {
 
     @FXML
+    private HBox paneCalling;
+    @FXML
     private TextField tfGroup;
     @FXML
     private ListView<ChatItem> lvGroupItem;
@@ -52,8 +58,14 @@ public class BaseController implements Initializable {
 
     private VoiceChatDialog voiceChatStage;
 
+    private SimpleBooleanProperty callableProperty;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        StageManager.getInstance().setBaseController(this);
+
+        callableProperty = new SimpleBooleanProperty(true);
+
         initializeListView(lvUserItem);
         initializeListView(lvGroupItem);
 
@@ -103,10 +115,12 @@ public class BaseController implements Initializable {
                                 break;
 
                             case Constants.VOICE_ACCEPT:
+                                hideCallingPane();
                                 onReceiveVoiceAccept(message);
                                 break;
 
                             case Constants.VOICE_REJECT:
+                                hideCallingPane();
                                 onReceiveVoiceReject(message);
                                 break;
 
@@ -308,12 +322,14 @@ public class BaseController implements Initializable {
 
     private void onReceiveVoiceQuit(DataTransfer message) {
         MyAccount.getInstance().setInCall(false);
+        callableProperty.set(true);
         closeVoiceChatDialog();
         UIUtils.showSimpleAlert(Alert.AlertType.INFORMATION, "Called end.");
     }
 
     private void onReceiveVoiceReject(DataTransfer message) {
         MyAccount.getInstance().setInCall(false);
+        callableProperty.set(true);
         String content = String.format("%s rejected your call request.", message.name);
         UIUtils.showSimpleAlert(Alert.AlertType.INFORMATION, content);
     }
@@ -333,6 +349,7 @@ public class BaseController implements Initializable {
                     .post();
         } else {
             MyAccount.getInstance().setInCall(true);
+            callableProperty.set(false);
             UIUtils.showIncomingCallAlert(message.name, new OnAcceptListener() {
                 @Override
                 public void onAccept() {
@@ -355,12 +372,35 @@ public class BaseController implements Initializable {
                                 @Override
                                 public void onReceive(DataTransfer message) {
                                     MyAccount.getInstance().setInCall(false);
+                                    callableProperty.set(true);
                                 }
                             })
                             .post();
                 }
             });
         }
+    }
+
+    public void setCallablePropertyValue(boolean callable) {
+        this.callableProperty.set(callable);
+    }
+
+    public SimpleBooleanProperty callableProperty() {
+        return callableProperty;
+    }
+
+    public void showCallingPane(String name) {
+        if (!paneCalling.getChildren().isEmpty()) {
+            Node node = paneCalling.getChildren().get(0);
+            if (node instanceof Text) {
+                ((Text) node).setText(String.format("You are calling %s", name));
+            }
+        }
+        paneCalling.setVisible(true);
+    }
+
+    public void hideCallingPane() {
+        paneCalling.setVisible(false);
     }
 
     private void openVoiceChatDialog(String target) {
@@ -402,21 +442,39 @@ public class BaseController implements Initializable {
         }
     }
 
+    private ChatItem getChatItemByName(String name, boolean isGroup) {
+        ListView<ChatItem> listView = isGroup ? lvGroupItem : lvUserItem;
+
+        return listView.getItems().stream()
+                .filter(i -> i.getName().equals(name))
+                .findFirst()
+                .orElse(null);
+    }
+
     private ChatItem getChatItemByMessages(Messages messages) {
         ChatItem chatItem = messages.getChatItem();
 
         if (chatItem == null) {
-            ListView<ChatItem> listView = messages.isGroup() ? lvGroupItem : lvUserItem;
-
+            boolean isGroup = messages.isGroup();
             String name = messages.getTopic().split(Constants.SPLITTER)[1];
-
-            chatItem = listView.getItems().stream()
-                    .filter(i -> i.getName().equals(name))
-                    .findFirst()
-                    .orElse(null);
+            chatItem = getChatItemByName(name, isGroup);
         }
 
         return chatItem;
+    }
+
+    public synchronized void leave(String group) {
+        String topic = String.format("group/%s", group);
+        Subscriber subscriber = MessageSubscribeManager.getInstance().remove(topic);
+        if (subscriber != null)
+            subscriber.cancel();
+        Messages messages = MessageManager.getInstance().get(topic);
+        ChatItem chatItem;
+        if (messages == null)
+            chatItem = getChatItemByName(group, true);
+        else
+            chatItem = getChatItemByMessages(messages);
+        lvGroupItem.getItems().remove(chatItem);
     }
 
     public synchronized void join(String group) throws DuplicateGroupException, InvalidNameException {

@@ -5,12 +5,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import npclient.gui.controller.BaseController;
 
 public class StageManager {
 
     private static StageManager instance;
 
     private Stage primaryStage;
+
+    private BaseController baseController;
 
     public static StageManager getInstance() {
         if (instance == null)
@@ -25,6 +28,14 @@ public class StageManager {
 
     public Stage getPrimaryStage() {
         return primaryStage;
+    }
+
+    public BaseController getBaseController() {
+        return baseController;
+    }
+
+    public void setBaseController(BaseController baseController) {
+        this.baseController = baseController;
     }
 
     public void changeScene(Parent root) {

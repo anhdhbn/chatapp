@@ -29,7 +29,7 @@ public class MessageSubscribeManager implements Map<String, Subscriber> {
             if (topic.startsWith(Constants.PREFIX_CHAT)) {
                 String user = topic.split(Constants.SPLITTER)[1];
                 if (!online.contains(user)) {
-                    Subscriber subscriber = remove(user);
+                    Subscriber subscriber = remove(topic);
                     if (subscriber != null)
                         subscriber.cancel();
                 }

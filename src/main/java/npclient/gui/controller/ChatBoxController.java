@@ -1,5 +1,8 @@
 package npclient.gui.controller;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -65,6 +68,7 @@ public class ChatBoxController implements Initializable {
                 return new MessageCell();
             }
         });
+
         try {
             sendIcon.setImage(new Image(getClass().getResourceAsStream("/img/send.png")));
             attachFileIcon.setImage(new Image(getClass().getResourceAsStream("/img/file.png")));
@@ -73,6 +77,16 @@ public class ChatBoxController implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        btnVoiceCall.disabledProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean disabled) {
+                if (disabled)
+                    voiceCallIcon.setOpacity(0.5f);
+                else
+                    voiceCallIcon.setOpacity(1f);
+            }
+        });
     }
 
     @FXML
@@ -97,12 +111,16 @@ public class ChatBoxController implements Initializable {
     public void startVoiceCall() {
         final String topic = String.format("voice/%s", target);
         final String username = MyAccount.getInstance().getName();
+        StageManager.getInstance().getBaseController().showCallingPane(target);
         new Publisher(topic, username)
                 .putData(Constants.VOICE_REQUEST)
                 .setSuccessListener(new OnPublishMessageSuccess() {
                     @Override
                     public void onReceive(DataTransfer message) {
                         MyAccount.getInstance().setInCall(true);
+                        StageManager.getInstance()
+                                .getBaseController()
+                                .setCallablePropertyValue(false);
                     }
                 })
                 .post();
@@ -177,14 +195,21 @@ public class ChatBoxController implements Initializable {
         this.isGroup = isGroup;
         this.target = target;
         String title;
+
+        btnVoiceCall.disableProperty().unbind();
+
         if (isGroup) {
             title = String.format("g:/%s", target);
-            voiceCallIcon.setOpacity(0.5f);
+//            voiceCallIcon.setOpacity(0.5f);
             btnVoiceCall.setDisable(true);
         } else {
             title = String.format("u:/%s", target);
-            voiceCallIcon.setOpacity(1f);
-            btnVoiceCall.setDisable(false);
+//            voiceCallIcon.setOpacity(1f);
+//            btnVoiceCall.setDisable(false);
+            btnVoiceCall.disableProperty().bind(StageManager.getInstance()
+                    .getBaseController()
+                    .callableProperty().not()
+            );
         }
         this.lTitle.setText(title);
 
