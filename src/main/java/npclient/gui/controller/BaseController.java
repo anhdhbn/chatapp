@@ -42,7 +42,7 @@ import java.util.ResourceBundle;
 public class BaseController implements Initializable {
 
     @FXML
-    private HBox paneCalling;
+    private CallingView paneCalling;
     @FXML
     private TextField tfGroup;
     @FXML
@@ -390,17 +390,19 @@ public class BaseController implements Initializable {
     }
 
     public void showCallingPane(String name) {
-        if (!paneCalling.getChildren().isEmpty()) {
-            Node node = paneCalling.getChildren().get(0);
-            if (node instanceof Text) {
-                ((Text) node).setText(String.format("You are calling %s", name));
-            }
-        }
-        paneCalling.setVisible(true);
+//        if (!paneCalling.getChildren().isEmpty()) {
+//            Node node = paneCalling.getChildren().get(0);
+//            if (node instanceof Text) {
+//                ((Text) node).setText(String.format("You are calling %s", name));
+//            }
+//        }
+//        paneCalling.setVisible(true);
+        paneCalling.show(name);
     }
 
     public void hideCallingPane() {
-        paneCalling.setVisible(false);
+//        paneCalling.setVisible(false);
+        paneCalling.hide();
     }
 
     private void openVoiceChatDialog(String target) {
