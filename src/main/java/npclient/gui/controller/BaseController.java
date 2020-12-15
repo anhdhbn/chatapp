@@ -476,7 +476,18 @@ public class BaseController implements Initializable {
             chatItem = getChatItemByName(group, true);
         else
             chatItem = getChatItemByMessages(messages);
+
         lvGroupItem.getItems().remove(chatItem);
+
+        // clear current chat box
+        boolean isCurrentChat = false;
+        ChatBox currentChatBox = getCurrentChat();
+        if (currentChatBox != null) {
+            isCurrentChat = currentChatBox.getTarget().equals(group);
+        }
+        if (isCurrentChat) {
+            clearChatBox();
+        }
     }
 
     public synchronized void join(String group) throws DuplicateGroupException, InvalidNameException {
