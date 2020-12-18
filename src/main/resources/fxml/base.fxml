@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<?import npclient.gui.view.*?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import npclient.gui.view.CircleImageView?>
 
+<?import npclient.gui.view.CallingView?>
 <SplitPane dividerPositions="0.36" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" stylesheets="@../css/base.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="npclient.gui.controller.BaseController">
     <items>
         <AnchorPane maxWidth="320.0" minWidth="320.0" style="-fx-padding: 9px;" styleClass="bg">
@@ -54,14 +64,35 @@
                 </TabPane>
             </children>
         </AnchorPane>
-        <AnchorPane fx:id="paneChatBox" prefHeight="200.0" prefWidth="200.0">
-            <opaqueInsets>
-                <Insets bottom="10.0" />
-            </opaqueInsets>
-         <styleClass>
-            <String fx:value="bg" />
-            <String fx:value="panel-chatbox" />
-         </styleClass>
-        </AnchorPane>
+      <StackPane>
+         <children>
+              <AnchorPane fx:id="paneChatBox" prefHeight="200.0" prefWidth="200.0">
+                  <opaqueInsets>
+                      <Insets bottom="10.0" />
+                  </opaqueInsets>
+               <styleClass>
+                  <String fx:value="bg" />
+                  <String fx:value="panel-chatbox" />
+               </styleClass>
+              </AnchorPane>
+             <CallingView fx:id="paneCalling" visible="false" StackPane.alignment="TOP_RIGHT">
+                 <StackPane.margin>
+                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                 </StackPane.margin>
+             </CallingView>
+<!--            <HBox fx:id="paneCalling" visible="false" alignment="CENTER_LEFT" maxWidth="NaN" maxHeight="-Infinity" prefHeight="72.0" styleClass="account" StackPane.alignment="TOP_RIGHT">-->
+<!--               <children>-->
+<!--                  <Text fill="#1b9746" strokeType="OUTSIDE" strokeWidth="0.0" text="You are calling">-->
+<!--                     <font>-->
+<!--                        <Font name="meBold" size="16.0" />-->
+<!--                     </font>-->
+<!--                  </Text>-->
+<!--               </children>-->
+<!--               <StackPane.margin>-->
+<!--                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />-->
+<!--               </StackPane.margin>-->
+<!--            </HBox>-->
+         </children>
+      </StackPane>
     </items>
 </SplitPane>

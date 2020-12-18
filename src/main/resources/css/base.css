@@ -60,6 +60,12 @@
     -fx-background-radius: 9px;
 }
 
+.calling {
+    -fx-background-color: #4cba73;
+    -fx-padding: 6px 12px;
+    -fx-background-radius: 9px;
+}
+
 .image-msg-view {
     -fx-padding: 6px 0px;
     -fx-background-color: transparent;

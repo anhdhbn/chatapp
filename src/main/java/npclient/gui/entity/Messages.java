@@ -7,9 +7,10 @@ import java.util.PriorityQueue;
 public class Messages extends PriorityQueue<Message> {
 
     private final String topic;
+
     // for fast search
     private ChatItem chatItem;
-//    private boolean seen = true;
+
     private Message newest;
 
     public Messages(String topic) {
@@ -17,23 +18,15 @@ public class Messages extends PriorityQueue<Message> {
     }
 
     @Override
-    public boolean add(Message message) {
+    public synchronized boolean add(Message message) {
         if (newest == null || newest.getTime() < message.getTime())
             newest = message;
         return super.add(message);
     }
 
-    public Message newest() {
+    public synchronized Message newest() {
         return newest;
     }
-
-//    public boolean isSeen() {
-//        return seen;
-//    }
-//
-//    public void setSeen(boolean seen) {
-//        this.seen = seen;
-//    }
 
     public String getTopic() {
         return topic;
