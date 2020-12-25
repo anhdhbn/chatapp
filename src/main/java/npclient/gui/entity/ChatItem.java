@@ -51,7 +51,9 @@ public abstract class ChatItem implements Comparable<ChatItem> {
         String rawLastMsg = null;
         Message<?> lastMsg = messages.newest();
         if (lastMsg != null) {
-            String lastMsgOwner = lastMsg.getFrom().equals(MyAccount.getInstance().getName()) ? "You" : getName();
+            String lastMsgOwner = lastMsg.getFrom();
+            if (lastMsgOwner.equals(MyAccount.getInstance().getName()))
+                lastMsgOwner = "You";
 
             if (lastMsg instanceof FileMessage) {
                 rawLastMsg = String.format("%s sent a attachment", lastMsgOwner);
