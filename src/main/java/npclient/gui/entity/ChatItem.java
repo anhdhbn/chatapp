@@ -46,8 +46,6 @@ public abstract class ChatItem implements Comparable<ChatItem> {
     }
 
     public void update(Messages messages) {
-//        setSeen(messages.isSeen());
-
         String rawLastMsg = null;
         Message<?> lastMsg = messages.newest();
         if (lastMsg != null) {
@@ -59,6 +57,9 @@ public abstract class ChatItem implements Comparable<ChatItem> {
                 rawLastMsg = String.format("%s sent a attachment", lastMsgOwner);
             } else if (lastMsg instanceof TextMessage) {
                 rawLastMsg = ((TextMessage) lastMsg).getContent();
+                if (this instanceof GroupChatItem) {
+                    rawLastMsg = lastMsgOwner + ": " + rawLastMsg;
+                }
             } else if (lastMsg instanceof EmojiMessage) {
                 rawLastMsg = String.format("%s sent a emoji", lastMsgOwner);
             }
